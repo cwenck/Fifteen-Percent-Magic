@@ -14,20 +14,31 @@ Motor::Motor(){
 	this->reversed = false;
 	this->speed = 0;
 	this->encoder = NULL;
+	this->location = NullMotorLocation;
 }
 
-Motor::Motor(MotorPort port, bool reversed) {
-	this->port = port;
-	this->reversed = reversed;
-	this->speed = 0;
-	this->encoder = NULL;
-}
-
-Motor::Motor(MotorPort port) {
+Motor::Motor(MotorPort port, MotorLocation location) {
 	this->reversed = false;
 	this->port = port;
 	this->speed = 0;
 	this->encoder = NULL;
+	this->location = location;
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, bool reversed) {
+	this->port = port;
+	this->reversed = reversed;
+	this->speed = 0;
+	this->encoder = NULL;
+	this->location = location;
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed){
+	this->port = port;
+	this->reversed = reversed;
+	this->speed = 0;
+	this->encoder = encoder;
+	this->location = location;
 }
 
 Motor::~Motor() {
@@ -51,8 +62,35 @@ MotorPort Motor::getPort(){
 	return port;
 }
 
-Encoder* Motor::getEncoder(){
+GenericEncoder* Motor::getEncoder(){
 	return encoder;
+}
+
+MotorLocation Motor::getLocation(){
+	return location;
+}
+
+MotorLocationSide Motor::getLocationSide(){
+	switch(location){
+	case Left:
+		return LeftSide;
+	case Right:
+		return RightSide;
+	case FrontRight:
+		return RightSide;
+	case FrontLeft:
+		return LeftSide;
+	case BackRight:
+		return RightSide;
+	case BackLeft:
+		return LeftSide;
+	case CenterRight:
+		return RightSide;
+	case CenterLeft:
+		return LeftSide;
+	default:
+		return NoSide;
+	}
 }
 
 void Motor::reverseDirection(){

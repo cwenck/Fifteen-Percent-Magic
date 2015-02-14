@@ -9,10 +9,11 @@
 #define MOTOR_H_
 
 #include <API.h>
+#include "GenericEncoder.h"
 
 namespace TRL {
 
-	enum MotorPort{
+	typedef enum _MotorPort {
 		MotorPort_1 = 1,
 		MotorPort_2 = 2,
 		MotorPort_3 = 3,
@@ -23,20 +24,40 @@ namespace TRL {
 		MotorPort_8 = 8,
 		MotorPort_9 = 9,
 		MotorPort_10 = 10
-	};
+	}MotorPort;
+
+	typedef enum _MotorLocation {
+		NullMotorLocation = 0,
+		Left,
+		Right,
+		FrontRight,
+		FrontLeft,
+		CenterRight,
+		CenterLeft,
+		BackRight,
+		BackLeft,
+		Intake,
+		Other
+	}MotorLocation;
+
+	typedef enum _MotorLocationSide {
+		NoSide,
+		LeftSide,
+		RightSide
+	}MotorLocationSide;
 
 	class Motor {
 	private:
-		Encoder* encoder;
+		GenericEncoder* encoder;
 		bool reversed;
 		int speed;
 		MotorPort port;
-
+		MotorLocation location;
 	public:
 		Motor();
-		Motor(MotorPort port);
-		Motor(MotorPort port, bool reversed);
-		Motor(MotorPort port, Encoder* encoder, bool reversed);
+		Motor(MotorPort port, MotorLocation location);
+		Motor(MotorPort port, MotorLocation location, bool reversed);
+		Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed);
 		virtual ~Motor();
 
 		void setPower(int speed);
@@ -47,7 +68,9 @@ namespace TRL {
 		static void stopAll();
 
 		MotorPort getPort();
-		Encoder* getEncoder();
+		MotorLocation getLocation();
+		MotorLocationSide getLocationSide();
+		GenericEncoder* getEncoder();
 	};
 }
 #endif /* MOTOR_H_ */
