@@ -12,6 +12,12 @@
 #include "Controller.h"
 
 namespace TRL {
+
+	typedef enum _InputControlMode {
+		NormalControllerOnly,
+		NormalAndPartnerContoller
+	}InputControlMode;
+
 	typedef enum _DriveDirection {
 		ManualDrive,
 		ManualTurn,
@@ -59,9 +65,15 @@ namespace TRL {
 		char numDriveMotors;
 		char numLiftMotors;
 
+		//Controllers
+		Controller mainController;
+		Controller partnerController;
+
 		//Controller Buttons
 		ControllerInput y_drive_stick;
 		ControllerInput x_drive_stick;
+
+		short controllerDeadzoneMagnitude;
 
 		ControllerInput lift_up;
 		ControllerInput lift_down;
@@ -69,8 +81,9 @@ namespace TRL {
 		ControllerInput claw_open;
 		ControllerInput claw_close;
 
-		ControllerInput claw_rotate_left;
-		ControllerInput claw_rotate_right;
+//		ControllerInput claw_rotate_left;
+//		ControllerInput claw_rotate_right;
+		ControllerInput claw_rotate;
 
 		ControllerInput orientation_forward;
 		ControllerInput orientation_backward;
@@ -86,12 +99,11 @@ namespace TRL {
 		virtual ~Robot();
 
 		// Controller Input
-		void handleInput(Controller *controller);
-		void handleDriveOrientation(Controller* controller);
-		void handleDrive(Controller* controller);
-		void handleLift(Controller* controller);
-		void handleClaw(Controller* controller);
-
+		void handleInput(InputControlMode controlMode);
+		void handleDriveOrientation(InputControlMode controlMode);
+		void handleDrive(InputControlMode controlMode);
+		void handleLift(InputControlMode controlMode);
+		void handleClaw(InputControlMode controlMode);
 
 		//Set Motor Pointers
 		bool setDriveMotors(Motor* driveMotors[], char numDriveMotors);
@@ -103,7 +115,7 @@ namespace TRL {
 		void reverseDriveOrientation();
 
 		//Drive
-		void drive(int powerC, DriveDirection dir);
+		void drive(int power, DriveDirection dir);
 		void stopDriveMotors();
 
 		//Lift
@@ -118,6 +130,19 @@ namespace TRL {
 		void clawArm(int power, ClawArmDirection dir);
 		void stopClawArm();
 
+		//Motors
+//		static Motor frontRightDrive;
+//		static Motor frontLeftDrive;
+//		static Motor backRightDrive;
+//		static Motor backLeftDrive;
+//
+//		static Motor frontRightLift;
+//		static Motor backRightLift;
+//		static Motor frontLeftLift;
+//		static Motor backLeftLift;
+//
+//		static Motor intakeMotor;
+//		static Motor intakeArmMotor;
 
 	};
 }

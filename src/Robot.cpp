@@ -11,23 +11,45 @@ namespace TRL {
 ///////////////////////////////
 //CONTSTRUCTORS + DESTRUCTORS//
 ///////////////////////////////
+//	Motor Robot::frontRightDrive = Motor(MotorPort_10, FrontRight);
+//	Motor Robot::frontLeftDrive = Motor(MotorPort_9, FrontLeft);
+//	Motor Robot::backRightDrive = Motor(MotorPort_2, BackRight, true);
+//	Motor Robot::backLeftDrive = Motor(MotorPort_1, BackLeft);
+//
+//	Motor Robot::frontRightLift = Motor(MotorPort_3, FrontRight);
+//	Motor Robot::backRightLift = Motor(MotorPort_5, BackRight);
+//	Motor Robot::frontLeftLift = Motor(MotorPort_4, FrontLeft, true);
+//	Motor Robot::backLeftLift = Motor(MotorPort_6, BackLeft, true);
+//
+//	Motor Robot::intakeMotor = Motor(MotorPort_7, Intake);
+//	Motor Robot::intakeArmMotor = Motor(MotorPort_8, Other);
+
+//	Controller Robot::mainController = Controller(Normal_Controller);
+//	Controller Robot::partnerController = Controller(Partner_Controller);
 
 Robot::Robot() {
+	mainController = Controller(Normal_Controller);
+	partnerController = Controller(Partner_Controller);
+
+	//Controller Deadzone
+	controllerDeadzoneMagnitude = 10;
+
 	//Init Controller Inputs
 	y_drive_stick = Ch3;
 	x_drive_stick = Ch4;
 
-	lift_up = Btn6U;
-	lift_down = Btn6D;
+	lift_up = Btn5D;
+	lift_down = Btn5U;
 
-	claw_rotate_left = Btn8L;
-	claw_rotate_right = Btn8R;
+//	claw_rotate_left = ;
+//	claw_rotate_right = Btn8R;
+	claw_rotate = Ch1;
 
-	claw_open = Btn8U;
-	claw_close = Btn8D;
+	claw_open = Btn6U;
+	claw_close = Btn6D;
 
-	orientation_forward = Btn7U;
-	orientation_backward = Btn7D;
+	orientation_forward = Btn7D;
+	orientation_backward = Btn7U;
 
 	//Init the default lift power
 	liftPower = 127;
@@ -36,7 +58,7 @@ Robot::Robot() {
 	clawClosePower = 127;
 
 	//Init the defualt orientaiton
-	orientation = ForwardOrientation;
+	orientation = BackwardOrientation;
 
 	//Init the number of diive and lift motors
 	numDriveMotors = 0;
@@ -55,58 +77,150 @@ Robot::~Robot() {
 //CONTROLLER INPUT//
 ////////////////////
 
-void Robot::handleInput(Controller* controller) {
-	handleDriveOrientation(controller);
-	handleDrive(controller);
-	handleLift(controller);
-	handleClaw(controller);
+void Robot::handleInput(InputControlMode controlMode) {
+	handleDriveOrientation(controlMode);
+	handleDrive(controlMode);
+	handleLift(controlMode);
+	handleClaw(controlMode);
 }
 
-void Robot::handleDriveOrientation(Controller* controller) {
-	if (controller->getValue(orientation_forward) == 1) {
-		setDriveOrientation(ForwardOrientation);
-	} else if (controller->getValue(orientation_backward) == 1) {
-		setDriveOrientation(BackwardOrientation);
-	}
-}
-
-void Robot::handleDrive(Controller* controller) {
-	short y = controller->getValue(y_drive_stick);
-	short x = controller->getValue(x_drive_stick);
-
-	if (abs(y) > abs(x)) {
-		drive(y, ManualDrive);
-	} else if (abs(x) >= abs(y)) {
-		drive(x, ManualTurn);
-	}
-}
-
-void Robot::handleLift(Controller* controller) {
-	if (controller->getValue(lift_up) == 1) {
-		lift(liftPower, Up);
-	} else if (controller->getValue(lift_down) == 1) {
-		lift(liftPower, Down);
-	} else {
-		stopLift();
+void Robot::handleDriveOrientation(InputControlMode controlMode) {
+	switch (controlMode) {
+	case NormalControllerOnly:
+		if (mainController.getValue(orientation_forward) == 1) {
+			setDriveOrientation(ForwardOrientation);
+		} else if (mainController.getValue(orientation_backward) == 1) {
+			setDriveOrientation(BackwardOrientation);
+		}
+		break;
+	case NormalAndPartnerContoller:
+		if (mainController.getValue(orientation_forward) == 1) {
+			setDriveOrientation(ForwardOrientation);
+		} else if (mainController.getValue(orientation_backward) == 1) {
+			setDriveOrientation(BackwardOrientation);
+		} else if (partnerController.getValue(orientation_forward) == 1) {
+			setDriveOrientation(ForwardOrientation);
+		} else if (partnerController.getValue(orientation_backward) == 1) {
+			setDriveOrientation(BackwardOrientation);
+		}
+		break;
 	}
 }
 
-void Robot::handleClaw(Controller* controller) {
-	if (controller->getValue(claw_open) == 1) {
-		claw(clawOpenPower, OpenClaw);
-	} else if (controller->getValue(claw_close) == 1) {
-		claw(clawClosePower, CloseClaw);
-	} else {
-		stopClaw();
+void Robot::handleDrive(InputControlMode controlMode) {
+	short yMain = mainController.getValue(y_drive_stick);
+	short xMain = mainController.getValue(x_drive_stick);
+
+	short yPartner = partnerController.getValue(y_drive_stick);
+	short xPartner = partnerController.getValue(x_drive_stick);
+
+	switch (controlMode) {
+	case NormalControllerOnly:
+		if (abs(xMain) < abs(controllerDeadzoneMagnitude)
+				&& abs(yMain) < abs(controllerDeadzoneMagnitude)) {
+			return;
+		}
+
+		if (abs(yMain) > abs(xMain)) {
+			drive(yMain, ManualDrive);
+		} else if (abs(xMain) >= abs(yMain)) {
+			drive(xMain, ManualTurn);
+		}
+		break;
+	case NormalAndPartnerContoller:
+		if (!(abs(xMain) < abs(controllerDeadzoneMagnitude)
+				&& abs(yMain) < abs(controllerDeadzoneMagnitude))) {
+			if (abs(yMain) > abs(xMain)) {
+				drive(yMain, ManualDrive);
+			} else if (abs(xMain) >= abs(yMain)) {
+				drive(xMain, ManualTurn);
+			}
+		} else if (!(abs(xPartner) < abs(controllerDeadzoneMagnitude)
+				&& abs(yPartner) < abs(controllerDeadzoneMagnitude))) {
+			if (abs(yPartner) > abs(xPartner)) {
+				drive(yPartner, ManualDrive);
+			} else if (abs(xPartner) >= abs(yPartner)) {
+				drive(xPartner, ManualTurn);
+			}
+		} else {
+			stopDriveMotors();
+		}
+		break;
+	}
+}
+
+//returns false if the lift should be set to 0
+void Robot::handleLift(InputControlMode controlMode) {
+	switch (controlMode) {
+	case NormalControllerOnly:
+		if (mainController.getValue(lift_up) == 1) {
+			lift(liftPower, Up);
+		} else if (mainController.getValue(lift_down) == 1) {
+			lift(liftPower, Down);
+		} else {
+			stopLift();
+		}
+		break;
+	case NormalAndPartnerContoller:
+		if (mainController.getValue(lift_up) == 1) {
+			lift(liftPower, Up);
+		} else if (mainController.getValue(lift_down) == 1) {
+			lift(liftPower, Down);
+		} else if (partnerController.getValue(lift_up) == 1) {
+			lift(liftPower, Up);
+		} else if (partnerController.getValue(lift_down) == 1) {
+			lift(liftPower, Down);
+		} else {
+			stopLift();
+		}
+		break;
+	}
+}
+
+void Robot::handleClaw(InputControlMode controlMode) {
+	switch (controlMode) {
+	case NormalControllerOnly:
+		clawArm(mainController.getValue(claw_rotate), ManualClawArmControl);
+
+		if (mainController.getValue(claw_open) == 1) {
+			claw(clawOpenPower, OpenClaw);
+		} else if (mainController.getValue(claw_close) == 1) {
+			claw(clawClosePower, CloseClaw);
+		} else {
+			stopClaw();
+		}
+		break;
+	case NormalAndPartnerContoller:
+		if (mainController.getValue(claw_rotate) != 0) {
+			clawArm(mainController.getValue(claw_rotate), ManualClawArmControl);
+		} else if (partnerController.getValue(claw_rotate) != 0) {
+			clawArm(partnerController.getValue(claw_rotate),
+					ManualClawArmControl);
+		} else {
+			stopClawArm();
+		}
+
+		if (mainController.getValue(claw_open) == 1) {
+			claw(clawOpenPower, OpenClaw);
+		} else if (mainController.getValue(claw_close) == 1) {
+			claw(clawClosePower, CloseClaw);
+		} else if (partnerController.getValue(claw_open) == 1) {
+			claw(clawOpenPower, OpenClaw);
+		} else if (partnerController.getValue(claw_close) == 1) {
+			claw(clawClosePower, CloseClaw);
+		} else {
+			stopClaw();
+		}
+		break;
 	}
 
-	if (controller->getValue(claw_rotate_left) == 1) {
-		clawArm(clawArmPower, RotateArmLeft);
-	} else if (controller->getValue(claw_rotate_right) == 1) {
-		clawArm(clawArmPower, RotateArmRight);
-	} else {
-		stopClawArm();
-	}
+//	if (controller->getValue(cl) == 1) {
+//		clawArm(clawArmPower, RotateArmLeft);
+//	} else if (controller->getValue(claw_rotate_right) == 1) {
+//		clawArm(clawArmPower, RotateArmRight);
+//	} else {
+//		stopClawArm();
+//	}
 }
 
 ///////////////////////////////
@@ -171,7 +285,7 @@ void Robot::drive(int power, DriveDirection dir) {
 			power = -power;
 			break;
 		case ManualTurn:
-			power = -power;
+//			power = -powe r;
 			break;
 		case ManualStrafe:
 			power = -power;
@@ -183,10 +297,10 @@ void Robot::drive(int power, DriveDirection dir) {
 			dir = DriveForward;
 			break;
 		case TurnLeft:
-			dir = TurnRight;
+//			dir = TurnRight;
 			break;
 		case TurnRight:
-			dir = TurnLeft;
+//			dir = TurnLeft;
 			break;
 		case StrafeLeft:
 			dir = StrafeRight;
@@ -347,8 +461,8 @@ void Robot::drive(int power, DriveDirection dir) {
 	}
 }
 
-void Robot::stopDriveMotors(){
-	for (int i = 0; i < numDriveMotors; i++){
+void Robot::stopDriveMotors() {
+	for (int i = 0; i < numDriveMotors; i++) {
 		driveMotors[i]->stop();
 	}
 }

@@ -56,6 +56,7 @@ namespace TRL {
 		ControllerType type;
 		ControllerShiftInput shiftKey;
 	public:
+		Controller();
 		Controller(ControllerType type);
 		Controller(ControllerType type, ControllerShiftInput shiftKey);
 		virtual ~Controller();

@@ -9,8 +9,8 @@
 
 namespace TRL {
 
-Motor::Motor(){
-	this->port = (MotorPort)NULL;
+Motor::Motor() {
+	this->port = MotorPort_NULL;
 	this->reversed = false;
 	this->speed = 0;
 	this->encoder = NULL;
@@ -33,7 +33,8 @@ Motor::Motor(MotorPort port, MotorLocation location, bool reversed) {
 	this->location = location;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed){
+Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
+		bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
@@ -46,6 +47,10 @@ Motor::~Motor() {
 }
 
 void Motor::setPower(int motorSpeed) {
+	if (port == MotorPort_NULL) {
+		printf("Motor not port not assigned to motor.");
+		return;
+	}
 	speed = motorSpeed;
 	if (!reversed) {
 		motorSet(port, -speed);
@@ -55,23 +60,27 @@ void Motor::setPower(int motorSpeed) {
 }
 
 void Motor::stop() {
+	if (port == MotorPort_NULL) {
+		printf("Motor not port not assigned to motor.");
+		return;
+	}
 	motorStop(port);
 }
 
-MotorPort Motor::getPort(){
+MotorPort Motor::getPort() {
 	return port;
 }
 
-GenericEncoder* Motor::getEncoder(){
+GenericEncoder* Motor::getEncoder() {
 	return encoder;
 }
 
-MotorLocation Motor::getLocation(){
+MotorLocation Motor::getLocation() {
 	return location;
 }
 
-MotorLocationSide Motor::getLocationSide(){
-	switch(location){
+MotorLocationSide Motor::getLocationSide() {
+	switch (location) {
 	case Left:
 		return LeftSide;
 	case Right:
@@ -93,19 +102,19 @@ MotorLocationSide Motor::getLocationSide(){
 	}
 }
 
-void Motor::reverseDirection(){
+void Motor::reverseDirection() {
 	printf("%d : ", reversed);
 	reversed = !reversed;
 	printf("%d\n\r", reversed);
 }
 
-void Motor::setAllPower(int speed){
-	for(int i = 1; i < 10; i++){
+void Motor::setAllPower(int speed) {
+	for (int i = 1; i < 10; i++) {
 		motorSet(i, speed);
 	}
 }
 
-void Motor::stopAll(){
+void Motor::stopAll() {
 	motorStopAll();
 }
 

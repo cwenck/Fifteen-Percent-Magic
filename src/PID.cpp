@@ -59,57 +59,52 @@ void PID::setTarget(int target) {
 }
 
 void PID::goToSetTarget() {
-//	pid.target_reached = false;
-//	while (!pid.target_reached) {
-//		pid.last_error = pid.error;
-//		pid.sensor_reading = sensorGet(pid.sensor);
-//		pid.error = pid.sensor_target - pid.sensor_reading;
-//
-//		lcdDisplayFormattedCenteredString(uart1, 1, "Err: %.2f\n\r", pid.error);
-//
-//		if (abs(pid.error) < pid.integral_range) {
-//			pid.integral += pid.error;
-//		} else {
-//			pid.integral = 0;
-//		}
-//		pid.derivative = pid.error - pid.last_error;
-//
-//		if (!pid.ignoreIntegralBounds) {
-//			if (abs(pid.integral) > pid.integral_max) {
-//				if (pid.integral > 0) {
-//					pid.integral = pid.integral_max;
-//				} else {
-//					pid.integral = -pid.integral_max;
-//				}
-//			} else if (abs(pid.integral) < pid.integral_min) {
-//				if (pid.integral > 0) {
-//					pid.integral = pid.integral_min;
-//				} else {
-//					pid.integral = -pid.integral_min;
-//				}
-//			}
-//		}
-//
-//		if (abs(pid.error) <= abs(pid.error_tolerance)) {
-//			pid.integral = 0;
-//			pid.num_checks_passed++;
-//			if (pid.num_checks_passed > 3) {
-//				pid.target_reached = true;
-//			}
-//		} else {
-//			pid.num_checks_passed = 0;
-//			pid.target_reached = false;
-//		}
-//		printf("Err: %.2f -- ISpd: %d -- I: %.2f\n\r", pid.error, pid.i_speed,
-//				pid.integral);
-//		pid.p_speed = pid.error * pid.kp;
-//		pid.i_speed = pid.integral * pid.ki;
-//		pid.d_speed = pid.derivative * pid.kd;
-//		pid.motor_speed = pid.p_speed + pid.i_speed + pid.d_speed;
-//		pid.setMotorSpeedFunction(pid.motor_speed);
-//		delay(20);
-//	}
-//	pid.setMotorSpeedFunction(0);
+	targetReached = false;
+	while (!targetReached) {
+		prevSensorValue = error;
+		sensorValue = sensor->getValue();
+		error = target - sensorValue;
+
+		if (abs(error) < abs(rangeWhereIntegralComponentIsActive)) {
+			integral += error;
+		}
+
+		if (!shouldIgnoreIntegralBounds) {
+			if (abs(integral) > abs(integralMax)) {
+				if (integral > 0) {
+					integral = integralMax;
+				} else if (integral < 0) {
+					integral = -integralMax;
+				}
+			}
+			if (abs(integral) > abs(integralMin)) {
+				if (integral > 0) {
+					integral = integralMin;
+				} else if (integral < 0) {
+					integral = -integralMin;
+				}
+			}
+		}
+
+		if (abs(error) <= abs(errorTolerance)) {
+			integral = 0;
+			checksPassed++;
+			if (checksPassed > 3) {
+				targetReached = true;
+			}
+		} else {
+			checksPassed = 0;
+			targetReached = false;
+		}
+		pSpeed = error * kp;
+		iSpeed = integral * ki;
+		dSpeed = derivative * kd;
+		motorSpeed = pSpeed + iSpeed + dSpeed;
+		setMotorSpeedFunction(motorSpeed);
+		delay(20);
+
+	}
+	setMotorSpeedFunction(0);
 }
 
 void PID::goToTarget(int target) {

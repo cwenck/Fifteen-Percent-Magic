@@ -8,6 +8,7 @@
 #ifndef PID_H_
 #define PID_H_
 
+#include <API.h>
 #include "Sensor.h"
 
 namespace TRL {
@@ -22,10 +23,27 @@ namespace TRL {
 		int target;
 		int sensorValue;
 		int prevSensorValue;
+		int error;
+
+		int integral;
+		int rangeWhereIntegralComponentIsActive;
+		bool shouldIgnoreIntegralBounds;
+		int integralMax;	//should be positive
+		int integralMin;	//should be positive
+
+		int derivative;
 
 		void (*setMotorSpeedFunction)(int speed); //function pointer with a parameter of int
 
 		bool targetReached;
+		short checksPassed;
+		short requiredPassedChecks;
+		int errorTolerance;
+
+		int pSpeed;
+		int iSpeed;
+		int dSpeed;
+		int motorSpeed;
 	public:
 		PID(Sensor* sensor, void (*setMotorSpeedFunction)(int speed));
 		PID(float kp, float ki, float kd, Sensor* sensor, void (*setMotorSpeedFunction)(int speed));

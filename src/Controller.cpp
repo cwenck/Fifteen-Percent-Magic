@@ -9,6 +9,11 @@
 
 namespace TRL {
 
+Controller::Controller(){
+	this->type = Normal_Controller;
+	this->shiftKey = Shift_NoInput;
+}
+
 Controller::Controller(ControllerType type) {
 	this->type = type;
 	this->shiftKey = Shift_NoInput;

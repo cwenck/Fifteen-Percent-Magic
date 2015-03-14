@@ -17,6 +17,7 @@
 #include "Button.h"
 #include "Controller.h"
 #include "QuadratureEncoder.h"
+#include "PID.h"
 #include "Robot.h"
 
 #endif /* TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_ */

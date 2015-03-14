@@ -58,33 +58,39 @@ extern "C" {
 using namespace TRL;
 
 void operatorControl() {
-	Controller controller = Controller(Normal_Controller);
+//	Controller controller = Controller(Normal_Controller);
+//	Controller partner = Controller(Partner_Controller);
 
 	Motor frontRightDrive = Motor(MotorPort_10, FrontRight);
 	Motor frontLeftDrive = Motor(MotorPort_9, FrontLeft);
 	Motor backRightDrive = Motor(MotorPort_2, BackRight, true);
 	Motor backLeftDrive = Motor(MotorPort_1, BackLeft);
 
-	Motor frontRightLift = Motor(MotorPort_5, FrontRight);
-	Motor frontLeftLift = Motor(MotorPort_3, FrontLeft, true);
-	Motor backRightLift = Motor(MotorPort_6, BackRight);
-	Motor backLeftLift = Motor(MotorPort_4, BackLeft, true);
+	Motor frontRightLift = Motor(MotorPort_3, FrontRight);
+	Motor backRightLift = Motor(MotorPort_5, BackRight);
+	Motor frontLeftLift = Motor(MotorPort_4, FrontLeft, true);
+	Motor backLeftLift = Motor(MotorPort_6, BackLeft, true);
 
-	Motor claw = Motor(MotorPort_8, Intake);
-	Motor clawArm = Motor(MotorPort_7, Other);
-
-	Motor* liftMotors[4] = {&frontRightLift, &frontLeftLift, &backRightLift, &backLeftLift};
-	Motor* driveMotors[4] = {&frontRightDrive, &frontLeftDrive, &backRightDrive, &backLeftDrive};
+	Motor intakeMotor = Motor(MotorPort_8, Intake, true);
+	Motor intakeArmMotor = Motor(MotorPort_7, Other, true);
 
 	Robot robot = Robot();
 
+	Motor* liftMotors[4] = { &frontRightLift, &frontLeftLift,
+			&backRightLift, &backLeftLift };
+	Motor* driveMotors[4] = { &frontRightDrive, &frontLeftDrive,
+			&backRightDrive, &backLeftDrive };
+
 	robot.setDriveMotors(driveMotors, 4);
 	robot.setLiftMotors(liftMotors, 4);
-	robot.setIntakeMotors(&claw, &clawArm);
+	robot.setIntakeMotors(&intakeMotor, &intakeArmMotor);
 
 	while (1) {
 		delay(5);
-		robot.handleInput(&controller);
+		robot.handleInput(NormalAndPartnerContoller);
+//		frontLeftDrive.setAllPower(controller.getValue(Ch3));
+
+//		robot.handleClaw(&6partner);
 	}
 }
 

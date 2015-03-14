@@ -14,6 +14,7 @@
 namespace TRL {
 
 	typedef enum _MotorPort {
+		MotorPort_NULL = 0,
 		MotorPort_1 = 1,
 		MotorPort_2 = 2,
 		MotorPort_3 = 3,
