@@ -19,5 +19,6 @@
 #include "QuadratureEncoder.h"
 #include "PID.h"
 #include "Robot.h"
+#include "AutonomusRoutines.h"
 
 #endif /* TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_ */

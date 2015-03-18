@@ -14,13 +14,31 @@ PID::PID(Sensor* sensor, void (*setMotorSpeedFunction)(int speed)) {
 	this->ki = 0;
 	this->kd = 0;
 
+	this->pSpeed = 0;
+	this->iSpeed = 0;
+	this->dSpeed = 0;
+
+	this->integral = 0;
+	this->derivative = 0;
+
+	this->shouldIgnoreIntegralBounds = true;
+	this->integralMin = 0;
+	this->integralMax = 127;
+	this->rangeWhereIntegralComponentIsActive = -1;
+
 	this->sensor = sensor;
 	this->target = 0;
 	this->sensorValue = 0;
 	this->prevSensorValue = 0;
 
+	this->error = 0;
+	this->checksPassed = 0;
+	this->requiredPassedChecks = 3;
+	this->errorTolerance = 10;
+
 	this->targetReached = false;
 	this->setMotorSpeedFunction = setMotorSpeedFunction;
+	this->motorSpeed = 0;
 }
 
 PID::PID(float kp, float ki, float kd, Sensor* sensor,
@@ -29,13 +47,31 @@ PID::PID(float kp, float ki, float kd, Sensor* sensor,
 	this->ki = ki;
 	this->kd = kd;
 
+	this->pSpeed = 0;
+	this->iSpeed = 0;
+	this->dSpeed = 0;
+
+	this->integral = 0;
+	this->derivative = 0;
+
+	this->shouldIgnoreIntegralBounds = true;
+	this->integralMin = 0;
+	this->integralMax = 127;
+	this->rangeWhereIntegralComponentIsActive = -1;
+
 	this->sensor = sensor;
 	this->target = 0;
 	this->sensorValue = 0;
 	this->prevSensorValue = 0;
 
+	this->error = 0;
+	this->checksPassed = 0;
+	this->requiredPassedChecks = 3;
+	this->errorTolerance = 10;
+
 	this->targetReached = false;
 	this->setMotorSpeedFunction = setMotorSpeedFunction;
+	this->motorSpeed = 0;
 }
 
 PID::~PID() {
@@ -52,6 +88,14 @@ void PID::setKi(float integralConstant) {
 
 void PID::setKd(float derivativeConstant) {
 	this->kd = derivativeConstant;
+}
+
+void PID::setErrorTolerance(int errorTolerance){
+	this->errorTolerance = errorTolerance;
+}
+
+void PID::setChecksRequiredToBreakPID(int numberOfChecks){
+	this->requiredPassedChecks = numberOfChecks;
 }
 
 void PID::setTarget(int target) {
@@ -77,7 +121,7 @@ void PID::goToSetTarget() {
 					integral = -integralMax;
 				}
 			}
-			if (abs(integral) > abs(integralMin)) {
+			if (abs(integral) < abs(integralMin)) {
 				if (integral > 0) {
 					integral = integralMin;
 				} else if (integral < 0) {

@@ -13,6 +13,16 @@
 
 namespace TRL {
 
+	typedef enum _RobotStartLocation {
+		AUTO_LOADER = 1,
+		POLE = 2
+	}RobotStartLocation;
+
+	typedef enum _AllianceColor {
+		RED,
+		BLUE
+	}AllianceColor;
+
 	typedef enum _InputControlMode {
 		NormalControllerOnly,
 		NormalAndPartnerContoller
@@ -81,8 +91,6 @@ namespace TRL {
 		ControllerInput claw_open;
 		ControllerInput claw_close;
 
-//		ControllerInput claw_rotate_left;
-//		ControllerInput claw_rotate_right;
 		ControllerInput claw_rotate;
 
 		ControllerInput orientation_forward;
@@ -93,10 +101,34 @@ namespace TRL {
 		short clawClosePower;
 		short clawArmPower;
 
+		//Motors
+		Motor frontRightDrive;
+		Motor frontLeftDrive;
+		Motor backRightDrive;
+		Motor backLeftDrive;
+
+		Motor frontRightLift;
+		Motor backRightLift;
+		Motor frontLeftLift;
+		Motor backLeftLift;
+
+		Motor intakeMotor;
+		Motor intakeArmMotor;
+
+		void initializeMotors();
+		void initializeStaticClassInstances();
 	public:
+
 		//Constructor + Destructor
 		Robot();
 		virtual ~Robot();
+
+		//Instance
+		static Robot instance;
+
+		//Autonomous Information
+		AllianceColor allianceColor;
+		RobotStartLocation startLocation;
 
 		// Controller Input
 		void handleInput(InputControlMode controlMode);
@@ -129,20 +161,6 @@ namespace TRL {
 		//Claw Arm
 		void clawArm(int power, ClawArmDirection dir);
 		void stopClawArm();
-
-		//Motors
-//		static Motor frontRightDrive;
-//		static Motor frontLeftDrive;
-//		static Motor backRightDrive;
-//		static Motor backLeftDrive;
-//
-//		static Motor frontRightLift;
-//		static Motor backRightLift;
-//		static Motor frontLeftLift;
-//		static Motor backLeftLift;
-//
-//		static Motor intakeMotor;
-//		static Motor intakeArmMotor;
 
 	};
 }

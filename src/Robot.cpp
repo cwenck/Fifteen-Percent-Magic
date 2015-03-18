@@ -11,23 +11,40 @@ namespace TRL {
 ///////////////////////////////
 //CONTSTRUCTORS + DESTRUCTORS//
 ///////////////////////////////
-//	Motor Robot::frontRightDrive = Motor(MotorPort_10, FrontRight);
-//	Motor Robot::frontLeftDrive = Motor(MotorPort_9, FrontLeft);
-//	Motor Robot::backRightDrive = Motor(MotorPort_2, BackRight, true);
-//	Motor Robot::backLeftDrive = Motor(MotorPort_1, BackLeft);
-//
-//	Motor Robot::frontRightLift = Motor(MotorPort_3, FrontRight);
-//	Motor Robot::backRightLift = Motor(MotorPort_5, BackRight);
-//	Motor Robot::frontLeftLift = Motor(MotorPort_4, FrontLeft, true);
-//	Motor Robot::backLeftLift = Motor(MotorPort_6, BackLeft, true);
-//
-//	Motor Robot::intakeMotor = Motor(MotorPort_7, Intake);
-//	Motor Robot::intakeArmMotor = Motor(MotorPort_8, Other);
 
-//	Controller Robot::mainController = Controller(Normal_Controller);
-//	Controller Robot::partnerController = Controller(Partner_Controller);
+Robot Robot::instance;
+
+void Robot::initializeStaticClassInstances() {
+	AutonomousRoutines::instance = AutonomousRoutines();
+}
+
+void Robot::initializeMotors() {
+	frontRightDrive = Motor(MotorPort_10, FrontRight);
+	frontLeftDrive = Motor(MotorPort_9, FrontLeft);
+	backRightDrive = Motor(MotorPort_2, BackRight, true);
+	backLeftDrive = Motor(MotorPort_1, BackLeft);
+
+	frontRightLift = Motor(MotorPort_3, FrontRight);
+	backRightLift = Motor(MotorPort_5, BackRight);
+	frontLeftLift = Motor(MotorPort_4, FrontLeft, true);
+	backLeftLift = Motor(MotorPort_6, BackLeft, true);
+
+	intakeMotor = Motor(MotorPort_7, Intake);
+	intakeArmMotor = Motor(MotorPort_8, Other);
+
+	Motor* liftMotors[4] = { &frontRightLift, &frontLeftLift, &backRightLift,
+			&backLeftLift };
+	Motor* driveMotors[4] = { &frontRightDrive, &frontLeftDrive,
+			&backRightDrive, &backLeftDrive };
+
+	setDriveMotors(driveMotors, 4);
+	setLiftMotors(liftMotors, 4);
+	setIntakeMotors(&intakeMotor, &intakeArmMotor);
+	printf("Motors Initialized\n\r");
+}
 
 Robot::Robot() {
+	printf("Robot class intitialized\n\r");
 	mainController = Controller(Normal_Controller);
 	partnerController = Controller(Partner_Controller);
 
@@ -67,6 +84,8 @@ Robot::Robot() {
 	//Init the motor pointers as null
 	clawMotor = NULL;
 	clawArmMotor = NULL;
+
+	initializeMotors();
 }
 
 Robot::~Robot() {

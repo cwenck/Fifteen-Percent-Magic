@@ -53,6 +53,9 @@ namespace TRL {
 		void setKi(float integralConstant);
 		void setKd(float derivativeConstant);
 
+		void setErrorTolerance(int errorTolerance);
+		void setChecksRequiredToBreakPID(int numberOfChecks);
+
 		void setTarget(int target);
 		void goToSetTarget();
 		void goToTarget(int target);

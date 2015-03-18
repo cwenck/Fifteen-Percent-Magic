@@ -48,7 +48,7 @@ Motor::~Motor() {
 
 void Motor::setPower(int motorSpeed) {
 	if (port == MotorPort_NULL) {
-		printf("Motor not port not assigned to motor.");
+		printf("Motor port not assigned to motor.\n\r");
 		return;
 	}
 	speed = motorSpeed;
@@ -61,7 +61,7 @@ void Motor::setPower(int motorSpeed) {
 
 void Motor::stop() {
 	if (port == MotorPort_NULL) {
-		printf("Motor not port not assigned to motor.");
+		printf("Motor port not assigned to motor.\n\r");
 		return;
 	}
 	motorStop(port);
