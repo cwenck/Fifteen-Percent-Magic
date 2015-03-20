@@ -8,63 +8,20 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
+#include "EnumeratedTypedefs.h"
 #include "Motor.h"
 #include "Controller.h"
+#include "PID.h"
+#include "AutonomousRoutines.h"
 
 namespace TRL {
 
-	typedef enum _RobotStartLocation {
-		AUTO_LOADER = 1,
-		POLE = 2
-	}RobotStartLocation;
-
-	typedef enum _AllianceColor {
-		RED,
-		BLUE
-	}AllianceColor;
-
-	typedef enum _InputControlMode {
-		NormalControllerOnly,
-		NormalAndPartnerContoller
-	}InputControlMode;
-
-	typedef enum _DriveDirection {
-		ManualDrive,
-		ManualTurn,
-		ManualStrafe,
-		DriveForward,
-		DriveBackward,
-		TurnLeft,
-		TurnRight,
-		StrafeLeft,
-		StrafeRight
-	}DriveDirection;
-
-	typedef enum _DriveOrientation {
-		ForwardOrientation,
-		BackwardOrientation
-	}DriveOrientation;
-
-	typedef enum _LiftDirection {
-		ManualLift,
-		Up,
-		Down
-	}LiftDirection;
-
-	typedef enum _ClawArmDirection {
-		ManualClawArmControl,
-		RotateArmLeft,
-		RotateArmRight
-	}ClawArmDirection;
-
-	typedef enum _ClawDirection {
-		ManualClawControl,
-		OpenClaw,
-		CloseClaw
-	}ClawDirection;
-
 	class Robot {
 	private:
+
+		PID liftController;
+		PID driveController;
+
 		Motor* driveMotors[6];
 		Motor* liftMotors[10];
 		Motor* clawMotor;
@@ -75,9 +32,6 @@ namespace TRL {
 		char numDriveMotors;
 		char numLiftMotors;
 
-		//Controllers
-		Controller mainController;
-		Controller partnerController;
 
 		//Controller Buttons
 		ControllerInput y_drive_stick;
@@ -116,7 +70,6 @@ namespace TRL {
 		Motor intakeArmMotor;
 
 		void initializeMotors();
-		void initializeStaticClassInstances();
 	public:
 
 		//Constructor + Destructor
@@ -129,6 +82,10 @@ namespace TRL {
 		//Autonomous Information
 		AllianceColor allianceColor;
 		RobotStartLocation startLocation;
+
+		//Controllers
+		static Controller mainController;
+		static Controller partnerController;
 
 		// Controller Input
 		void handleInput(InputControlMode controlMode);

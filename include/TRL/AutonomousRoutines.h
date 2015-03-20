@@ -8,6 +8,7 @@
 #ifndef AUTONOMUSROUTINES_H_
 #define AUTONOMUSROUTINES_H_
 
+#include "EnumeratedTypedefs.h"
 #include "Robot.h"
 
 namespace TRL {

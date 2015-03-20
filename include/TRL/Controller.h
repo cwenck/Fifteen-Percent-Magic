@@ -47,9 +47,14 @@ namespace TRL {
 	}ControllerShiftInput;
 
 	typedef enum _ControllerType {
-		Normal_Controller = 1,
+		Main_Controller = 1,
 		Partner_Controller = 2
 	}ControllerType;
+
+	typedef enum _ControllerInputType{
+		BUTTON,
+		JOYSTICK
+	}ControllerInputType;
 
 	class Controller {
 	private:
@@ -63,7 +68,10 @@ namespace TRL {
 		int getValue(ControllerInput in);
 		bool isShifted();
 		void setShiftKey(ControllerShiftInput input);
-
+		ControllerInputType getControllerInputType(ControllerInput in);
+		bool isInputInactive(ControllerInput in);
+		//threshold is only used for joystick inputs
+		bool isInputInactive(ControllerInput in, short threshold);
 	};
 }
 #endif /* CONTROLLER_H_ */

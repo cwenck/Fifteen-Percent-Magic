@@ -9,7 +9,7 @@
 
 extern "C" {
 
-int __dso_handle;
+void* __dso_handle;
 
 void __cxa_pure_virtual() {
 	printf(

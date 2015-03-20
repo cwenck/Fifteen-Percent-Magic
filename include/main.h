@@ -44,7 +44,7 @@
 #define MAIN_H_
 
 #include <API.h>
-#include "TRL/TRL_Initilization.h"
+#include "TRL/TRL_Initialization.h"
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {

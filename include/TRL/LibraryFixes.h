@@ -12,7 +12,7 @@
 
 extern "C" {
 	int vsnprintf (char * s, size_t n, const char * format, va_list arg );
-	extern int __dso_handle;
+	extern void* __dso_handle;
 }
 
 #endif /* LIBRARYFIXES_H_ */

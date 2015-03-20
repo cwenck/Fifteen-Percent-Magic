@@ -10,6 +10,7 @@
 
 #include <API.h>
 #include "Sensor.h"
+#include "LibraryFixes.h"
 
 namespace TRL {
 
@@ -45,6 +46,7 @@ namespace TRL {
 		int dSpeed;
 		int motorSpeed;
 	public:
+		PID();
 		PID(Sensor* sensor, void (*setMotorSpeedFunction)(int speed));
 		PID(float kp, float ki, float kd, Sensor* sensor, void (*setMotorSpeedFunction)(int speed));
 		virtual ~PID();

@@ -14,9 +14,8 @@ namespace TRL {
 
 Robot Robot::instance;
 
-void Robot::initializeStaticClassInstances() {
-	AutonomousRoutines::instance = AutonomousRoutines();
-}
+Controller Robot::mainController;
+Controller Robot::partnerController;
 
 void Robot::initializeMotors() {
 	frontRightDrive = Motor(MotorPort_10, FrontRight);
@@ -45,8 +44,6 @@ void Robot::initializeMotors() {
 
 Robot::Robot() {
 	printf("Robot class intitialized\n\r");
-	mainController = Controller(Normal_Controller);
-	partnerController = Controller(Partner_Controller);
 
 	//Controller Deadzone
 	controllerDeadzoneMagnitude = 10;
@@ -58,8 +55,6 @@ Robot::Robot() {
 	lift_up = Btn5D;
 	lift_down = Btn5U;
 
-//	claw_rotate_left = ;
-//	claw_rotate_right = Btn8R;
 	claw_rotate = Ch1;
 
 	claw_open = Btn6U;

@@ -10,6 +10,7 @@
 
 //Include All Files Of the Library So Only This File Needs To Be Linked To main.h
 #include "LibraryFixes.h"
+#include "EnumeratedTypedefs.h"
 #include "Types.h"
 #include "Motor.h"
 #include "GenericEncoder.h"
@@ -19,6 +20,6 @@
 #include "QuadratureEncoder.h"
 #include "PID.h"
 #include "Robot.h"
-#include "AutonomusRoutines.h"
+#include "AutonomousRoutines.h"
 
 #endif /* TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_ */

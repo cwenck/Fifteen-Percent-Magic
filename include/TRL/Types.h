@@ -8,7 +8,7 @@
 #ifndef ENUMERATEDTYPES_H_
 #define ENUMERATEDTYPES_H_
 
-#include "TRL_Initilization.h"
+#include "TRL_Initialization.h"
 
 //types that are wrappers for default pros types are prefixed with "PROS_"
 typedef void* PROS_Encoder;

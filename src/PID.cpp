@@ -9,6 +9,38 @@
 
 namespace TRL {
 
+PID::PID(){
+	this->kp = 0;
+	this->ki = 0;
+	this->kd = 0;
+
+	this->pSpeed = 0;
+	this->iSpeed = 0;
+	this->dSpeed = 0;
+
+	this->integral = 0;
+	this->derivative = 0;
+
+	this->shouldIgnoreIntegralBounds = true;
+	this->integralMin = 0;
+	this->integralMax = 127;
+	this->rangeWhereIntegralComponentIsActive = -1;
+
+	this->sensor = 0;
+	this->target = 0;
+	this->sensorValue = 0;
+	this->prevSensorValue = 0;
+
+	this->error = 0;
+	this->checksPassed = 0;
+	this->requiredPassedChecks = 3;
+	this->errorTolerance = 10;
+
+	this->targetReached = false;
+	this->setMotorSpeedFunction = 0;
+	this->motorSpeed = 0;
+}
+
 PID::PID(Sensor* sensor, void (*setMotorSpeedFunction)(int speed)) {
 	this->kp = 0;
 	this->ki = 0;

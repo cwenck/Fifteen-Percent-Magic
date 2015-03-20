@@ -9,8 +9,8 @@
 
 namespace TRL {
 
-Controller::Controller(){
-	this->type = Normal_Controller;
+Controller::Controller() {
+	this->type = Main_Controller;
 	this->shiftKey = Shift_NoInput;
 }
 
@@ -19,22 +19,22 @@ Controller::Controller(ControllerType type) {
 	this->shiftKey = Shift_NoInput;
 }
 
-Controller::Controller(ControllerType type, ControllerShiftInput shiftKey){
+Controller::Controller(ControllerType type, ControllerShiftInput shiftKey) {
 	this->type = type;
 	this->shiftKey = shiftKey;
 }
 
-Controller::~Controller(){
+Controller::~Controller() {
 //	Destructor
 }
 
-void Controller::setShiftKey(ControllerShiftInput input){
+void Controller::setShiftKey(ControllerShiftInput input) {
 	shiftKey = input;
 }
 
 bool Controller::isShifted() {
 	ControllerInput shift = (ControllerInput) ((int) shiftKey);
-	if(getValue(shift) != 0){
+	if (getValue(shift) != 0) {
 		return true;
 	} else {
 		return false;
@@ -116,6 +116,24 @@ int Controller::getValue(ControllerInput in) {
 		} else {
 			return 0;
 		}
+	}
+}
+
+ControllerInputType Controller::getControllerInputType(ControllerInput in) {
+	if (in < Ch1) {
+		return BUTTON;
+	} else {
+		return JOYSTICK;
+	}
+}
+
+bool Controller::isInputInactive(ControllerInput in) {
+	return (getValue(in) == 0);
+}
+
+bool Controller::isInputInactive(ControllerInput in, short threshold) {
+	if (in < Ch1) {
+		return isInputInactive(in);
 	}
 }
 
