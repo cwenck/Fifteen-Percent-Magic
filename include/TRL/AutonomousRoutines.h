@@ -8,8 +8,7 @@
 #ifndef AUTONOMUSROUTINES_H_
 #define AUTONOMUSROUTINES_H_
 
-#include "EnumeratedTypedefs.h"
-#include "Robot.h"
+#include "main.h"
 
 namespace TRL {
 	//Position ONE is the AUTO_LOADER

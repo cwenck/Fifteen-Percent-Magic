@@ -12,10 +12,10 @@ namespace TRL {
 //CONTSTRUCTORS + DESTRUCTORS//
 ///////////////////////////////
 
-Robot Robot::instance;
+Robot Robot::instance = Robot();
 
-Controller Robot::mainController;
-Controller Robot::partnerController;
+Controller Robot::mainController = Controller(Main_Controller);
+Controller Robot::partnerController = Controller(Partner_Controller);
 
 void Robot::initializeMotors() {
 	frontRightDrive = Motor(MotorPort_10, FrontRight);

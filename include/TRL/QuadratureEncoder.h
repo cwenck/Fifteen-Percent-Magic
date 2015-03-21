@@ -8,9 +8,7 @@
 #ifndef QUADRATUREENCODER_H_
 #define QUADRATUREENCODER_H_
 
-#include <API.h>
-#include "GenericEncoder.h"
-#include "Types.h"
+#include "main.h"
 
 namespace TRL {
 

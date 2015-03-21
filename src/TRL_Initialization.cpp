@@ -9,11 +9,6 @@
 
 namespace TRL {
 
-void initializeLibrary(){
-	Robot::mainController = Controller(Main_Controller);
-	Robot::partnerController = Controller(Partner_Controller);
-	Robot::instance = Robot();
-	AutonomousRoutines::instance = AutonomousRoutines();
-}
+//Nothing is done in this file at the moment. It is here just in case.
 
 }

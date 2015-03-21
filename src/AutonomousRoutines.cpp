@@ -9,7 +9,7 @@
 
 namespace TRL {
 
-AutonomousRoutines AutonomousRoutines::instance;
+AutonomousRoutines AutonomousRoutines::instance = AutonomousRoutines();
 
 AutonomousRoutines::AutonomousRoutines() {
 }

@@ -10,6 +10,9 @@
 
 #include "TRL_Initialization.h"
 
+//wrapper type for strings in c
+typedef const char* string;
+
 //types that are wrappers for default pros types are prefixed with "PROS_"
 typedef void* PROS_Encoder;
 
