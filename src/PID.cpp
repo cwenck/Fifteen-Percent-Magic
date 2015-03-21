@@ -26,7 +26,7 @@ PID::PID(){
 	this->integralMax = 127;
 	this->rangeWhereIntegralComponentIsActive = -1;
 
-	this->sensor = 0;
+	this->sensor = NULL;
 	this->target = 0;
 	this->sensorValue = 0;
 	this->prevSensorValue = 0;
@@ -37,7 +37,7 @@ PID::PID(){
 	this->errorTolerance = 10;
 
 	this->targetReached = false;
-	this->setMotorSpeedFunction = 0;
+	this->setMotorSpeedFunction = NULL;
 	this->motorSpeed = 0;
 }
 

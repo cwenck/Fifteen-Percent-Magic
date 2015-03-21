@@ -132,9 +132,12 @@ bool Controller::isInputInactive(ControllerInput in) {
 }
 
 bool Controller::isInputInactive(ControllerInput in, short threshold) {
-	if (in < Ch1) {
+	if (in < (int)Ch1) {
 		return isInputInactive(in);
+	} else if (getValue(in) < threshold){
+		return true;
 	}
+	return false;
 }
 
 } /* namespace TRL */
