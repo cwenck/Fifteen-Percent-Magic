@@ -60,7 +60,9 @@ using namespace TRL;
 void operatorControl() {
 	while (1) {
 		delay(5);
-		Robot::instance.handleInput(NormalAndPartnerContoller);
+//		Robot::instance.handleInput(NormalAndPartnerContoller);
+		Controller controller = Controller(Master_Controller);
+		Robot::master_controller;
 	}
 }
 

@@ -20,8 +20,11 @@ namespace TRL {
 	}AllianceColor;
 
 	typedef enum _InputControlMode {
-		NormalControllerOnly,
-		NormalAndPartnerContoller
+		MasterOnly,
+		SlaveOnly,
+		MasterAndSlaveEqualPriority,
+		MasterHigherPriority,
+		SlaveHigherPriority
 	}InputControlMode;
 
 	typedef enum _DriveDirection {

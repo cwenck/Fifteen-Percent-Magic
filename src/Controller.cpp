@@ -10,7 +10,7 @@
 namespace TRL {
 
 Controller::Controller() {
-	this->type = Main_Controller;
+	this->type = Master_Controller;
 	this->shiftKey = Shift_NoInput;
 }
 
@@ -119,6 +119,14 @@ int Controller::getValue(ControllerInput in) {
 	}
 }
 
+int Controller::getShifedValue(ControllerInput in){
+	if(isShifted()){
+		return getValue(in);
+	} else {
+		return 0;
+	}
+}
+
 ControllerInputType Controller::getControllerInputType(ControllerInput in) {
 	if (in < Ch1) {
 		return BUTTON;
@@ -138,6 +146,14 @@ bool Controller::isInputInactive(ControllerInput in, short threshold) {
 		return true;
 	}
 	return false;
+}
+
+bool Controller::isInputActive(ControllerInput in){
+	return !isInputInactive(in);
+}
+
+bool Controller::isInputActive(ControllerInput in, short threshold){
+	return !isInputInactive(in, threshold);
 }
 
 } /* namespace TRL */

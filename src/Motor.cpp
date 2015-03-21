@@ -13,6 +13,7 @@ Motor::Motor() {
 	this->port = MotorPort_NULL;
 	this->reversed = false;
 	this->speed = 0;
+	this->offset = 0;
 	this->encoder = NULL;
 	this->location = NullMotorLocation;
 }
@@ -21,6 +22,16 @@ Motor::Motor(MotorPort port, MotorLocation location) {
 	this->reversed = false;
 	this->port = port;
 	this->speed = 0;
+	this->offset = 0;
+	this->encoder = NULL;
+	this->location = location;
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, short offset) {
+	this->reversed = false;
+	this->port = port;
+	this->speed = 0;
+	this->offset = offset;
 	this->encoder = NULL;
 	this->location = location;
 }
@@ -29,6 +40,16 @@ Motor::Motor(MotorPort port, MotorLocation location, bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
+	this->offset = 0;
+	this->encoder = NULL;
+	this->location = location;
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, bool reversed, short offset) {
+	this->port = port;
+	this->reversed = reversed;
+	this->speed = 0;
+	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
 }
@@ -38,6 +59,17 @@ Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
+	this->offset = 0;
+	this->encoder = encoder;
+	this->location = location;
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
+		bool reversed, short offset) {
+	this->port = port;
+	this->reversed = reversed;
+	this->speed = 0;
+	this->offset = offset;
 	this->encoder = encoder;
 	this->location = location;
 }
@@ -46,12 +78,25 @@ Motor::~Motor() {
 	// TODO Auto-generated destructor stub
 }
 
+int Motor::addOffsetToSpeed(int speed){
+	int absSpeed = abs(speed);
+	if(speed < 0){
+		return -(absSpeed + offset);
+	} else {
+		return (absSpeed + offset);
+	}
+
+
+}
+
 void Motor::setPower(int motorSpeed) {
 	if (port == MotorPort_NULL) {
 		printf("Motor port not assigned to motor.\n\r");
 		return;
 	}
-	speed = motorSpeed;
+	this->speed = addOffsetToSpeed(motorSpeed);
+
+
 	if (!reversed) {
 		motorSet(port, -speed);
 	} else {

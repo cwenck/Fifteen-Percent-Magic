@@ -8,19 +8,15 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
-#include "EnumeratedTypedefs.h"
-#include "Motor.h"
-#include "Controller.h"
-#include "PID.h"
-#include "AutonomousRoutines.h"
+#include "main.h"
 
 namespace TRL {
 
 	class Robot {
 	private:
 
-		PID liftController;
-		PID driveController;
+		PID pid_liftController;
+		PID pid_driveController;
 
 		Motor* driveMotors[6];
 		Motor* liftMotors[10];
@@ -36,6 +32,9 @@ namespace TRL {
 		//Controller Buttons
 		ControllerInput y_drive_stick;
 		ControllerInput x_drive_stick;
+
+		ControllerInput y_strafe_stick;
+		ControllerInput x_strafe_stick;
 
 		short controllerDeadzoneMagnitude;
 
@@ -84,15 +83,30 @@ namespace TRL {
 		RobotStartLocation startLocation;
 
 		//Controllers
-		static Controller mainController;
-		static Controller partnerController;
+		static Controller master_controller;
+		static Controller slave_controller;
 
 		// Controller Input
 		void handleInput(InputControlMode controlMode);
-		void handleDriveOrientation(InputControlMode controlMode);
-		void handleDrive(InputControlMode controlMode);
-		void handleLift(InputControlMode controlMode);
-		void handleClaw(InputControlMode controlMode);
+//		void handleDriveOrientation(InputControlMode controlMode);
+//		void handleDrive(InputControlMode controlMode);
+//		void handleLift(InputControlMode controlMode);
+//		void handleClaw(InputControlMode controlMode);
+
+		void driveOrientationInputController(InputControlMode controlMode);
+		void driveOrientationController(Controller &controller);
+
+		void driveInputController(InputControlMode controlMode);
+		void driveController(Controller &controller);
+
+		void liftInputController(InputControlMode controlMode);
+		void liftController(Controller &controller);
+
+		void intakeInputController(InputControlMode controlMode);
+		void intakeController(Controller &controller);
+
+
+
 
 		//Set Motor Pointers
 		bool setDriveMotors(Motor* driveMotors[], char numDriveMotors);

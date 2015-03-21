@@ -2,7 +2,7 @@
  * Robot.cpp
  *
  *  Created on: Feb 8, 2015
- *      Author: guywenck
+ *      Author: cwenck
  */
 
 #include "TRL/Robot.h"
@@ -14,8 +14,8 @@ namespace TRL {
 
 Robot Robot::instance = Robot();
 
-Controller Robot::mainController = Controller(Main_Controller);
-Controller Robot::partnerController = Controller(Partner_Controller);
+Controller Robot::master_controller = Controller(Master_Controller);
+Controller Robot::slave_controller = Controller(Slave_Controller);
 
 void Robot::initializeMotors() {
 	frontRightDrive = Motor(MotorPort_10, FrontRight);
@@ -36,15 +36,13 @@ void Robot::initializeMotors() {
 	Motor* driveMotors[4] = { &frontRightDrive, &frontLeftDrive,
 			&backRightDrive, &backLeftDrive };
 
-	setDriveMotors(driveMotors, 4);
-	setLiftMotors(liftMotors, 4);
+	setDriveMotors(driveMotors, 4);	//last number is the number of drive motors
+	setLiftMotors(liftMotors, 4);	//last number is the number of lift motors
 	setIntakeMotors(&intakeMotor, &intakeArmMotor);
-	printf("Motors Initialized\n\r");
+	println(LOG, "ROBOT", "Motors Initialized.");
 }
 
 Robot::Robot() {
-	printf("Robot class intitialized\n\r");
-
 	//Controller Deadzone
 	controllerDeadzoneMagnitude = 10;
 
@@ -92,141 +90,239 @@ Robot::~Robot() {
 ////////////////////
 
 void Robot::handleInput(InputControlMode controlMode) {
-	handleDriveOrientation(controlMode);
-	handleDrive(controlMode);
-	handleLift(controlMode);
-	handleClaw(controlMode);
+//	handleDriveOrientation(controlMode);
+//	handleDrive(controlMode);
+//	handleLift(controlMode);
+//	handleClaw(controlMode);
 }
 
-void Robot::handleDriveOrientation(InputControlMode controlMode) {
+//void Robot::handleDriveOrientation(InputControlMode controlMode) {
+//	switch (controlMode) {
+//	case MasterControllerOnly:
+//		if (master_controller.getValue(orientation_forward) == 1) {
+//			setDriveOrientation(ForwardOrientation);
+//		} else if (master_controller.getValue(orientation_backward) == 1) {
+//			setDriveOrientation(BackwardOrientation);
+//		}
+//		break;
+//	case NormalOverwritesPartnerContoller:
+//		if (master_controller.getValue(orientation_forward) == 1) {
+//			setDriveOrientation(ForwardOrientation);
+//		} else if (master_controller.getValue(orientation_backward) == 1) {
+//			setDriveOrientation(BackwardOrientation);
+//		} else if (slave_controller.getValue(orientation_forward) == 1) {
+//			setDriveOrientation(ForwardOrientation);
+//		} else if (slave_controller.getValue(orientation_backward) == 1) {
+//			setDriveOrientation(BackwardOrientation);
+//		}
+//		break;
+//	}
+//}
+
+void Robot::driveOrientationInputController(InputControlMode controlMode) {
+	bool masterForwardActive = master_controller.isInputActive(
+			orientation_forward);
+	bool masterBackwawrdActive = master_controller.isInputActive(
+			orientation_backward);
+	bool slaveForwardActive = slave_controller.isInputActive(
+			orientation_forward);
+	bool slaveBackwardActive = slave_controller.isInputActive(
+			orientation_backward);
+
+	bool masterActive = masterForwardActive || masterBackwawrdActive;
+	bool slaveActive = slaveForwardActive || slaveBackwardActive;
+
 	switch (controlMode) {
-	case NormalControllerOnly:
-		if (mainController.getValue(orientation_forward) == 1) {
-			setDriveOrientation(ForwardOrientation);
-		} else if (mainController.getValue(orientation_backward) == 1) {
-			setDriveOrientation(BackwardOrientation);
+	case MasterOnly:
+		driveOrientationController(master_controller);
+		return;
+	case SlaveOnly:
+		driveOrientationController(slave_controller);
+		return;
+	case MasterAndSlaveEqualPriority:
+		if (masterActive && !slaveActive) {
+			driveOrientationController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			driveOrientationController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			//Dont send any input if both are trying to control it
 		}
-		break;
-	case NormalAndPartnerContoller:
-		if (mainController.getValue(orientation_forward) == 1) {
-			setDriveOrientation(ForwardOrientation);
-		} else if (mainController.getValue(orientation_backward) == 1) {
-			setDriveOrientation(BackwardOrientation);
-		} else if (partnerController.getValue(orientation_forward) == 1) {
-			setDriveOrientation(ForwardOrientation);
-		} else if (partnerController.getValue(orientation_backward) == 1) {
-			setDriveOrientation(BackwardOrientation);
+		return;
+	case MasterHigherPriority:
+		if (masterActive && !slaveActive) {
+			driveOrientationController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			driveOrientationController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			driveOrientationController(master_controller);
 		}
-		break;
+		return;
+	case SlaveHigherPriority:
+		if (masterActive && !slaveActive) {
+			driveOrientationController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			driveOrientationController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			driveOrientationController(slave_controller);
+		}
+		return;
 	}
 }
 
-void Robot::handleDrive(InputControlMode controlMode) {
-	short yMain = mainController.getValue(y_drive_stick);
-	short xMain = mainController.getValue(x_drive_stick);
-
-	short yPartner = partnerController.getValue(y_drive_stick);
-	short xPartner = partnerController.getValue(x_drive_stick);
-
-	switch (controlMode) {
-	case NormalControllerOnly:
-		if (abs(xMain) < abs(controllerDeadzoneMagnitude)
-				&& abs(yMain) < abs(controllerDeadzoneMagnitude)) {
-			return;
-		}
-
-		if (abs(yMain) > abs(xMain)) {
-			drive(yMain, ManualDrive);
-		} else if (abs(xMain) >= abs(yMain)) {
-			drive(xMain, ManualTurn);
-		}
-		break;
-	case NormalAndPartnerContoller:
-		if (!(abs(xMain) < abs(controllerDeadzoneMagnitude)
-				&& abs(yMain) < abs(controllerDeadzoneMagnitude))) {
-			if (abs(yMain) > abs(xMain)) {
-				drive(yMain, ManualDrive);
-			} else if (abs(xMain) >= abs(yMain)) {
-				drive(xMain, ManualTurn);
-			}
-		} else if (!(abs(xPartner) < abs(controllerDeadzoneMagnitude)
-				&& abs(yPartner) < abs(controllerDeadzoneMagnitude))) {
-			if (abs(yPartner) > abs(xPartner)) {
-				drive(yPartner, ManualDrive);
-			} else if (abs(xPartner) >= abs(yPartner)) {
-				drive(xPartner, ManualTurn);
-			}
-		} else {
-			stopDriveMotors();
-		}
-		break;
+void Robot::driveOrientationController(Controller &controller) {
+	if (controller.isInputActive(orientation_forward)) {
+		setDriveOrientation(ForwardOrientation);
+	} else if (controller.getValue(orientation_backward) == 1) {
+		setDriveOrientation(BackwardOrientation);
 	}
 }
 
-//returns false if the lift should be set to 0
-void Robot::handleLift(InputControlMode controlMode) {
-	switch (controlMode) {
-	case NormalControllerOnly:
-		if (mainController.getValue(lift_up) == 1) {
-			lift(liftPower, Up);
-		} else if (mainController.getValue(lift_down) == 1) {
-			lift(liftPower, Down);
-		} else {
-			stopLift();
-		}
-		break;
-	case NormalAndPartnerContoller:
-		if (mainController.getValue(lift_up) == 1) {
-			lift(liftPower, Up);
-		} else if (mainController.getValue(lift_down) == 1) {
-			lift(liftPower, Down);
-		} else if (partnerController.getValue(lift_up) == 1) {
-			lift(liftPower, Up);
-		} else if (partnerController.getValue(lift_down) == 1) {
-			lift(liftPower, Down);
-		} else {
-			stopLift();
-		}
-		break;
+void Robot::driveInputController(InputControlMode controlMode) {
+//	controllerDeadzoneMagnitude
+	bool yMasterActiveDrive = master_controller.isInputActive(y_drive_stick);
+	bool xMasterActiveDrive = master_controller.isInputActive(x_drive_stick);
+
+	bool yMasterActiveStrafe = master_controller.isInputActive(y_strafe_stick);
+	bool xMasterActiveStrafe = master_controller.isInputActive(x_strafe_stick);
+
+	bool ySlaveActiveDrive = slave_controller.isInputActive(y_drive_stick);
+	bool xSlaveActiveDrive = slave_controller.isInputActive(x_drive_stick);
+
+	bool ySlaveActiveStrafe = slave_controller.isInputActive(y_strafe_stick);
+	bool xSlaveActiveStrafe = slave_controller.isInputActive(x_strafe_stick);
+
+	bool masterDriveActive = xMasterActiveDrive || yMasterActiveDrive;
+	bool masterStrafeActive = xMasterActiveStrafe || yMasterActiveStrafe;
+
+	bool slaveDriveActive = xSlaveActiveDrive || ySlaveActiveDrive;
+	bool slaveStrafeActive = xSlaveActiveStrafe || ySlaveActiveStrafe;
+
+	//TODO Add code to handle the boolean logic for picking which controller handles the drives input
+
+}
+
+void Robot::driveController(Controller &controller) {
+	short y = controller.getValue(y_drive_stick);
+	short x = controller.getValue(x_drive_stick);
+
+	if (abs(x) < abs(controllerDeadzoneMagnitude)
+			&& abs(y) < abs(controllerDeadzoneMagnitude)) {
+		return;
+	}
+
+	if (abs(y) > abs(x)) {
+		drive(y, ManualDrive);
+	} else if (abs(x) >= abs(y)) {
+		drive(x, ManualTurn);
 	}
 }
 
-void Robot::handleClaw(InputControlMode controlMode) {
-	switch (controlMode) {
-	case NormalControllerOnly:
-		clawArm(mainController.getValue(claw_rotate), ManualClawArmControl);
-
-		if (mainController.getValue(claw_open) == 1) {
-			claw(clawOpenPower, OpenClaw);
-		} else if (mainController.getValue(claw_close) == 1) {
-			claw(clawClosePower, CloseClaw);
-		} else {
-			stopClaw();
-		}
-		break;
-	case NormalAndPartnerContoller:
-		if (mainController.getValue(claw_rotate) != 0) {
-			clawArm(mainController.getValue(claw_rotate), ManualClawArmControl);
-		} else if (partnerController.getValue(claw_rotate) != 0) {
-			clawArm(partnerController.getValue(claw_rotate),
-					ManualClawArmControl);
-		} else {
-			stopClawArm();
-		}
-
-		if (mainController.getValue(claw_open) == 1) {
-			claw(clawOpenPower, OpenClaw);
-		} else if (mainController.getValue(claw_close) == 1) {
-			claw(clawClosePower, CloseClaw);
-		} else if (partnerController.getValue(claw_open) == 1) {
-			claw(clawOpenPower, OpenClaw);
-		} else if (partnerController.getValue(claw_close) == 1) {
-			claw(clawClosePower, CloseClaw);
-		} else {
-			stopClaw();
-		}
-		break;
-	}
+//void Robot::handleDrive(InputControlMode controlMode) {
+//	short yMain = master_controller.getValue(y_drive_stick);
+//	short xMain = master_controller.getValue(x_drive_stick);
+//
+//	short yPartner = slave_controller.getValue(y_drive_stick);
+//	short xPartner = slave_controller.getValue(x_drive_stick);
+//
+//	switch (controlMode) {
+//	case MasterControllerOnly:
+//		if (abs(xMain) < abs(controllerDeadzoneMagnitude)
+//				&& abs(yMain) < abs(controllerDeadzoneMagnitude)) {
+//			return;
+//		}
+//
+//		if (abs(yMain) > abs(xMain)) {
+//			drive(yMain, ManualDrive);
+//		} else if (abs(xMain) >= abs(yMain)) {
+//			drive(xMain, ManualTurn);
+//		}
+//		break;
+//	case NormalOverwritesPartnerContoller:
+//		if (!(abs(xMain) < abs(controllerDeadzoneMagnitude)
+//				&& abs(yMain) < abs(controllerDeadzoneMagnitude))) {
+//			if (abs(yMain) > abs(xMain)) {
+//				drive(yMain, ManualDrive);
+//			} else if (abs(xMain) >= abs(yMain)) {
+//				drive(xMain, ManualTurn);
+//			}
+//		} else if (!(abs(xPartner) < abs(controllerDeadzoneMagnitude)
+//				&& abs(yPartner) < abs(controllerDeadzoneMagnitude))) {
+//			if (abs(yPartner) > abs(xPartner)) {
+//				drive(yPartner, ManualDrive);
+//			} else if (abs(xPartner) >= abs(yPartner)) {
+//				drive(xPartner, ManualTurn);
+//			}
+//		} else {
+//			stopDriveMotors();
+//		}
+//		break;
+//	}
+//}
+//
+////returns false if the lift should be set to 0
+//void Robot::handleLift(InputControlMode controlMode) {
+//	switch (controlMode) {
+//	case MasterControllerOnly:
+//		if (master_controller.getValue(lift_up) == 1) {
+//			lift(liftPower, Up);
+//		} else if (master_controller.getValue(lift_down) == 1) {
+//			lift(liftPower, Down);
+//		} else {
+//			stopLift();
+//		}
+//		break;
+//	case NormalOverwritesPartnerContoller:
+//		if (master_controller.getValue(lift_up) == 1) {
+//			lift(liftPower, Up);
+//		} else if (master_controller.getValue(lift_down) == 1) {
+//			lift(liftPower, Down);
+//		} else if (slave_controller.getValue(lift_up) == 1) {
+//			lift(liftPower, Up);
+//		} else if (slave_controller.getValue(lift_down) == 1) {
+//			lift(liftPower, Down);
+//		} else {
+//			stopLift();
+//		}
+//		break;
+//	}
+//}
+//
+//void Robot::handleClaw(InputControlMode controlMode) {
+//	switch (controlMode) {
+//	case MasterControllerOnly:
+//		clawArm(master_controller.getValue(claw_rotate), ManualClawArmControl);
+//
+//		if (master_controller.getValue(claw_open) == 1) {
+//			claw(clawOpenPower, OpenClaw);
+//		} else if (master_controller.getValue(claw_close) == 1) {
+//			claw(clawClosePower, CloseClaw);
+//		} else {
+//			stopClaw();
+//		}
+//		break;
+//	case NormalOverwritesPartnerContoller:
+//		if (master_controller.getValue(claw_rotate) != 0) {
+//			clawArm(master_controller.getValue(claw_rotate), ManualClawArmControl);
+//		} else if (slave_controller.getValue(claw_rotate) != 0) {
+//			clawArm(slave_controller.getValue(claw_rotate),
+//					ManualClawArmControl);
+//		} else {
+//			stopClawArm();
+//		}
+//
+//		if (master_controller.getValue(claw_open) == 1) {
+//			claw(clawOpenPower, OpenClaw);
+//		} else if (master_controller.getValue(claw_close) == 1) {
+//			claw(clawClosePower, CloseClaw);
+//		} else if (slave_controller.getValue(claw_open) == 1) {
+//			claw(clawOpenPower, OpenClaw);
+//		} else if (slave_controller.getValue(claw_close) == 1) {
+//			claw(clawClosePower, CloseClaw);
+//		} else {
+//			stopClaw();
+//		}
+//		break;
+//	}
 
 //	if (controller->getValue(cl) == 1) {
 //		clawArm(clawArmPower, RotateArmLeft);
@@ -235,7 +331,7 @@ void Robot::handleClaw(InputControlMode controlMode) {
 //	} else {
 //		stopClawArm();
 //	}
-}
+//}
 
 ///////////////////////////////
 //SET MOTOR POINTER FUNCTIONS//
@@ -299,7 +395,7 @@ void Robot::drive(int power, DriveDirection dir) {
 			power = -power;
 			break;
 		case ManualTurn:
-//			power = -powe r;
+			//Nothing needs to be done
 			break;
 		case ManualStrafe:
 			power = -power;
@@ -311,10 +407,10 @@ void Robot::drive(int power, DriveDirection dir) {
 			dir = DriveForward;
 			break;
 		case TurnLeft:
-//			dir = TurnRight;
+			//Nothing needs to be done
 			break;
 		case TurnRight:
-//			dir = TurnLeft;
+			//Nothing needs to be done
 			break;
 		case StrafeLeft:
 			dir = StrafeRight;

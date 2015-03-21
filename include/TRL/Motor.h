@@ -52,13 +52,21 @@ namespace TRL {
 		GenericEncoder* encoder;
 		bool reversed;
 		int speed;
+		short offset;
 		MotorPort port;
 		MotorLocation location;
+
+		//functions
+		int addOffsetToSpeed(int speed);
+
 	public:
 		Motor();
 		Motor(MotorPort port, MotorLocation location);
+		Motor(MotorPort port, MotorLocation location, short offset);
 		Motor(MotorPort port, MotorLocation location, bool reversed);
+		Motor(MotorPort port, MotorLocation location, bool reversed, short offset);
 		Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed);
+		Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed, short offset);
 		virtual ~Motor();
 
 		void setPower(int speed);

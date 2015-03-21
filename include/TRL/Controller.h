@@ -47,8 +47,8 @@ namespace TRL {
 	}ControllerShiftInput;
 
 	typedef enum _ControllerType {
-		Main_Controller = 1,
-		Partner_Controller = 2
+		Master_Controller = 1,
+		Slave_Controller = 2
 	}ControllerType;
 
 	typedef enum _ControllerInputType{
@@ -66,12 +66,18 @@ namespace TRL {
 		Controller(ControllerType type, ControllerShiftInput shiftKey);
 		virtual ~Controller();
 		int getValue(ControllerInput in);
+		int getShifedValue(ControllerInput in);
 		bool isShifted();
 		void setShiftKey(ControllerShiftInput input);
 		ControllerInputType getControllerInputType(ControllerInput in);
-		bool isInputInactive(ControllerInput in);
+
 		//threshold is only used for joystick inputs
+		bool isInputInactive(ControllerInput in);
 		bool isInputInactive(ControllerInput in, short threshold);
+
+		//threshold is only used for joystick inputs
+		bool isInputActive(ControllerInput in);
+		bool isInputActive(ControllerInput in, short threshold);
 	};
 }
 #endif /* CONTROLLER_H_ */
