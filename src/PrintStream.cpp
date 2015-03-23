@@ -10,8 +10,8 @@
 namespace TRL {
 
 //Max length is 255 characters
-void print(MessageStatusIndicator indicator, string sender, string formatString,
-		...) {
+void print(MessageStatusIndicator indicator, string className,
+		string functionName, string formatString, ...) {
 	short maxSize = 255;
 	short len = strlen(formatString);
 
@@ -46,14 +46,16 @@ void print(MessageStatusIndicator indicator, string sender, string formatString,
 		break;
 	}
 	printf("] [");
-	printf(sender);
-	printf("] ");
+	printf(className);
+	printf("::");
+	printf(functionName);
+	printf("()] ");
 	printf(line_chars);
 }
 
 //Max length is 255 characters
-void println(MessageStatusIndicator indicator, string sender,
-		string formatString, ...) {
+void println(MessageStatusIndicator indicator, string className,
+		string functionName, string formatString, ...) {
 	short maxSize = 255;
 	short len = strlen(formatString);
 
@@ -89,8 +91,10 @@ void println(MessageStatusIndicator indicator, string sender,
 		break;
 	}
 	printf("] [");
-	printf(sender);
-	printf("] ");
+	printf(className);
+	printf("::");
+	printf(functionName);
+	printf("()] ");
 	printf(line_chars);
 	printf("\n\r");
 }

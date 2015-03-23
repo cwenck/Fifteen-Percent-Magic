@@ -39,7 +39,7 @@ void Robot::initializeMotors() {
 	setDriveMotors(driveMotors, 4);	//last number is the number of drive motors
 	setLiftMotors(liftMotors, 4);	//last number is the number of lift motors
 	setIntakeMotors(&intakeMotor, &intakeArmMotor);
-	println(LOG, "ROBOT", "Motors Initialized.");
+	println(LOG, "Robot", "initializeMotors", "Motors Initialized.");
 }
 
 Robot::Robot() {

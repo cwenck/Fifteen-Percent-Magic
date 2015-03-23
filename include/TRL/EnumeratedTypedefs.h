@@ -131,6 +131,12 @@ namespace TRL {
 		BUTTON,
 		JOYSTICK
 	}ControllerInputType;
+
+	typedef enum _ControllerStickSide {
+		NULL_CONTROLLER_STICK,
+		LEFT_CONTROLLER_STICK,
+		RIGHT_CONTROLLER_STICK
+	} ControllerStickSide;
 }
 
 #endif /* ENUMERATEDTYPEDEFS_H_ */

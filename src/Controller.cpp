@@ -26,8 +26,8 @@ Controller::Controller(ControllerType type, short leftStickDeadzoneMagnitude,
 		short rightStickDeadzoneMagnitude) {
 	this->type = type;
 	this->shiftKey = ShiftBtn_None;
-	this->leftStickDeadzoneMagnitude = leftStickDeadzoneMagnitude;
-	this->rightStickDeadzoneMagnitude = rightStickDeadzoneMagnitude;
+	this->leftStickDeadzoneMagnitude = abs(leftStickDeadzoneMagnitude);
+	this->rightStickDeadzoneMagnitude = abs(rightStickDeadzoneMagnitude);
 }
 
 Controller::Controller(ControllerType type, ControllerShiftInput shiftKey) {
@@ -41,8 +41,8 @@ Controller::Controller(ControllerType type, ControllerShiftInput shiftKey,
 		short leftStickDeadzoneMagnitude, short rightStickDeadzoneMagnitude) {
 	this->type = type;
 	this->shiftKey = shiftKey;
-	this->leftStickDeadzoneMagnitude = leftStickDeadzoneMagnitude;
-	this->rightStickDeadzoneMagnitude = rightStickDeadzoneMagnitude;
+	this->leftStickDeadzoneMagnitude = abs(leftStickDeadzoneMagnitude);
+	this->rightStickDeadzoneMagnitude = abs(rightStickDeadzoneMagnitude);
 }
 
 Controller::~Controller() {
@@ -131,7 +131,8 @@ int Controller::getRawValue(ControllerInput in) {
 		channel = 4;
 		break;
 	default:
-		println(ERROR, "CONTROLLER", "This should never get called.");
+		println(ERROR, "Controller", "getRawValue",
+				"This should never get called.");
 		return 0;
 	}
 	if (channel == 1 || channel == 2 || channel == 3 || channel == 4) {
@@ -146,12 +147,40 @@ int Controller::getRawValue(ControllerInput in) {
 }
 
 int Controller::getValue(ControllerInput in) {
+	int value = 0;
 	if (isControllerShifted() && isShiftedInputType(in)) {
-		return getRawValue(in);
+		value = getRawValue(in);
 	} else if (!isControllerShifted() && !isShiftedInputType(in)) {
-		return getRawValue(in);
+		value = getRawValue(in);
 	} else {
+		value = 0;
+	}
+
+	if (getControllerInputType(in) == JOYSTICK) {
+		ControllerStickSide joystickSide = getControllerStickSide(in);
+		switch (joystickSide) {
+		case LEFT_CONTROLLER_STICK:
+			if (abs(value) < abs(leftStickDeadzoneMagnitude)) {
+				return 0;
+			} else {
+				return value;
+			}
+		case RIGHT_CONTROLLER_STICK:
+			if (abs(value) < abs(rightStickDeadzoneMagnitude)) {
+				return 0;
+			} else {
+				return value;
+			}
+		case NULL_CONTROLLER_STICK:
+			println(ERROR, "Controller", "getValue",
+					"This should never get called.");
+			return 0;
+		}
+		println(ERROR, "Controller", "getValue",
+				"This should never get called.");
 		return 0;
+	} else {
+		return value;
 	}
 }
 
@@ -179,6 +208,21 @@ ControllerInputType Controller::getControllerInputType(ControllerInput in) {
 		return BUTTON;
 	} else {
 		return JOYSTICK;
+	}
+}
+
+ControllerStickSide Controller::getControllerStickSide(ControllerInput in) {
+	switch (in) {
+	case Ch1:
+		return RIGHT_CONTROLLER_STICK;
+	case Ch2:
+		return RIGHT_CONTROLLER_STICK;
+	case Ch3:
+		return LEFT_CONTROLLER_STICK;
+	case Ch4:
+		return LEFT_CONTROLLER_STICK;
+	default:
+		return NULL_CONTROLLER_STICK;
 	}
 }
 

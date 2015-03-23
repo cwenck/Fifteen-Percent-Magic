@@ -31,6 +31,7 @@ namespace TRL {
 		bool isShiftedInputType(ControllerInput in);
 		void setShiftKey(ControllerShiftInput input);
 		ControllerInputType getControllerInputType(ControllerInput in);
+		ControllerStickSide getControllerStickSide(ControllerInput in);
 
 		//threshold is only used for joystick inputs
 		bool isInputInactive(ControllerInput in);
