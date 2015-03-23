@@ -8,8 +8,6 @@
 #ifndef ENUMERATEDTYPES_H_
 #define ENUMERATEDTYPES_H_
 
-#include "TRL_Initialization.h"
-
 //wrapper type for strings in c
 typedef const char* string;
 

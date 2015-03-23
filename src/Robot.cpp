@@ -178,7 +178,6 @@ void Robot::driveOrientationController(Controller &controller) {
 }
 
 void Robot::driveInputController(InputControlMode controlMode) {
-//	controllerDeadzoneMagnitude
 	bool yMasterActiveDrive = master_controller.isInputActive(y_drive_stick);
 	bool xMasterActiveDrive = master_controller.isInputActive(x_drive_stick);
 
@@ -193,12 +192,53 @@ void Robot::driveInputController(InputControlMode controlMode) {
 
 	bool masterDriveActive = xMasterActiveDrive || yMasterActiveDrive;
 	bool masterStrafeActive = xMasterActiveStrafe || yMasterActiveStrafe;
+	bool masterActive = masterDriveActive || masterStrafeActive;
 
 	bool slaveDriveActive = xSlaveActiveDrive || ySlaveActiveDrive;
 	bool slaveStrafeActive = xSlaveActiveStrafe || ySlaveActiveStrafe;
+	bool slaveActive = slaveDriveActive || slaveStrafeActive;
 
-	//TODO Add code to handle the boolean logic for picking which controller handles the drives input
-
+	switch (controlMode) {
+	case MasterOnly:
+		driveController(master_controller);
+		return;
+	case SlaveOnly:
+		driveController(slave_controller);
+		return;
+	case MasterAndSlaveEqualPriority:
+		if (masterActive && !slaveActive) {
+			driveController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			driveController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			//Dont send any input if both are trying to control it
+		} else if (!masterActive && !slaveActive) {
+			stopDriveMotors();
+		}
+		return;
+	case MasterHigherPriority:
+		if (masterActive && !slaveActive) {
+			driveController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			driveController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			driveController(master_controller);
+		} else if (!masterActive && !slaveActive) {
+			stopDriveMotors();
+		}
+		return;
+	case SlaveHigherPriority:
+		if (masterActive && !slaveActive) {
+			driveController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			driveController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			driveController(slave_controller);
+		} else if (!masterActive && !slaveActive) {
+			stopDriveMotors();
+		}
+		return;
+	}
 }
 
 void Robot::driveController(Controller &controller) {

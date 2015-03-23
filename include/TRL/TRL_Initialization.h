@@ -9,13 +9,8 @@
 #define TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_
 
 //Include All Files Of the Library So Only This File Needs To Be Linked To main.h
-#include <string.h>
-#include <stdarg.h>
+#include "TRL_BaseInitialization.h"
 
-#include "LibraryFixes.h"
-#include "Types.h"
-#include "EnumeratedTypedefs.h"
-#include "PrintStream.h"
 #include "Motor.h"
 #include "Controller.h"
 #include "Sensor.h"

@@ -8,7 +8,11 @@
 #ifndef PRINTSTREAM_H_
 #define PRINTSTREAM_H_
 
-#include "main.h"
+#include "Typedefs.h"
+#include "LibraryFixes.h"
+#include <stdarg.h>
+#include <string.h>
+#include <API.h>
 
 namespace TRL {
 
