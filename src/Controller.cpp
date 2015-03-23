@@ -130,12 +130,18 @@ int Controller::getRawValue(ControllerInput in) {
 	case Ch4:
 		channel = 4;
 		break;
+	case Accel_X:
+		channel = ACCEL_X;
+		break;
+	case Accel_y:
+		channel = ACCEL_Y;
+		break;
 	default:
 		println(ERROR, "Controller", "getRawValue",
 				"This should never get called.");
 		return 0;
 	}
-	if (channel == 1 || channel == 2 || channel == 3 || channel == 4) {
+	if (channel == 1 || channel == 2 || channel == 3 || channel == 4 || ACCEL_X || ACCEL_Y) {
 		return joystickGetAnalog(controllerNum, channel);
 	} else {
 		if (joystickGetDigital(controllerNum, channel, btn)) {

@@ -88,22 +88,26 @@ namespace TRL {
 		Ch2 = 14,
 		Ch3 = 15,
 		Ch4 = 16,
-		ShiftedInput_Btn5U = 17,
-		ShiftedInput_Btn6U = 18,
-		ShiftedInput_Btn7U = 19,
-		ShiftedInput_Btn8U = 20,
-		ShiftedInput_Btn5D = 21,
-		ShiftedInput_Btn6D = 22,
-		ShiftedInput_Btn7D = 23,
-		ShiftedInput_Btn8D = 24,
-		ShiftedInput_Btn7L = 25,
-		ShiftedInput_Btn8L = 26,
-		ShiftedInput_Btn7R = 27,
-		ShiftedInput_Btn8R = 28,
-		ShiftedInput_Ch1 = 29,
-		ShiftedInput_Ch2 = 30,
-		ShiftedInput_Ch3 = 31,
-		ShiftedInput_Ch4 = 32
+		Accel_X = 17,
+		Accel_y = 18,
+		ShiftedInput_Btn5U = 19,
+		ShiftedInput_Btn6U = 20,
+		ShiftedInput_Btn7U = 21,
+		ShiftedInput_Btn8U = 22,
+		ShiftedInput_Btn5D = 23,
+		ShiftedInput_Btn6D = 24,
+		ShiftedInput_Btn7D = 25,
+		ShiftedInput_Btn8D = 26,
+		ShiftedInput_Btn7L = 27,
+		ShiftedInput_Btn8L = 28,
+		ShiftedInput_Btn7R = 29,
+		ShiftedInput_Btn8R = 30,
+		ShiftedInput_Ch1 = 31,
+		ShiftedInput_Ch2 = 32,
+		ShiftedInput_Ch3 = 33,
+		ShiftedInput_Ch4 = 34,
+		ShiftedInput_Accel_X = 35,
+		ShiftedInput_Accel_y = 36
 	}ControllerInput;
 
 	typedef enum _ControllerShiftButtonInput {
@@ -136,7 +140,7 @@ namespace TRL {
 		NULL_CONTROLLER_STICK,
 		LEFT_CONTROLLER_STICK,
 		RIGHT_CONTROLLER_STICK
-	} ControllerStickSide;
+	}ControllerStickSide;
 }
 
 #endif /* ENUMERATEDTYPEDEFS_H_ */
