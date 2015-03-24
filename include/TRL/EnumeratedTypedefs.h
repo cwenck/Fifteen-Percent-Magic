@@ -137,9 +137,9 @@ namespace TRL {
 	}ControllerInputType;
 
 	typedef enum _ControllerStickSide {
-		NULL_CONTROLLER_STICK,
-		LEFT_CONTROLLER_STICK,
-		RIGHT_CONTROLLER_STICK
+		NULL_JOYSTICK,
+		LEFT_JOYSTICK,
+		RIGHT_JOYSTICK
 	}ControllerStickSide;
 }
 

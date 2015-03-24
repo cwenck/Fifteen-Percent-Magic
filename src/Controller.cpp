@@ -9,6 +9,10 @@
 
 namespace TRL {
 
+////////////////////////////////
+//CONSTRUCTORS AND DESTRUCTORS//
+////////////////////////////////
+
 Controller::Controller() {
 	this->type = Master_Controller;
 	this->shiftKey = ShiftBtn_None;
@@ -49,17 +53,15 @@ Controller::~Controller() {
 //	Destructor
 }
 
-void Controller::setShiftKey(ControllerShiftInput input) {
-	shiftKey = input;
+////////////////////////////////
+//GENERAL CONTROLLER FUNCTIONS//
+////////////////////////////////
+bool Controller::isInputInactive(ControllerInput in) {
+	return (getValue(in) == 0);
 }
 
-bool Controller::isControllerShifted() {
-	ControllerInput shift = (ControllerInput) ((int) shiftKey);
-	if (getValue(shift) != 0) {
-		return true;
-	} else {
-		return false;
-	}
+bool Controller::isInputActive(ControllerInput in) {
+	return !isInputInactive(in);
 }
 
 int Controller::getRawValue(ControllerInput in) {
@@ -141,8 +143,9 @@ int Controller::getRawValue(ControllerInput in) {
 				"This should never get called.");
 		return 0;
 	}
-	if (channel == 1 || channel == 2 || channel == 3 || channel == 4 || ACCEL_X || ACCEL_Y) {
-		return joystickGetAnalog(controllerNum, channel);
+	if (channel
+			== 1|| channel == 2 || channel == 3 || channel == 4 || ACCEL_X || ACCEL_Y) {
+		return joystickGetAnalog(controllerNum,channel);
 	} else {
 		if (joystickGetDigital(controllerNum, channel, btn)) {
 			return 1;
@@ -163,21 +166,21 @@ int Controller::getValue(ControllerInput in) {
 	}
 
 	if (getControllerInputType(in) == JOYSTICK) {
-		ControllerStickSide joystickSide = getControllerStickSide(in);
+		ControllerStickSide joystickSide = getJoystickSide(in);
 		switch (joystickSide) {
-		case LEFT_CONTROLLER_STICK:
+		case LEFT_JOYSTICK:
 			if (abs(value) < abs(leftStickDeadzoneMagnitude)) {
 				return 0;
 			} else {
 				return value;
 			}
-		case RIGHT_CONTROLLER_STICK:
+		case RIGHT_JOYSTICK:
 			if (abs(value) < abs(rightStickDeadzoneMagnitude)) {
 				return 0;
 			} else {
 				return value;
 			}
-		case NULL_CONTROLLER_STICK:
+		case NULL_JOYSTICK:
 			println(ERROR, "Controller", "getValue",
 					"This should never get called.");
 			return 0;
@@ -187,6 +190,35 @@ int Controller::getValue(ControllerInput in) {
 		return 0;
 	} else {
 		return value;
+	}
+}
+
+///////////////////////////////
+//JOYSTICK DEADZONE FUNCTIONS//
+///////////////////////////////
+
+void Controller::setLeftStickDeadzone(short deadzone) {
+	this->leftStickDeadzoneMagnitude = abs(deadzone);
+}
+
+void Controller::setRightStickDeadzone(short deadzone) {
+	this->rightStickDeadzoneMagnitude = abs(deadzone);
+}
+
+///////////////////
+//SHIFT FUNCTIONS//
+///////////////////
+
+void Controller::setShiftKey(ControllerShiftInput input) {
+	shiftKey = input;
+}
+
+bool Controller::isControllerShifted() {
+	ControllerInput shift = (ControllerInput) ((int) shiftKey);
+	if (getValue(shift) != 0) {
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -203,11 +235,17 @@ bool Controller::isShiftedInputType(ControllerInput in) {
 ControllerInput Controller::convertControllerInputToNonShiftedVariant(
 		ControllerInput in) {
 	if (isShiftedInputType(in)) {
-		return (ControllerInput) ((int) in - 16);
+		int shiftOffset = NUMBER_NON_SHIFTED_INPUTS
+		;
+		return (ControllerInput) ((int) in - shiftOffset);
 	} else {
 		return in;
 	}
 }
+
+//////////////////////////////////////////
+//CONTROLLER INPUT INFROMATION FUNCTIONS//
+//////////////////////////////////////////
 
 ControllerInputType Controller::getControllerInputType(ControllerInput in) {
 	if (in < Ch1) {
@@ -217,40 +255,19 @@ ControllerInputType Controller::getControllerInputType(ControllerInput in) {
 	}
 }
 
-ControllerStickSide Controller::getControllerStickSide(ControllerInput in) {
+ControllerStickSide Controller::getJoystickSide(ControllerInput in) {
 	switch (in) {
 	case Ch1:
-		return RIGHT_CONTROLLER_STICK;
+		return RIGHT_JOYSTICK;
 	case Ch2:
-		return RIGHT_CONTROLLER_STICK;
+		return RIGHT_JOYSTICK;
 	case Ch3:
-		return LEFT_CONTROLLER_STICK;
+		return LEFT_JOYSTICK;
 	case Ch4:
-		return LEFT_CONTROLLER_STICK;
+		return LEFT_JOYSTICK;
 	default:
-		return NULL_CONTROLLER_STICK;
+		return NULL_JOYSTICK;
 	}
-}
-
-bool Controller::isInputInactive(ControllerInput in) {
-	return (getValue(in) == 0);
-}
-
-bool Controller::isInputInactive(ControllerInput in, short threshold) {
-	if (in < (int) Ch1) {
-		return isInputInactive(in);
-	} else if (getValue(in) < threshold) {
-		return true;
-	}
-	return false;
-}
-
-bool Controller::isInputActive(ControllerInput in) {
-	return !isInputInactive(in);
-}
-
-bool Controller::isInputActive(ControllerInput in, short threshold) {
-	return !isInputInactive(in, threshold);
 }
 
 } /* namespace TRL */
