@@ -38,6 +38,7 @@ class Controller {
 		//DEADZONE FUNCTIONS//
 		void setLeftStickDeadzone(short deadzone);
 		void setRightStickDeadzone(short deadzone);
+		void setJoystickDeadzone(short deadzone);
 
 		//SHIFT FUNCTIONS//
 		void setShiftKey(ControllerShiftInput input);

@@ -44,7 +44,8 @@ void Robot::initializeMotors() {
 
 Robot::Robot() {
 	//Controller Deadzone
-	controllerDeadzoneMagnitude = 10;
+	master_controller.setJoystickDeadzone(10);
+	slave_controller.setJoystickDeadzone(10);
 
 	//Init Controller Inputs
 	y_drive_stick = Ch3;
@@ -326,6 +327,71 @@ void Robot::driveController(Controller &controller) {
 //		break;
 //	}
 //}
+
+void Robot::liftInputController(InputControlMode controlMode) {
+
+	bool masterActive = master_controller.isInputActive(lift_up)
+			|| master_controller.isInputActive(lift_down);
+	bool slaveActive = slave_controller.isInputActive(lift_up)
+			|| slave_controller.isInputActive(lift_down);
+
+	switch (controlMode) {
+	case MasterOnly:
+		liftController(master_controller);
+		return;
+	case SlaveOnly:
+		liftController(slave_controller);
+		return;
+	case MasterAndSlaveEqualPriority:
+		if (masterActive && !slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			//Dont send any input if both are trying to control it
+		} else if (!masterActive && !slaveActive) {
+			stopLift();
+		}
+		return;
+	case MasterHigherPriority:
+		if (masterActive && !slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && !slaveActive) {
+			stopLift();
+		}
+		return;
+	case SlaveHigherPriority:
+		if (masterActive && !slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (!masterActive && !slaveActive) {
+			stopLift();
+		}
+		return;
+	}
+}
+
+void Robot::liftController(Controller &controller) {
+	bool upActive = controller.isInputActive(lift_up);
+	bool downActive = controller.isInputActive(lift_down);
+
+	if (upActive && downActive) {
+		stopLift();
+	} else if (upActive) {
+		lift(liftPower, Up);
+	} else if (downActive) {
+		lift(liftPower, Down);
+	}
+
+}
+
 //
 //void Robot::handleClaw(InputControlMode controlMode) {
 //	switch (controlMode) {

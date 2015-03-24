@@ -205,6 +205,11 @@ void Controller::setRightStickDeadzone(short deadzone) {
 	this->rightStickDeadzoneMagnitude = abs(deadzone);
 }
 
+void Controller::setJoystickDeadzone(short deadzone){
+	setLeftStickDeadzone(deadzone);
+	setRightStickDeadzone(deadzone);
+}
+
 ///////////////////
 //SHIFT FUNCTIONS//
 ///////////////////
