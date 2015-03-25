@@ -58,8 +58,8 @@ extern "C" {
 using namespace TRL;
 
 void operatorControl() {
-	while (1) {
-		delay(5);
+	while (true) {
+		delay(30);
 		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 	}
 }

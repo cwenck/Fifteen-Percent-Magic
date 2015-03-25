@@ -12,10 +12,16 @@ namespace TRL {
 //CONTSTRUCTORS + DESTRUCTORS//
 ///////////////////////////////
 
-Robot Robot::instance = Robot();
+Robot Robot::instance;
 
-Controller Robot::master_controller = Controller(Master_Controller);
-Controller Robot::slave_controller = Controller(Slave_Controller);
+Controller Robot::master_controller;
+Controller Robot::slave_controller;
+
+void Robot::initStatics(){
+	instance = Robot();
+	master_controller = Controller(Master_Controller);
+	slave_controller = Controller(Slave_Controller);
+}
 
 void Robot::initializeMotors() {
 	frontRightDrive = Motor(MotorPort_10, FrontRight);
@@ -39,12 +45,13 @@ void Robot::initializeMotors() {
 	setDriveMotors(driveMotors, 4);	//last number is the number of drive motors
 	setLiftMotors(liftMotors, 4);	//last number is the number of lift motors
 	setIntakeMotors(&intakeMotor, &intakeArmMotor);
-	println(LOG, "ROBOT", "Motors Initialized.");
+	println(LOG, "Robot", "initializeMotors", "Motors Initialized.");
 }
 
 Robot::Robot() {
 	//Controller Deadzone
-	controllerDeadzoneMagnitude = 10;
+	master_controller.setJoystickDeadzone(10);
+	slave_controller.setJoystickDeadzone(10);
 
 	//Init Controller Inputs
 	y_drive_stick = Ch3;
@@ -90,6 +97,7 @@ Robot::~Robot() {
 ////////////////////
 
 void Robot::handleInput(InputControlMode controlMode) {
+	driveInputController(controlMode);
 //	handleDriveOrientation(controlMode);
 //	handleDrive(controlMode);
 //	handleLift(controlMode);
@@ -326,6 +334,71 @@ void Robot::driveController(Controller &controller) {
 //		break;
 //	}
 //}
+
+void Robot::liftInputController(InputControlMode controlMode) {
+
+	bool masterActive = master_controller.isInputActive(lift_up)
+			|| master_controller.isInputActive(lift_down);
+	bool slaveActive = slave_controller.isInputActive(lift_up)
+			|| slave_controller.isInputActive(lift_down);
+
+	switch (controlMode) {
+	case MasterOnly:
+		liftController(master_controller);
+		return;
+	case SlaveOnly:
+		liftController(slave_controller);
+		return;
+	case MasterAndSlaveEqualPriority:
+		if (masterActive && !slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			//Dont send any input if both are trying to control it
+		} else if (!masterActive && !slaveActive) {
+			stopLift();
+		}
+		return;
+	case MasterHigherPriority:
+		if (masterActive && !slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && !slaveActive) {
+			stopLift();
+		}
+		return;
+	case SlaveHigherPriority:
+		if (masterActive && !slaveActive) {
+			liftController(master_controller);
+		} else if (!masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (masterActive && slaveActive) {
+			liftController(slave_controller);
+		} else if (!masterActive && !slaveActive) {
+			stopLift();
+		}
+		return;
+	}
+}
+
+void Robot::liftController(Controller &controller) {
+	bool upActive = controller.isInputActive(lift_up);
+	bool downActive = controller.isInputActive(lift_down);
+
+	if (upActive && downActive) {
+		stopLift();
+	} else if (upActive) {
+		lift(liftPower, Up);
+	} else if (downActive) {
+		lift(liftPower, Down);
+	}
+
+}
+
 //
 //void Robot::handleClaw(InputControlMode controlMode) {
 //	switch (controlMode) {
@@ -379,7 +452,7 @@ void Robot::driveController(Controller &controller) {
 
 bool Robot::setDriveMotors(Motor* driveMotors[], char numDriveMotors) {
 	if (numDriveMotors > 6) {
-		printf("[Error] Too many drive motors in array\n\r");
+		println(ERROR, "Robot", "setDriveMotos", "Too many drive motors in array.");
 		return false;
 	}
 
@@ -480,8 +553,7 @@ void Robot::drive(int power, DriveDirection dir) {
 				motor->setPower(-power);
 				break;
 			default:
-				printf(
-						"[Warning] A motor on the drive does not have it's location properly set.\n\r");
+				println(WARNING, "Robot", "drive", "A motor on the drive does not have it's location properly set.");
 				break;
 			}
 		}

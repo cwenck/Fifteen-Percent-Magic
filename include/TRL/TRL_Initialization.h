@@ -21,4 +21,8 @@
 #include "Robot.h"
 #include "AutonomousRoutines.h"
 
+namespace TRL{
+	void initializeLibrary();
+}
+
 #endif /* TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_ */

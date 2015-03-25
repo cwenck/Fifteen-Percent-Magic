@@ -73,6 +73,7 @@ namespace TRL {
 
 		//Constructor + Destructor
 		Robot();
+		static void initStatics();
 		virtual ~Robot();
 
 		//Instance

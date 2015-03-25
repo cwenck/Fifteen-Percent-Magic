@@ -91,7 +91,7 @@ int Motor::addOffsetToSpeed(int speed){
 
 void Motor::setPower(int motorSpeed) {
 	if (port == MotorPort_NULL) {
-		printf("Motor port not assigned to motor.\n\r");
+		println(ERROR, "Motor", "setPower", "Can't power a motor without an assigned port.");
 		return;
 	}
 	this->speed = addOffsetToSpeed(motorSpeed);
@@ -106,7 +106,7 @@ void Motor::setPower(int motorSpeed) {
 
 void Motor::stop() {
 	if (port == MotorPort_NULL) {
-		printf("Motor port not assigned to motor.\n\r");
+		println(ERROR, "Motor", "stop", "Can't stop a motor without an assigned port.");
 		return;
 	}
 	motorStop(port);

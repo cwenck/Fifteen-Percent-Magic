@@ -10,6 +10,7 @@
 
 #include <API.h>
 #include "GenericEncoder.h"
+#include "TRL_BaseInitialization.h"
 
 namespace TRL {
 

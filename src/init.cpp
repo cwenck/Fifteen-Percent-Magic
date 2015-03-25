@@ -65,7 +65,7 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
-	Robot::instance = Robot();
+	initializeLibrary();
 }
 
 #ifdef __cplusplus

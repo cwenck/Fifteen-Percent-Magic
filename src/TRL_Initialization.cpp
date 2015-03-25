@@ -9,6 +9,8 @@
 
 namespace TRL {
 
-//Nothing is done in this file at the moment. It is here just in case.
+void initializeLibrary() {
+	Robot::initStatics();
+}
 
 }

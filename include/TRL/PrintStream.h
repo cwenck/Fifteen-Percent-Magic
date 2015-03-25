@@ -23,8 +23,8 @@ namespace TRL {
 		LOG
 	}MessageStatusIndicator;
 
-	void print(MessageStatusIndicator indicator, string sender, string formatString, ...);
-	void println(MessageStatusIndicator indicator, string sender, string formatString, ...);
+	void print(MessageStatusIndicator indicator, string className, string functionName,string formatString, ...);
+	void println(MessageStatusIndicator indicator, string className, string functionName, string formatString, ...);
 
 }
 

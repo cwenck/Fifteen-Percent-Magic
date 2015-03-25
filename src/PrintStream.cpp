@@ -10,13 +10,13 @@
 namespace TRL {
 
 //Max length is 255 characters
-void print(MessageStatusIndicator indicator, string sender, string formatString,
-		...) {
+void print(MessageStatusIndicator indicator, string className,
+		string functionName, string formatString, ...) {
 	short maxSize = 255;
 	short len = strlen(formatString);
 
-	if (maxSize > len) {
-		printf("[Error] String exceeds max print() length of 255 characters.");
+	if (len > maxSize) {
+		printf("[Error] String exceeds max print() length of 255 characters.\n\r");
 		return;
 	}
 
@@ -25,7 +25,7 @@ void print(MessageStatusIndicator indicator, string sender, string formatString,
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, 255, formatString, arg);
+		vsnprintf(line_chars, maxSize, formatString, arg);
 	}
 	va_end(arg);
 
@@ -46,20 +46,22 @@ void print(MessageStatusIndicator indicator, string sender, string formatString,
 		break;
 	}
 	printf("] [");
-	printf(sender);
-	printf("] ");
+	printf(className);
+	printf("::");
+	printf(functionName);
+	printf("()] ");
 	printf(line_chars);
 }
 
 //Max length is 255 characters
-void println(MessageStatusIndicator indicator, string sender,
-		string formatString, ...) {
+void println(MessageStatusIndicator indicator, string className,
+		string functionName, string formatString, ...) {
 	short maxSize = 255;
 	short len = strlen(formatString);
 
-	if (maxSize > len) {
+	if (len > maxSize) {
 		printf(
-				"[Error] String exceeds max println() length of 255 characters.");
+				"[Error] String exceeds max println() length of 255 characters.\n\r");
 		return;
 	}
 
@@ -68,7 +70,7 @@ void println(MessageStatusIndicator indicator, string sender,
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, 255, formatString, arg);
+		vsnprintf(line_chars, maxSize, formatString, arg);
 	}
 	va_end(arg);
 
@@ -89,8 +91,10 @@ void println(MessageStatusIndicator indicator, string sender,
 		break;
 	}
 	printf("] [");
-	printf(sender);
-	printf("] ");
+	printf(className);
+	printf("::");
+	printf(functionName);
+	printf("()] ");
 	printf(line_chars);
 	printf("\n\r");
 }
