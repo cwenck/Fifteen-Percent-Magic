@@ -166,8 +166,8 @@ int Controller::getRawValue(ControllerInput in) {
 
 int Controller::getValue(ControllerInput in) {
 	int value = 0;
+//	println(LOG, "Controller", "getValue", "C_Shifted:%d I_Shifted:%d", isControllerShifted(), isShiftedInputType(in));
 	if (isControllerShifted() && isShiftedInputType(in)) {
-//		println(LOG, "Controller", "getValue", "getValueCalled");
 		value = getRawValue(in);
 	} else if (!isControllerShifted() && !isShiftedInputType(in)) {
 		value = getRawValue(in);
@@ -180,8 +180,11 @@ int Controller::getValue(ControllerInput in) {
 		switch (joystickSide) {
 		case LEFT_JOYSTICK:
 			if (abs(value) < abs(leftStickDeadzoneMagnitude)) {
+//				println(LOG, "Controller", "getValue", "Ignoring Joystick Input");
 				return 0;
 			} else {
+//				println(LOG, "Controller", "getValue", "Not Ignoring Joystick Input");
+//				println(LOG, "Controller", "getValue", "%d", value);
 				return value;
 			}
 		case RIGHT_JOYSTICK:
@@ -276,6 +279,7 @@ ControllerInputType Controller::getControllerInputType(ControllerInput in) {
 }
 
 ControllerStickSide Controller::getJoystickSide(ControllerInput in) {
+	in = convertControllerInputToNonShiftedVariant(in);
 	switch (in) {
 	case Ch1:
 		return RIGHT_JOYSTICK;

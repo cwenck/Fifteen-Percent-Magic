@@ -60,7 +60,9 @@ using namespace TRL;
 void operatorControl() {
 	while (true) {
 		delay(30);
-		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
+//		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
+		int value = Robot::master_controller.getValue(Ch3);
+		println(LOG, "Main", "operatorControl", "%d", value);
 	}
 }
 
