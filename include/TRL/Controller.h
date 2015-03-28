@@ -15,17 +15,16 @@
 namespace TRL {
 class Controller {
 	private:
-		ControllerType type;
-		ControllerShiftInput shiftKey;
-		short leftStickDeadzoneMagnitude;
-		short rightStickDeadzoneMagnitude;
+		ControllerShiftButton masterShiftKey;
+		ControllerShiftButton slaveShiftKey;
+		short masterLeftStickDeadzoneMagnitude;
+		short masterRightStickDeadzoneMagnitude;
+		short slaveLeftStickDeadzoneMagnitude;
+		short slaveRightStickDeadzoneMagnitude;
+
 	public:
 		//CONSTRUCTORS AND DESTRUCTOR//
 		Controller();
-		Controller(ControllerType type);
-		Controller(ControllerType type, short leftStickDeadzoneMagnitude, short rightStickDeadzoneMagnitude);
-		Controller(ControllerType type, ControllerShiftInput shiftKey);
-		Controller(ControllerType type, ControllerShiftInput shiftKey, short leftStickDeadzoneMagnitude, short rightStickDeadzoneMagnitude);
 		virtual ~Controller();
 
 		//GENERAL CONTROLLER FUNCTIONS//
@@ -36,20 +35,34 @@ class Controller {
 		int getValue(ControllerInput in);
 
 		//DEADZONE FUNCTIONS//
-		void setLeftStickDeadzone(short deadzone);
-		void setRightStickDeadzone(short deadzone);
-		void setJoystickDeadzone(short deadzone);
+		void setLeftStickDeadzone(ControllerType type, short deadzone);
+		void setRightStickDeadzone(ControllerType type, short deadzone);
+		void setJoystickDeadzone(ControllerType type, short deadzone);
 
 		//SHIFT FUNCTIONS//
-		void setShiftKey(ControllerShiftInput input);
-		bool isControllerShifted(); //returns true if the controller's shift button is pressed
+		void setShiftKey(ControllerType type, ControllerShiftButton input);
+		bool isControllerShifted(ControllerType type); //returns true if the controller's shift button is pressed
 		bool isShiftedInputType(ControllerInput in);
+		bool isNonShiftedInputType(ControllerInput in);
+		bool isSlaveControllerInput(ControllerInput in);
+		bool isMasterControllerInput(ControllerInput in);
+
 		ControllerInput convertControllerInputToNonShiftedVariant(ControllerInput in);
+		ControllerInput convertControllerInputToShiftedVariant(ControllerInput in);
+		ControllerInput convertControllerInputToMasterVariant(ControllerInput in);
+		ControllerInput convertControllerInputToSlaveVariant(ControllerInput in);
+		ControllerInput convertControllerInputToType(ControllerType type, ControllerInput in);
+
+		ControllerInput getControllerInputForShiftBtn(ControllerType type, ControllerShiftButton shiftBtn);
 
 		//CONTROLLER INPUT INFO FUNCTIONS//
 		ControllerInputType getControllerInputType(ControllerInput in);
 		ControllerStickSide getJoystickSide(ControllerInput in);
-		int getControllerNumber();
+		ControllerType getInputControllerType(ControllerInput in);
+		int getInputControllerNumber(ControllerInput in);
+
+		//CONTROLLER INFO FUNCTIONS
+
 
 
 	};

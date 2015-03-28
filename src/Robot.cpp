@@ -14,13 +14,11 @@ namespace TRL {
 
 Robot Robot::instance;
 
-Controller Robot::master_controller;
-Controller Robot::slave_controller;
+Controller Robot::controller;
 
 void Robot::initStatics(){
 	instance = Robot();
-	master_controller = Controller(Master_Controller);
-	slave_controller = Controller(Slave_Controller);
+	controller = Controller();
 }
 
 void Robot::initializeMotors() {
@@ -50,8 +48,8 @@ void Robot::initializeMotors() {
 
 Robot::Robot() {
 	//Controller Deadzone
-	master_controller.setJoystickDeadzone(10);
-	slave_controller.setJoystickDeadzone(10);
+	controller.setJoystickDeadzone(MASTER_CONTROLLER, 10);
+	controller.setJoystickDeadzone(SLAVE_CONTROLLER, 10);
 
 	//Init Controller Inputs
 	y_drive_stick = Ch3;
@@ -98,83 +96,57 @@ Robot::~Robot() {
 
 void Robot::handleInput(InputControlMode controlMode) {
 	driveInputController(controlMode);
-//	handleDriveOrientation(controlMode);
-//	handleDrive(controlMode);
-//	handleLift(controlMode);
-//	handleClaw(controlMode);
 }
 
-//void Robot::handleDriveOrientation(InputControlMode controlMode) {
-//	switch (controlMode) {
-//	case MasterControllerOnly:
-//		if (master_controller.getValue(orientation_forward) == 1) {
-//			setDriveOrientation(ForwardOrientation);
-//		} else if (master_controller.getValue(orientation_backward) == 1) {
-//			setDriveOrientation(BackwardOrientation);
-//		}
-//		break;
-//	case NormalOverwritesPartnerContoller:
-//		if (master_controller.getValue(orientation_forward) == 1) {
-//			setDriveOrientation(ForwardOrientation);
-//		} else if (master_controller.getValue(orientation_backward) == 1) {
-//			setDriveOrientation(BackwardOrientation);
-//		} else if (slave_controller.getValue(orientation_forward) == 1) {
-//			setDriveOrientation(ForwardOrientation);
-//		} else if (slave_controller.getValue(orientation_backward) == 1) {
-//			setDriveOrientation(BackwardOrientation);
-//		}
-//		break;
-//	}
-//}
 
 void Robot::driveOrientationInputController(InputControlMode controlMode) {
-	bool masterForwardActive = master_controller.isInputActive(
-			orientation_forward);
-	bool masterBackwawrdActive = master_controller.isInputActive(
-			orientation_backward);
-	bool slaveForwardActive = slave_controller.isInputActive(
-			orientation_forward);
-	bool slaveBackwardActive = slave_controller.isInputActive(
-			orientation_backward);
-
-	bool masterActive = masterForwardActive || masterBackwawrdActive;
-	bool slaveActive = slaveForwardActive || slaveBackwardActive;
-
-	switch (controlMode) {
-	case MasterOnly:
-		driveOrientationController(master_controller);
-		return;
-	case SlaveOnly:
-		driveOrientationController(slave_controller);
-		return;
-	case MasterAndSlaveEqualPriority:
-		if (masterActive && !slaveActive) {
-			driveOrientationController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			driveOrientationController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			//Dont send any input if both are trying to control it
-		}
-		return;
-	case MasterHigherPriority:
-		if (masterActive && !slaveActive) {
-			driveOrientationController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			driveOrientationController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			driveOrientationController(master_controller);
-		}
-		return;
-	case SlaveHigherPriority:
-		if (masterActive && !slaveActive) {
-			driveOrientationController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			driveOrientationController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			driveOrientationController(slave_controller);
-		}
-		return;
-	}
+//	bool masterForwardActive = controller.isInputActive(
+//			orientation_forward);
+//	bool masterBackwawrdActive = controller.isInputActive(
+//			orientation_backward);
+//	bool slaveForwardActive = controller.isInputActive(
+//			orientation_forward);
+//	bool slaveBackwardActive = controller.isInputActive(
+//			orientation_backward);
+//
+//	bool masterActive = masterForwardActive || masterBackwawrdActive;
+//	bool slaveActive = slaveForwardActive || slaveBackwardActive;
+//
+//	switch (controlMode) {
+//	case MasterOnly:
+//		driveOrientationController(master_controller);
+//		return;
+//	case SlaveOnly:
+//		driveOrientationController(slave_controller);
+//		return;
+//	case MasterAndSlaveEqualPriority:
+//		if (masterActive && !slaveActive) {
+//			driveOrientationController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			driveOrientationController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			//Dont send any input if both are trying to control it
+//		}
+//		return;
+//	case MasterHigherPriority:
+//		if (masterActive && !slaveActive) {
+//			driveOrientationController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			driveOrientationController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			driveOrientationController(master_controller);
+//		}
+//		return;
+//	case SlaveHigherPriority:
+//		if (masterActive && !slaveActive) {
+//			driveOrientationController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			driveOrientationController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			driveOrientationController(slave_controller);
+//		}
+//		return;
+//	}
 }
 
 void Robot::driveOrientationController(Controller &controller) {
@@ -186,67 +158,67 @@ void Robot::driveOrientationController(Controller &controller) {
 }
 
 void Robot::driveInputController(InputControlMode controlMode) {
-	bool yMasterActiveDrive = master_controller.isInputActive(y_drive_stick);
-	bool xMasterActiveDrive = master_controller.isInputActive(x_drive_stick);
-
-	bool yMasterActiveStrafe = master_controller.isInputActive(y_strafe_stick);
-	bool xMasterActiveStrafe = master_controller.isInputActive(x_strafe_stick);
-
-	bool ySlaveActiveDrive = slave_controller.isInputActive(y_drive_stick);
-	bool xSlaveActiveDrive = slave_controller.isInputActive(x_drive_stick);
-
-	bool ySlaveActiveStrafe = slave_controller.isInputActive(y_strafe_stick);
-	bool xSlaveActiveStrafe = slave_controller.isInputActive(x_strafe_stick);
-
-	bool masterDriveActive = xMasterActiveDrive || yMasterActiveDrive;
-	bool masterStrafeActive = xMasterActiveStrafe || yMasterActiveStrafe;
-	bool masterActive = masterDriveActive || masterStrafeActive;
-
-	bool slaveDriveActive = xSlaveActiveDrive || ySlaveActiveDrive;
-	bool slaveStrafeActive = xSlaveActiveStrafe || ySlaveActiveStrafe;
-	bool slaveActive = slaveDriveActive || slaveStrafeActive;
-
-	switch (controlMode) {
-	case MasterOnly:
-		driveController(master_controller);
-		return;
-	case SlaveOnly:
-		driveController(slave_controller);
-		return;
-	case MasterAndSlaveEqualPriority:
-		if (masterActive && !slaveActive) {
-			driveController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			driveController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			//Dont send any input if both are trying to control it
-		} else if (!masterActive && !slaveActive) {
-			stopDriveMotors();
-		}
-		return;
-	case MasterHigherPriority:
-		if (masterActive && !slaveActive) {
-			driveController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			driveController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			driveController(master_controller);
-		} else if (!masterActive && !slaveActive) {
-			stopDriveMotors();
-		}
-		return;
-	case SlaveHigherPriority:
-		if (masterActive && !slaveActive) {
-			driveController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			driveController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			driveController(slave_controller);
-		} else if (!masterActive && !slaveActive) {
-			stopDriveMotors();
-		}
-		return;
-	}
+//	bool yMasterActiveDrive = master_controller.isInputActive(y_drive_stick);
+//	bool xMasterActiveDrive = master_controller.isInputActive(x_drive_stick);
+//
+//	bool yMasterActiveStrafe = master_controller.isInputActive(y_strafe_stick);
+//	bool xMasterActiveStrafe = master_controller.isInputActive(x_strafe_stick);
+//
+//	bool ySlaveActiveDrive = slave_controller.isInputActive(y_drive_stick);
+//	bool xSlaveActiveDrive = slave_controller.isInputActive(x_drive_stick);
+//
+//	bool ySlaveActiveStrafe = slave_controller.isInputActive(y_strafe_stick);
+//	bool xSlaveActiveStrafe = slave_controller.isInputActive(x_strafe_stick);
+//
+//	bool masterDriveActive = xMasterActiveDrive || yMasterActiveDrive;
+//	bool masterStrafeActive = xMasterActiveStrafe || yMasterActiveStrafe;
+//	bool masterActive = masterDriveActive || masterStrafeActive;
+//
+//	bool slaveDriveActive = xSlaveActiveDrive || ySlaveActiveDrive;
+//	bool slaveStrafeActive = xSlaveActiveStrafe || ySlaveActiveStrafe;
+//	bool slaveActive = slaveDriveActive || slaveStrafeActive;
+//
+//	switch (controlMode) {
+//	case MasterOnly:
+//		driveController(master_controller);
+//		return;
+//	case SlaveOnly:
+//		driveController(slave_controller);
+//		return;
+//	case MasterAndSlaveEqualPriority:
+//		if (masterActive && !slaveActive) {
+//			driveController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			driveController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			//Dont send any input if both are trying to control it
+//		} else if (!masterActive && !slaveActive) {
+//			stopDriveMotors();
+//		}
+//		return;
+//	case MasterHigherPriority:
+//		if (masterActive && !slaveActive) {
+//			driveController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			driveController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			driveController(master_controller);
+//		} else if (!masterActive && !slaveActive) {
+//			stopDriveMotors();
+//		}
+//		return;
+//	case SlaveHigherPriority:
+//		if (masterActive && !slaveActive) {
+//			driveController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			driveController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			driveController(slave_controller);
+//		} else if (!masterActive && !slaveActive) {
+//			stopDriveMotors();
+//		}
+//		return;
+//	}
 }
 
 void Robot::driveController(Controller &controller) {
@@ -265,124 +237,55 @@ void Robot::driveController(Controller &controller) {
 	}
 }
 
-//void Robot::handleDrive(InputControlMode controlMode) {
-//	short yMain = master_controller.getValue(y_drive_stick);
-//	short xMain = master_controller.getValue(x_drive_stick);
-//
-//	short yPartner = slave_controller.getValue(y_drive_stick);
-//	short xPartner = slave_controller.getValue(x_drive_stick);
-//
-//	switch (controlMode) {
-//	case MasterControllerOnly:
-//		if (abs(xMain) < abs(controllerDeadzoneMagnitude)
-//				&& abs(yMain) < abs(controllerDeadzoneMagnitude)) {
-//			return;
-//		}
-//
-//		if (abs(yMain) > abs(xMain)) {
-//			drive(yMain, ManualDrive);
-//		} else if (abs(xMain) >= abs(yMain)) {
-//			drive(xMain, ManualTurn);
-//		}
-//		break;
-//	case NormalOverwritesPartnerContoller:
-//		if (!(abs(xMain) < abs(controllerDeadzoneMagnitude)
-//				&& abs(yMain) < abs(controllerDeadzoneMagnitude))) {
-//			if (abs(yMain) > abs(xMain)) {
-//				drive(yMain, ManualDrive);
-//			} else if (abs(xMain) >= abs(yMain)) {
-//				drive(xMain, ManualTurn);
-//			}
-//		} else if (!(abs(xPartner) < abs(controllerDeadzoneMagnitude)
-//				&& abs(yPartner) < abs(controllerDeadzoneMagnitude))) {
-//			if (abs(yPartner) > abs(xPartner)) {
-//				drive(yPartner, ManualDrive);
-//			} else if (abs(xPartner) >= abs(yPartner)) {
-//				drive(xPartner, ManualTurn);
-//			}
-//		} else {
-//			stopDriveMotors();
-//		}
-//		break;
-//	}
-//}
-//
-////returns false if the lift should be set to 0
-//void Robot::handleLift(InputControlMode controlMode) {
-//	switch (controlMode) {
-//	case MasterControllerOnly:
-//		if (master_controller.getValue(lift_up) == 1) {
-//			lift(liftPower, Up);
-//		} else if (master_controller.getValue(lift_down) == 1) {
-//			lift(liftPower, Down);
-//		} else {
-//			stopLift();
-//		}
-//		break;
-//	case NormalOverwritesPartnerContoller:
-//		if (master_controller.getValue(lift_up) == 1) {
-//			lift(liftPower, Up);
-//		} else if (master_controller.getValue(lift_down) == 1) {
-//			lift(liftPower, Down);
-//		} else if (slave_controller.getValue(lift_up) == 1) {
-//			lift(liftPower, Up);
-//		} else if (slave_controller.getValue(lift_down) == 1) {
-//			lift(liftPower, Down);
-//		} else {
-//			stopLift();
-//		}
-//		break;
-//	}
-//}
 
 void Robot::liftInputController(InputControlMode controlMode) {
-
-	bool masterActive = master_controller.isInputActive(lift_up)
-			|| master_controller.isInputActive(lift_down);
-	bool slaveActive = slave_controller.isInputActive(lift_up)
-			|| slave_controller.isInputActive(lift_down);
-
-	switch (controlMode) {
-	case MasterOnly:
-		liftController(master_controller);
-		return;
-	case SlaveOnly:
-		liftController(slave_controller);
-		return;
-	case MasterAndSlaveEqualPriority:
-		if (masterActive && !slaveActive) {
-			liftController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			liftController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			//Dont send any input if both are trying to control it
-		} else if (!masterActive && !slaveActive) {
-			stopLift();
-		}
-		return;
-	case MasterHigherPriority:
-		if (masterActive && !slaveActive) {
-			liftController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			liftController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			liftController(master_controller);
-		} else if (!masterActive && !slaveActive) {
-			stopLift();
-		}
-		return;
-	case SlaveHigherPriority:
-		if (masterActive && !slaveActive) {
-			liftController(master_controller);
-		} else if (!masterActive && slaveActive) {
-			liftController(slave_controller);
-		} else if (masterActive && slaveActive) {
-			liftController(slave_controller);
-		} else if (!masterActive && !slaveActive) {
-			stopLift();
-		}
-		return;
-	}
+//
+//	bool masterActive = master_controller.isInputActive(lift_up)
+//			|| master_controller.isInputActive(lift_down);
+//	bool slaveActive = slave_controller.isInputActive(lift_up)
+//			|| slave_controller.isInputActive(lift_down);
+//
+//	switch (controlMode) {
+//	case MasterOnly:
+//		liftController(master_controller);
+//		return;
+//	case SlaveOnly:
+//		liftController(slave_controller);
+//		return;
+//	case MasterAndSlaveEqualPriority:
+//		if (masterActive && !slaveActive) {
+//			liftController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			liftController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			//Dont send any input if both are trying to control it
+//		} else if (!masterActive && !slaveActive) {
+//			stopLift();
+//		}
+//		return;
+//	case MasterHigherPriority:
+//		if (masterActive && !slaveActive) {
+//			liftController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			liftController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			liftController(master_controller);
+//		} else if (!masterActive && !slaveActive) {
+//			stopLift();
+//		}
+//		return;
+//	case SlaveHigherPriority:
+//		if (masterActive && !slaveActive) {
+//			liftController(master_controller);
+//		} else if (!masterActive && slaveActive) {
+//			liftController(slave_controller);
+//		} else if (masterActive && slaveActive) {
+//			liftController(slave_controller);
+//		} else if (!masterActive && !slaveActive) {
+//			stopLift();
+//		}
+//		return;
+//	}
 }
 
 void Robot::liftController(Controller &controller) {

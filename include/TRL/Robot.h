@@ -84,15 +84,10 @@ namespace TRL {
 		RobotStartLocation startLocation;
 
 		//Controllers
-		static Controller master_controller;
-		static Controller slave_controller;
+		static Controller controller;
 
 		// Controller Input
 		void handleInput(InputControlMode controlMode);
-//		void handleDriveOrientation(InputControlMode controlMode);
-//		void handleDrive(InputControlMode controlMode);
-//		void handleLift(InputControlMode controlMode);
-//		void handleClaw(InputControlMode controlMode);
 
 		void driveOrientationInputController(InputControlMode controlMode);
 		void driveOrientationController(Controller &controller);

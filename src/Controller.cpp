@@ -14,39 +14,12 @@ namespace TRL {
 ////////////////////////////////
 
 Controller::Controller() {
-	this->type = Master_Controller;
-	this->shiftKey = ShiftBtn_None;
-	this->leftStickDeadzoneMagnitude = 0;
-	this->rightStickDeadzoneMagnitude = 0;
-}
-
-Controller::Controller(ControllerType type) {
-	this->type = type;
-	this->shiftKey = ShiftBtn_None;
-	this->leftStickDeadzoneMagnitude = 0;
-	this->rightStickDeadzoneMagnitude = 0;
-}
-Controller::Controller(ControllerType type, short leftStickDeadzoneMagnitude,
-		short rightStickDeadzoneMagnitude) {
-	this->type = type;
-	this->shiftKey = ShiftBtn_None;
-	this->leftStickDeadzoneMagnitude = abs(leftStickDeadzoneMagnitude);
-	this->rightStickDeadzoneMagnitude = abs(rightStickDeadzoneMagnitude);
-}
-
-Controller::Controller(ControllerType type, ControllerShiftInput shiftKey) {
-	this->type = type;
-	this->shiftKey = shiftKey;
-	this->leftStickDeadzoneMagnitude = 0;
-	this->rightStickDeadzoneMagnitude = 0;
-}
-
-Controller::Controller(ControllerType type, ControllerShiftInput shiftKey,
-		short leftStickDeadzoneMagnitude, short rightStickDeadzoneMagnitude) {
-	this->type = type;
-	this->shiftKey = shiftKey;
-	this->leftStickDeadzoneMagnitude = abs(leftStickDeadzoneMagnitude);
-	this->rightStickDeadzoneMagnitude = abs(rightStickDeadzoneMagnitude);
+	this->masterShiftKey = ShiftBtn_None;
+	this->slaveShiftKey = ShiftBtn_None;
+	this->masterLeftStickDeadzoneMagnitude = 0;
+	this->masterRightStickDeadzoneMagnitude = 0;
+	this->slaveLeftStickDeadzoneMagnitude = 0;
+	this->slaveRightStickDeadzoneMagnitude = 0;
 }
 
 Controller::~Controller() {
@@ -68,12 +41,15 @@ int Controller::getRawValue(ControllerInput in) {
 	bool isAnalog = false;
 	char channel = 0;
 	char btn = 0;
-	char controllerNum = getControllerNumber();
+	char controllerNum = getInputControllerNumber(in);
 
 //	println(LOG, "Controller", "getRawValue", "Controller: %d",
 //			getControllerNumber());
 
 	in = convertControllerInputToNonShiftedVariant(in);
+
+	//Controller number is set earlier so this simply allows less cases in the switch statement
+	in = convertControllerInputToMasterVariant(in);
 
 	switch (in) {
 	case Btn5U:
@@ -167,9 +143,11 @@ int Controller::getRawValue(ControllerInput in) {
 int Controller::getValue(ControllerInput in) {
 	int value = 0;
 //	println(LOG, "Controller", "getValue", "C_Shifted:%d I_Shifted:%d", isControllerShifted(), isShiftedInputType(in));
-	if (isControllerShifted() && isShiftedInputType(in)) {
+	if (isControllerShifted(getInputControllerType(in))
+			&& isShiftedInputType(in)) {
 		value = getRawValue(in);
-	} else if (!isControllerShifted() && !isShiftedInputType(in)) {
+	} else if (!isControllerShifted(getInputControllerType(in))
+			&& !isShiftedInputType(in)) {
 		value = getRawValue(in);
 	} else {
 		value = 0;
@@ -179,7 +157,7 @@ int Controller::getValue(ControllerInput in) {
 		ControllerStickSide joystickSide = getJoystickSide(in);
 		switch (joystickSide) {
 		case LEFT_JOYSTICK:
-			if (abs(value) < abs(leftStickDeadzoneMagnitude)) {
+			if (abs(value) < abs(masterLeftStickDeadzoneMagnitude)) {
 //				println(LOG, "Controller", "getValue", "Ignoring Joystick Input");
 				return 0;
 			} else {
@@ -188,7 +166,7 @@ int Controller::getValue(ControllerInput in) {
 				return value;
 			}
 		case RIGHT_JOYSTICK:
-			if (abs(value) < abs(rightStickDeadzoneMagnitude)) {
+			if (abs(value) < abs(masterRightStickDeadzoneMagnitude)) {
 				return 0;
 			} else {
 				return value;
@@ -210,46 +188,92 @@ int Controller::getValue(ControllerInput in) {
 //JOYSTICK DEADZONE FUNCTIONS//
 ///////////////////////////////
 
-void Controller::setLeftStickDeadzone(short deadzone) {
-	this->leftStickDeadzoneMagnitude = abs(deadzone);
+void Controller::setLeftStickDeadzone(ControllerType type, short deadzone) {
+	switch (type) {
+	case MASTER_CONTROLLER:
+		this->masterLeftStickDeadzoneMagnitude = abs(deadzone);
+		return;
+	case SLAVE_CONTROLLER:
+		this->slaveLeftStickDeadzoneMagnitude = abs(deadzone);
+		return;
+	}
 }
 
-void Controller::setRightStickDeadzone(short deadzone) {
-	this->rightStickDeadzoneMagnitude = abs(deadzone);
+void Controller::setRightStickDeadzone(ControllerType type, short deadzone) {
+	switch (type) {
+	case MASTER_CONTROLLER:
+		this->masterRightStickDeadzoneMagnitude = abs(deadzone);
+		return;
+	case SLAVE_CONTROLLER:
+		this->slaveRightStickDeadzoneMagnitude = abs(deadzone);
+		return;
+	}
 }
 
-void Controller::setJoystickDeadzone(short deadzone) {
-	setLeftStickDeadzone(deadzone);
-	setRightStickDeadzone(deadzone);
+void Controller::setJoystickDeadzone(ControllerType type, short deadzone) {
+	setLeftStickDeadzone(type, deadzone);
+	setRightStickDeadzone(type, deadzone);
 }
 
 ///////////////////
 //SHIFT FUNCTIONS//
 ///////////////////
 
-void Controller::setShiftKey(ControllerShiftInput input) {
-	shiftKey = input;
+void Controller::setShiftKey(ControllerType type, ControllerShiftButton input) {
+	switch (type) {
+	case MASTER_CONTROLLER:
+		masterShiftKey = input;
+		return;
+	case SLAVE_CONTROLLER:
+		slaveShiftKey = input;
+		return;
+	}
 }
 
-bool Controller::isControllerShifted() {
-	ControllerInput shift = (ControllerInput) ((int) shiftKey);
-	if ((int) shift == (int) ShiftBtn_None) {
+bool Controller::isControllerShifted(ControllerType type) {
+
+	ControllerShiftButton shiftKey = ShiftBtn_None;
+
+	switch (type) {
+	case MASTER_CONTROLLER:
+		shiftKey = masterShiftKey;
+		break;
+	case SLAVE_CONTROLLER:
+		shiftKey = slaveShiftKey;
+		break;
+	}
+
+	if ((int) shiftKey == (int) ShiftBtn_None) {
 		return false;
 	}
-	if (getRawValue(shift) != 0) {
+
+	if (isInputActive(getControllerInputForShiftBtn(type, shiftKey))) {
 		return true;
 	}
 	return false;
 }
 
 bool Controller::isShiftedInputType(ControllerInput in) {
-	if (((int) in <= (int) ShiftedInput_Accel_y)
-			&& ((int) in >= (int) ShiftedInput_Btn5U)) {
+	in = convertControllerInputToMasterVariant(in);
+	if ((in >= ShiftedInput_Btn5U) && (in <= ShiftedInput_Accel_Y)) {
 		return true;
-	} else if (((int) in <= (int) Accel_Y) && ((int) in >= (int) Btn5U)) {
-		return false;
 	}
 	return false;
+}
+
+bool Controller::isNonShiftedInputType(ControllerInput in) {
+	return !isShiftedInputType(in);
+}
+
+bool Controller::isSlaveControllerInput(ControllerInput in) {
+	if ((in >= Partner_Btn5U) && (in <= Partner_Accel_Y)) {
+		return true;
+	}
+	return false;
+}
+
+bool Controller::isMasterControllerInput(ControllerInput in) {
+	return !isSlaveControllerInput(in);
 }
 
 ControllerInput Controller::convertControllerInputToNonShiftedVariant(
@@ -257,10 +281,62 @@ ControllerInput Controller::convertControllerInputToNonShiftedVariant(
 	if (isShiftedInputType(in)) {
 		int shiftOffset = NUMBER_NON_SHIFTED_INPUTS
 		;
-		return (ControllerInput) ((int) in - shiftOffset);
+		return (ControllerInput) (in - shiftOffset);
 	} else {
 		return in;
 	}
+}
+
+ControllerInput Controller::convertControllerInputToShiftedVariant(
+		ControllerInput in) {
+	if (isNonShiftedInputType(in)) {
+		int shiftOffset = NUMBER_NON_SHIFTED_INPUTS
+		;
+		return (ControllerInput) (in + shiftOffset);
+	} else {
+		return in;
+	}
+}
+
+ControllerInput Controller::convertControllerInputToMasterVariant(
+		ControllerInput in) {
+	int controllerOffset = 2 * NUMBER_NON_SHIFTED_INPUTS
+	;
+	if (isSlaveControllerInput(in)) {
+		return (ControllerInput) (in - controllerOffset);
+	} else {
+		return in;
+	}
+}
+
+ControllerInput Controller::convertControllerInputToSlaveVariant(
+		ControllerInput in) {
+	int controllerOffset = 2 * NUMBER_NON_SHIFTED_INPUTS
+	;
+	if (isMasterControllerInput(in)) {
+		return (ControllerInput) (in + controllerOffset);
+	} else {
+		return in;
+	}
+}
+
+ControllerInput Controller::convertControllerInputToType(ControllerType type,
+		ControllerInput in) {
+	switch (type) {
+	case MASTER_CONTROLLER:
+		return convertControllerInputToMasterVariant(in);
+	case SLAVE_CONTROLLER:
+		return convertControllerInputToSlaveVariant(in);
+	default:
+		println(ERROR, "Controller", "convertControllerInputToType",
+				"This should never get called.");
+		return in;
+	}
+}
+
+ControllerInput Controller::getControllerInputForShiftBtn(ControllerType type, ControllerShiftButton shiftBtn){
+	ControllerInput input = (ControllerInput) ((int) shiftBtn);
+	return convertControllerInputToType(type, input);
 }
 
 //////////////////////////////////////////
@@ -294,8 +370,20 @@ ControllerStickSide Controller::getJoystickSide(ControllerInput in) {
 	}
 }
 
-int Controller::getControllerNumber() {
-	return (int) type;
+ControllerType Controller::getInputControllerType(ControllerInput in) {
+	if (isMasterControllerInput(in)) {
+		return MASTER_CONTROLLER;
+	} else {
+		return SLAVE_CONTROLLER;
+	}
+}
+
+int Controller::getInputControllerNumber(ControllerInput in) {
+	if (isMasterControllerInput(in)) {
+		return MASTER_CONTROLLER;
+	} else {
+		return SLAVE_CONTROLLER;
+	}
 }
 
 } /* namespace TRL */

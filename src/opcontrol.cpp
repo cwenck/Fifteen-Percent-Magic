@@ -61,8 +61,11 @@ void operatorControl() {
 	while (true) {
 		delay(30);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
-		int value = Robot::master_controller.getValue(Ch3);
-		println(LOG, "Main", "operatorControl", "%d", value);
+		Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
+//		Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
+		int value = Robot::controller.getValue(Partner_ShiftedInput_Ch3);
+//		int value2 = Robot::controller.getValue(ShiftedInput_Ch3);
+		println(LOG, "Main", "operatorControl", "Slave:%d", value);
 	}
 }
 
