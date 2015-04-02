@@ -285,8 +285,7 @@ ControllerInput Controller::convertControllerInputToNonShiftedVariant(
 ControllerInput Controller::convertControllerInputToShiftedVariant(
 		ControllerInput in) {
 	if (isNonShiftedInputType(in)) {
-		int shiftOffset = NUMBER_NON_SHIFTED_INPUTS
-		;
+		int shiftOffset = NUMBER_NON_SHIFTED_INPUTS;
 		return (ControllerInput) (in + shiftOffset);
 	} else {
 		return in;
@@ -295,8 +294,7 @@ ControllerInput Controller::convertControllerInputToShiftedVariant(
 
 ControllerInput Controller::convertControllerInputToMasterVariant(
 		ControllerInput in) {
-	int controllerOffset = 2 * NUMBER_NON_SHIFTED_INPUTS
-	;
+	int controllerOffset = 2 * NUMBER_NON_SHIFTED_INPUTS;
 	if (isSlaveControllerInput(in)) {
 		return (ControllerInput) (in - controllerOffset);
 	} else {
@@ -306,8 +304,7 @@ ControllerInput Controller::convertControllerInputToMasterVariant(
 
 ControllerInput Controller::convertControllerInputToSlaveVariant(
 		ControllerInput in) {
-	int controllerOffset = 2 * NUMBER_NON_SHIFTED_INPUTS
-	;
+	int controllerOffset = 2 * NUMBER_NON_SHIFTED_INPUTS;
 	if (isMasterControllerInput(in)) {
 		return (ControllerInput) (in + controllerOffset);
 	} else {

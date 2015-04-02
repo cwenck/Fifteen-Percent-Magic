@@ -11,6 +11,7 @@
 //Include All Files Of the Library So Only This File Needs To Be Linked To main.h
 #include "TRL_BaseInitialization.h"
 
+#include "CortexFile.h"
 #include "Motor.h"
 #include "Controller.h"
 #include "Sensor.h"

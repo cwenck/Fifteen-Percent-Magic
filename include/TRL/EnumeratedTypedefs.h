@@ -179,6 +179,17 @@ namespace TRL {
 		RIGHT_JOYSTICK,
 		ACCEL_JOYSTICK
 	}ControllerStickSide;
+
+	////////////////////////////////
+	//CORTEX FILE ENUMERATED TYPES//
+	////////////////////////////////
+
+	typedef enum _FileMode {
+		FILE_MODE_UNSET,
+		READ,
+		WRITE
+	} FileMode;
+
 }
 
 #endif /* ENUMERATEDTYPEDEFS_H_ */

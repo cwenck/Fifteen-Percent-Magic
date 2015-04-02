@@ -10,7 +10,7 @@
 
 #include "TRL_BaseInitialization.h"
 
-#define NUMBER_NON_SHIFTED_INPUTS 18;
+#define NUMBER_NON_SHIFTED_INPUTS 18
 
 namespace TRL {
 class Controller {

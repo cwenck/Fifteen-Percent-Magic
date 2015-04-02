@@ -26,6 +26,7 @@ namespace TRL {
 		//Destructor
 		virtual ~AutonomousRoutines();
 		AutonomousRoutines();
+		static void initStatics();
 
 		static AutonomousRoutines instance;
 

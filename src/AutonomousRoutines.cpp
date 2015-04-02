@@ -17,6 +17,10 @@ AutonomousRoutines::AutonomousRoutines() {
 AutonomousRoutines::~AutonomousRoutines() {
 }
 
+void AutonomousRoutines::initStatics(){
+	instance = AutonomousRoutines();
+}
+
 void AutonomousRoutines::runAutonomusRountine(AllianceColor color,
 		RobotStartLocation startLocation, short rountineNumber) {
 	switch (color) {
