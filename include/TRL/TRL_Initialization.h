@@ -14,6 +14,7 @@
 #include "Motor.h"
 #include "Controller.h"
 #include "Sensor.h"
+#include "LCD.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
 #include "Button.h"

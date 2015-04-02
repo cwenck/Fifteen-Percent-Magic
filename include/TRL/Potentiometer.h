@@ -10,9 +10,11 @@
 
 #define MAX_POTENTIOMETER_READING 4095
 
+#include "TRL_BaseInitialization.h"
+
 namespace TRL {
 
-	class Potentiometer {
+	class Potentiometer: public TRL::Sensor {
 	private:
 		AnalogPort port;
 

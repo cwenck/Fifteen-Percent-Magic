@@ -190,9 +190,9 @@ namespace TRL {
 		WRITE
 	}FileMode;
 
-	///////////////////////////
+	////////////////////////////////
 	//SENSOR/PORT ENUMERATED TYPES//
-	///////////////////////////
+	////////////////////////////////
 
 	typedef enum _AnalogPort {
 		NoAnalogInput = 0,
@@ -239,6 +239,12 @@ namespace TRL {
 		QUAD_ENCODER_TYPE = 0,
 		INTEGRATED_ENCODER_TYPE = 1
 	}EncoderType;
+
+	typedef enum _LCDPort {
+		NoLCD = 0,
+		UART_1 = 1,
+		UART_2 = 2
+	} LCDPort;
 
 }
 

@@ -10,6 +10,7 @@
 
 #include <string.h>
 #include <stdarg.h>
+#include <API.h>
 
 #include "Constants.h"
 #include "LibraryFixes.h"
