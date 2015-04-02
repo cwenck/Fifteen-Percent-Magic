@@ -58,6 +58,9 @@ extern "C" {
 using namespace TRL;
 
 void operatorControl() {
+	CortexFile file = CortexFile("auton");
+	file.writeStringToFile("This is a test file.");
+	print(file.readFileContents());
 	while (true) {
 		delay(50);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);

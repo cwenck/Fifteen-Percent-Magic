@@ -40,7 +40,6 @@ void CortexFile::writeStringToFile(string textToWrite) {
 	println(LOG, "CortexFile", "writeStringToFile", "Writing file. Don't turn off the cortex!");
 	fileMode = WRITE;
 	fileHandle = fopen(fileName, "w");
-
 	{
 		fprint(textToWrite, fileHandle);
 		fflush(fileHandle);
@@ -53,18 +52,20 @@ void CortexFile::writeStringToFile(string textToWrite) {
 
 string CortexFile::readFileContents() {
 	//TODO readFileContents is not working properly
-	char *contents = 0;
 	fileMode = READ;
 	fileHandle = fopen(fileName, "r");
 	{
+		char *contents = 0;
 		int fileChars = fcount(fileHandle) + 1;
 		char tempStr[fileChars];
 		contents = tempStr;
 		contents = fgets(contents, fileChars, fileHandle);
+		println(DEBUG, "CortexFile", "writeStringToFile", contents);
 	}
 	fclose(fileHandle);
 	fileMode = FILE_MODE_UNSET;
-	return contents;
+	println(DEBUG, "CortexFile", "writeStringToFile", "");
+	return "";
 }
 
 void CortexFile::resetCooldownTimer() {

@@ -51,8 +51,8 @@ namespace TRL {
 
 	typedef enum _LiftDirection {
 		ManualLift,
-		Up,
-		Down
+		LiftUp,
+		LiftDown
 	}LiftDirection;
 
 	typedef enum _ClawArmDirection {
@@ -195,6 +195,7 @@ namespace TRL {
 	///////////////////////////
 
 	typedef enum _AnalogPort {
+		NoAnalogInput = 0,
 		Analog_1 = 1,
 		Analog_2 = 2,
 		Analog_3 = 3,
@@ -206,6 +207,7 @@ namespace TRL {
 	}AnalogPort;
 
 	typedef enum _DigitalPort {
+		NoDigitalInput = 0,
 		Digital_1 = 1,
 		Digital_2 = 2,
 		Digital_3 = 3,

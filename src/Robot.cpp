@@ -295,9 +295,9 @@ void Robot::liftController(Controller &controller) {
 	if (upActive && downActive) {
 		stopLift();
 	} else if (upActive) {
-		lift(liftPower, Up);
+		lift(liftPower, LiftUp);
 	} else if (downActive) {
-		lift(liftPower, Down);
+		lift(liftPower, LiftDown);
 	}
 
 }
@@ -603,13 +603,13 @@ void Robot::lift(int power, LiftDirection dir) {
 			liftMotors[i]->setPower(power);
 		}
 		break;
-	case Up:
+	case LiftUp:
 		power = abs(power);
 		for (int i = 0; i < numLiftMotors; i++) {
 			liftMotors[i]->setPower(power);
 		}
 		break;
-	case Down:
+	case LiftDown:
 		power = abs(power);
 		for (int i = 0; i < numLiftMotors; i++) {
 			liftMotors[i]->setPower(-power);
