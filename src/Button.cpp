@@ -10,12 +10,19 @@
 namespace TRL {
 
 Button::Button() {
-	// TODO Auto-generated constructor stub
-
+	this->port = NULL_UNIVERSAL_PORT;
 }
 
 Button::~Button() {
 	// TODO Auto-generated destructor stub
+}
+
+void Button::setPort(AnalogPort port){
+	this->port = Port::getUniversalPortNumber(port);
+}
+
+void Button::setPort(DigitalPort port){
+	this->port = Port::getUniversalPortNumber(port);
 }
 
 } /* namespace TRL */

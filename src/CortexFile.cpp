@@ -37,18 +37,22 @@ void CortexFile::writeStringToFile(string textToWrite) {
 	if (cooldownTimer > 0) {
 		return;
 	}
+	println(LOG, "CortexFile", "writeStringToFile", "Writing file. Don't turn off the cortex!");
 	fileMode = WRITE;
 	fileHandle = fopen(fileName, "w");
+
 	{
 		fprint(textToWrite, fileHandle);
 		fflush(fileHandle);
 	}
 	fclose(fileHandle);
 	fileMode = FILE_MODE_UNSET;
+	println(LOG, "CortexFile", "writeStringToFile", "Finished writing file.");
 	resetCooldownTimer();
 }
 
 string CortexFile::readFileContents() {
+	//TODO readFileContents is not working properly
 	char *contents = 0;
 	fileMode = READ;
 	fileHandle = fopen(fileName, "r");
@@ -70,7 +74,10 @@ void CortexFile::resetCooldownTimer() {
 
 void CortexFile::updateCooldownTimer() {
 	int elapsedTime = millis() - resetTime;
-	cooldownTimer = FILE_WRITE_COOLDOWN_TIME - elapsedTime;
+	int newTimerValue = FILE_WRITE_COOLDOWN_TIME - elapsedTime;
+	if(cooldownTimer > newTimerValue){
+		cooldownTimer = newTimerValue;
+	}
 	if(cooldownTimer < 0){
 		cooldownTimer = 0;
 	}

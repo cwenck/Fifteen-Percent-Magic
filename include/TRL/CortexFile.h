@@ -8,7 +8,11 @@
 #ifndef CORTEXFILE_H_
 #define CORTEXFILE_H_
 
-#include "TRL_BaseInitialization.h"
+#include "Constants.h"
+#include "LibraryFixes.h"
+#include "Typedefs.h"
+#include "EnumeratedTypedefs.h"
+#include "PrintStream.h"
 
 //File write cooldown time in milliseconds
 #define FILE_WRITE_COOLDOWN_TIME 10000

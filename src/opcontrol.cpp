@@ -32,7 +32,7 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
- #include "main.h"
+#include "main.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,14 +58,12 @@ extern "C" {
 using namespace TRL;
 
 void operatorControl() {
- 	 while (true) {
- 	 	delay(30);
-		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
- 		Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
- 		Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
+	while (true) {
+		delay(50);
+//		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
+		Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
+		Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
- 		int value2 = Robot::controller.getValue(ShiftedInput_Ch3);
- 		println(LOG, "Main", "operatorControl", "Val:%d", value2);
 	}
 }
 
