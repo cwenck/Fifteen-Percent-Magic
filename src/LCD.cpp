@@ -9,20 +9,24 @@
 
 namespace TRL {
 
+LCD LCD::instance;
+
 LCD::LCD() {
 	this->port = NoLCD;
 }
 
 LCD::LCD(LCDPort port) {
 	this->port = port;
-	PROS_File file = getFileFromPort();
-	lcdInit (file);
-	lcdClear(file);
-	lcdSetBacklight(file, true);
 }
 
 LCD::~LCD() {
 	// TODO Auto-generated destructor stub
+}
+
+void LCD::initStatics(){
+	lcdInit(uart1);
+	lcdInit(uart2);
+	instance = LCD(UART_1);
 }
 
 PROS_File LCD::getFileFromPort() {
@@ -38,8 +42,10 @@ PROS_File LCD::getFileFromPort() {
 	}
 }
 
-////////
-///////
+LCD* LCD::setPort(LCDPort port){
+	this->port = port;
+	return this;
+}
 
 bool LCD::isLeftButtonPressed() {
 	int btns = lcdReadButtons(getFileFromPort());
@@ -56,7 +62,27 @@ bool LCD::isRightButtonPressed() {
 	return (btns & LCD_BTN_RIGHT) != 0;
 }
 
-void LCD::displayCenteredString(short line, const string text) {
+LCD* LCD::setBacklight(bool backlight){
+	lcdSetBacklight(getFileFromPort(), backlight);
+	return this;
+}
+
+LCD* LCD::enableBacklight(){
+	lcdSetBacklight(getFileFromPort(), true);
+	return this;
+}
+
+LCD* LCD::disableBacklight(){
+	lcdSetBacklight(getFileFromPort(), false);
+	return this;
+}
+
+LCD* LCD::clear(){
+	lcdClear(getFileFromPort());
+	return this;
+}
+
+LCD* LCD::displayCenteredString(short line, const string text) {
 	const unsigned char line_size = 16;
 	int size = 0;
 	for (const char *cursor = text; *cursor != NULL; cursor++) {
@@ -85,9 +111,10 @@ void LCD::displayCenteredString(short line, const string text) {
 		}
 		lcdSetText(getFileFromPort(), line, line_chars);
 	}
+	return this;
 }
 
-void LCD::displayFormattedCenteredString(short line,
+LCD* LCD::displayFormattedCenteredString(short line,
 		const string formatString, ...) {
 	int size = 0;
 	for (const char *cursor = formatString; *cursor != NULL; cursor++) {
@@ -103,12 +130,12 @@ void LCD::displayFormattedCenteredString(short line,
 	}
 	va_end(arg);
 	displayCenteredString(line, line_chars);
+	return this;
 }
 
-void LCD::displayBatteryStatus() {
+LCD* LCD::displayBatteryStatus() {
 	displayFormattedCenteredString(1, "Main: %.2fV", getMainBatteryPower());
-	displayFormattedCenteredString(2, "%c             %c",
-			LCD_LEFT_TRIANGLE_ARROW, LCD_RIGHT_TRIANGLE_ARROW);
+	return this;
 }
 
 } /* namespace TRL */

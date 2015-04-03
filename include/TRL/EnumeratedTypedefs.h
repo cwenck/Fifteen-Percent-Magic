@@ -246,6 +246,16 @@ namespace TRL {
 		UART_2 = 2
 	} LCDPort;
 
+	typedef enum _SonarUnit{
+		CM,
+		INCH
+	} SonarUnit;
+
+	typedef enum _SonarUnefinedReturnBehavior{
+		ReturnHighValue,
+		ReturnLowValue
+	}UnefinedBehavior;
+
 }
 
 #endif /* ENUMERATEDTYPEDEFS_H_ */

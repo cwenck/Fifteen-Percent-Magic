@@ -36,15 +36,25 @@ namespace TRL {
 		LCD(LCDPort port);
 		virtual ~LCD();
 
-		void setPort(LCDPort port);
+		static LCD instance;
+		static void initStatics();
 
 		bool isLeftButtonPressed();
 		bool isCenterButtonPressed();
 		bool isRightButtonPressed();
-		void displayCenteredString(short line, const string text);
-		void displayFormattedCenteredString(short line,
+
+		LCD* setPort(LCDPort port);
+
+		LCD* setBacklight(bool backlight);
+		LCD* enableBacklight();
+		LCD* disableBacklight();
+
+		LCD* clear();
+
+		LCD* displayCenteredString(short line, const string text);
+		LCD* displayFormattedCenteredString(short line,
 				const string formatString, ...);
-		void displayBatteryStatus();
+		LCD* displayBatteryStatus();
 	};
 
 }

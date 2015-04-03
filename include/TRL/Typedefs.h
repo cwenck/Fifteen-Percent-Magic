@@ -17,7 +17,7 @@ typedef short UniversalPort;
 
 //types that are wrappers for default pros types are prefixed with "PROS_"
 typedef void* PROS_Encoder;
-
 typedef FILE* PROS_File;
+typedef Ultrasonic PROS_Sonar;
 
 #endif /* ENUMERATEDTYPES_H_ */

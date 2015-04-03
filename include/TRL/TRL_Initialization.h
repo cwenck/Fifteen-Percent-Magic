@@ -18,6 +18,7 @@
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
 #include "Button.h"
+#include "Sonar.h"
 #include "PID.h"
 #include "Robot.h"
 #include "AutonomousRoutines.h"

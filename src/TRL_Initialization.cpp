@@ -12,6 +12,7 @@ namespace TRL {
 void initializeLibrary() {
 	Robot::initStatics();
 	AutonomousRoutines::initStatics();
+	LCD::initStatics();
 }
 
 }

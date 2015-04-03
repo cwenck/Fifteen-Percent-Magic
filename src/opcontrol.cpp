@@ -58,14 +58,17 @@ extern "C" {
 using namespace TRL;
 
 void operatorControl() {
-	CortexFile file = CortexFile("auton");
-	file.writeStringToFile("This is a test file.");
-	print(file.readFileContents());
+//	CortexFile file = CortexFile("auton");
+//	file.writeStringToFile("This is a test file.");
+//	print(file.readFileContents());
+
 	while (true) {
-		delay(50);
+		delay(100);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 		Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
 		Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
+
+//		println(DEBUG, "Main", "operatorControl", "Sonar:%d", ult->getVa));
 
 	}
 }

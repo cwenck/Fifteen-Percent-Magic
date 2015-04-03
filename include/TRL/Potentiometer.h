@@ -11,6 +11,7 @@
 #define MAX_POTENTIOMETER_READING 4095
 
 #include "TRL_BaseInitialization.h"
+#include "Sensor.h"
 
 namespace TRL {
 
