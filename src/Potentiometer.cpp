@@ -17,10 +17,11 @@ Potentiometer::Potentiometer() {
 Potentiometer::Potentiometer(AnalogPort port) {
 	this->port = port;
 	numSelections = -1;
+	PortRegistry::registerPort(port, PotentiometerSensorType);
 }
 
 Potentiometer::~Potentiometer() {
-	// TODO Auto-generated destructor stub
+	PortRegistry::deleteRegistryEntry(port);
 }
 
 void Potentiometer::disablePotentiometerSelections() {

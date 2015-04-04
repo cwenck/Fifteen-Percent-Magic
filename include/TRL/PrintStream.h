@@ -24,8 +24,10 @@ namespace TRL {
 	}MessageStatusIndicator;
 
 	void print(MessageStatusIndicator indicator, string className, string functionName,string formatString, ...);
-	void println(MessageStatusIndicator indicator, string className, string functionName, string formatString, ...);
+	void print(string formatString, ...);
 
+	void println(MessageStatusIndicator indicator, string className, string functionName, string formatString, ...);
+	void println(string formatString, ...);
 }
 
 #endif /* PRINTSTREAM_H_ */

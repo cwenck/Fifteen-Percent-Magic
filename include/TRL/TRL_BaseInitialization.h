@@ -18,6 +18,7 @@
 #include "EnumeratedTypedefs.h"
 #include "PrintStream.h"
 #include "Port.h"
+#include "PortRegistry.h"
 #include "CortexFile.h"
 
 #endif /* TRL_BASEINITIALIZATION_H_ */

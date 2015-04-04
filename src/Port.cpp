@@ -74,14 +74,14 @@ UniversalPort Port::getUniversalPortNumber(DigitalPort port) {
 	}
 }
 
-bool Port::isUniversalPortNumberDigitalType(UniversalPort port) {
+bool Port::isPortDigitalType(UniversalPort port) {
 	if ((port >= 1) && (port <= 12)) {
 		return true;
 	}
 	return false;
 }
 
-bool Port::isUniversalPortNumberAnalogType(UniversalPort port) {
+bool Port::isPortAnalogType(UniversalPort port) {
 	if ((port >= 13) && (port <= 20)) {
 		return true;
 	}
@@ -113,7 +113,7 @@ short Port::getAnalogPortNumber(AnalogPort port) {
 	}
 }
 short Port::getAnalogPortNumber(UniversalPort port) {
-	if (isUniversalPortNumberAnalogType(port)) {
+	if (isPortAnalogType(port)) {
 		return port - 12;
 	}
 	return NULL_UNIVERSAL_PORT;
@@ -153,10 +153,111 @@ short Port::getDigitalPortNumber(DigitalPort port) {
 }
 
 short Port::getDigitalPortNumber(UniversalPort port) {
-	if (isUniversalPortNumberDigitalType(port)) {
+	if (isPortDigitalType(port)) {
 		return port;
 	}
 	return NULL_UNIVERSAL_PORT;
+}
+
+PortType Port::getPortType(UniversalPort port) {
+	if (isPortAnalogType(port)) {
+		return AnalogPortType;
+	} else if (isPortDigitalType(port)) {
+		return DigitalPortType;
+	} else {
+		return OtherPortType;
+	}
+}
+
+bool Port::isPortInactive(AnalogPort port) {
+	int value = getAnalogValue(port);
+	if (value > 100) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Port::isPortInactive(DigitalPort port) {
+	return digitalRead(getUniversalPortNumber(port));
+}
+
+bool Port::isPortInactive(UniversalPort port) {
+	PortType type = getPortType(port);
+	bool value;
+	switch(type){
+	case AnalogInputPort:
+		value = isPortInactive(getAnalogPortFromUniversalPort(port));
+		println(DEBUG, "Port", "isPortInactive", "%d", value);
+		return value;
+	case DigitalInputPort:
+		return digitalRead(port);
+	case OtherPortType:
+		return digitalRead(port);
+	}
+	return -1;
+}
+
+bool Port::isPortActive(AnalogPort port) {
+	return !isPortInactive(port);
+}
+
+bool Port::isPortActive(DigitalPort port) {
+	return !isPortInactive(port);
+}
+
+bool Port::isPortActive(UniversalPort port) {
+	return !isPortInactive(port);
+}
+
+int Port::getAnalogValue(AnalogPort port){
+	return analogRead(getAnalogPortNumber(port));
+}
+
+//returns -1 if the port isn't analog
+int Port::getAnalogValue(UniversalPort port){
+	if(isPortAnalogType(port)){
+		return analogRead(getAnalogPortNumber(port));
+	}
+	return -1;
+}
+
+void Port::configurePort(PortConfig config, UniversalPort port) {
+	switch (config) {
+	case DigitalInputPort:
+		pinMode(port, INPUT);
+		return;
+	case AnalogInputPort:
+		if (isPortAnalogType(port)) {
+			pinMode(port, INPUT_ANALOG);
+		}
+		return;
+	case OutputPort:
+		pinMode(port, OUTPUT);
+		return;
+	}
+}
+
+void Port::configurePort(PortConfig config, DigitalPort port) {
+	configurePort(config, getUniversalPortNumber(port));
+}
+
+void Port::configurePort(PortConfig config, AnalogPort port){
+	configurePort(config, getUniversalPortNumber(port));
+}
+
+AnalogPort Port::getAnalogPortFromUniversalPort(UniversalPort port){
+	if(isPortAnalogType(port)){
+		return (AnalogPort) getAnalogPortNumber(port);
+	}
+	return NoAnalogInput;
+}
+
+DigitalPort Port::getDigitalPortFromUniversalPort(UniversalPort port){
+	if(isPortDigitalType(port)){
+		return (DigitalPort) getDigitalPortNumber(port);
+	}
+	return NoDigitalInput;
 }
 
 } /* namespace TRL */

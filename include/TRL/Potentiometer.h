@@ -22,7 +22,6 @@ namespace TRL {
 		//This is set to -1 to disable reading from different positions
 		short numSelections;
 
-		void configurePin();
 	public:
 		Potentiometer();
 		Potentiometer(AnalogPort port);

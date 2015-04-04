@@ -13,12 +13,18 @@
 
 #include "Motor.h"
 #include "Controller.h"
-#include "Sensor.h"
 #include "LCD.h"
+
+//Sensor Includes
+#include "Sensor.h"
+#include "AnalogSensor.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
-#include "Button.h"
+#include "DigitalSwitch.h"
 #include "Sonar.h"
+
+
+
 #include "PID.h"
 #include "Robot.h"
 #include "AutonomousRoutines.h"

@@ -23,10 +23,14 @@ Sonar::Sonar(DigitalPort yellowInputPort, DigitalPort orangeOutputPort) {
 	this->unit = CM;
 	this->behavior = ReturnLowValue;
 	prosSonar = ultrasonicInit(outputPort, inputPort);
+	PortRegistry::registerPort(inputPort, SonarSensorType);
+	PortRegistry::registerPort(outputPort, SonarSensorType);
 }
 
 Sonar::~Sonar() {
 	ultrasonicShutdown(prosSonar);
+	PortRegistry::deleteRegistryEntry(inputPort);
+	PortRegistry::deleteRegistryEntry(outputPort);
 }
 
 //reads 200 if the value is undefined

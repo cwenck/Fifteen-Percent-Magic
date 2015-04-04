@@ -24,7 +24,6 @@ namespace TRL {
 		virtual ~QuadratureEncoder();
 		EncoderType getType();
 		int getValue();
-		void shutdown();
 		void resetValue();	//resets the value to 0
 
 	};

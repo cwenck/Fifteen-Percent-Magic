@@ -62,13 +62,20 @@ void operatorControl() {
 //	file.writeStringToFile("This is a test file.");
 //	print(file.readFileContents());
 
+//	Port::configurePort(DigitalInputPort, Analog_1);
+	DigitalSwitch btn = DigitalSwitch(Analog_1);
+	printf("%d", btn.getPort());
+
 	while (true) {
 		delay(100);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 		Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
 		Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
-//		println(DEBUG, "Main", "operatorControl", "Sonar:%d", ult->getVa));
+//		Port::isPortActive(Analog_1);
+		btn.getValue();
+//		println(DEBUG, "Main", "operatorControl", "On:%d", btn.getValue());
+
 
 	}
 }

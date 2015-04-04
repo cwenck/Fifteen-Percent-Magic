@@ -9,23 +9,15 @@
 
 namespace TRL {
 
-//Max length is 255 characters
 void print(MessageStatusIndicator indicator, string className,
 		string functionName, string formatString, ...) {
-	short maxSize = 255;
 	short len = strlen(formatString);
-
-	if (len > maxSize) {
-		printf("[Error] String exceeds max print() length of 255 characters.\n\r");
-		return;
-	}
-
-	char line_chars[maxSize + 1];
+	char line_chars[len + 1];
 
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, maxSize, formatString, arg);
+		vsnprintf(line_chars, len, formatString, arg);
 	}
 	va_end(arg);
 
@@ -53,28 +45,33 @@ void print(MessageStatusIndicator indicator, string className,
 	printf(line_chars);
 }
 
-//Max length is 255 characters
-void println(MessageStatusIndicator indicator, string className,
-		string functionName, string formatString, ...) {
-	short maxSize = 255;
+void print(string formatString, ...) {
 	short len = strlen(formatString);
-
-	if (len > maxSize) {
-		printf(
-				"[Error] String exceeds max println() length of 255 characters.\n\r");
-		return;
-	}
-
-	char line_chars[maxSize + 1];
+	char line_chars[len + 1];
 
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, maxSize, formatString, arg);
+		vsnprintf(line_chars, len, formatString, arg);
 	}
 	va_end(arg);
 
-	//print prefix
+	printf(line_chars);
+}
+
+void println(MessageStatusIndicator indicator, string className,
+		string functionName, string formatString, ...) {
+	short len = strlen(formatString);
+	char line_chars[len + 1];
+
+	va_list arg;
+	va_start(arg, formatString);
+	{
+		vsnprintf(line_chars, len, formatString, arg);
+	}
+	va_end(arg);
+
+//print prefix
 	printf("[");
 	switch (indicator) {
 	case ERROR:
@@ -95,6 +92,21 @@ void println(MessageStatusIndicator indicator, string className,
 	printf("::");
 	printf(functionName);
 	printf("()] ");
+	printf(line_chars);
+	printf("\n\r");
+}
+
+void println(string formatString, ...) {
+	short len = strlen(formatString);
+	char line_chars[len + 1];
+
+	va_list arg;
+	va_start(arg, formatString);
+	{
+		vsnprintf(line_chars, len, formatString, arg);
+	}
+	va_end(arg);
+
 	printf(line_chars);
 	printf("\n\r");
 }

@@ -11,8 +11,10 @@ namespace TRL {
 
 QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom) {
 	if ((top == 10) || (bottom == 10)) {
-		printf("[Warning] The Quadrature Encoder will not function if either wire is plugged into port 10.\n\r");
-		printf("\t The encoder will remain uninitialized");
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+				"The Quadrature Encoder will not function if either wire is plugged into port 10.");
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+						"The encoder will NOT be initialized.");
 		return;
 	}
 	this->top = top;
@@ -20,16 +22,24 @@ QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom) {
 	this->inverted = false;
 	//the original pros functions are never reversed
 	this->encoder = encoderInit((int) top, int(bottom), false);
-	if(this->encoder == NULL){
-		printf("[Warning] An encoder using the same ports has already been initialized. Please choose different ports.\n\r");
+	if (this->encoder == NULL) {
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+				"An encoder using the same ports has already been initialized.");
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+						"The encoder will NOT be initialized.");
+		return;
 	}
+	PortRegistry::registerPort(top, QuadratureEncoderSensorType);
+	PortRegistry::registerPort(bottom, QuadratureEncoderSensorType);
 }
 
-QuadratureEncoder::QuadratureEncoder::QuadratureEncoder(DigitalPort top,
-		DigitalPort bottom, bool inverted) {
+QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom,
+		bool inverted) {
 	if ((top == 10) || (bottom == 10)) {
-		printf("[Error] The Quadrature Encoder will not function if either wire is plugged into port 10.\n\r");
-		printf("\t The encoder will remain uninitialized");
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+				"The Quadrature Encoder will not function if either wire is plugged into port 10.");
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+						"The encoder will NOT be initialized.");
 		return;
 	}
 	this->top = top;
@@ -37,13 +47,21 @@ QuadratureEncoder::QuadratureEncoder::QuadratureEncoder(DigitalPort top,
 	this->inverted = inverted;
 	//the original pros functions are never reversed
 	this->encoder = encoderInit((int) top, int(bottom), false);
-	if(this->encoder == NULL){
-		printf("[Warning] An encoder using the same ports has already been initialized. Please choose different ports.\n\r");
+	if (this->encoder == NULL) {
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+				"An encoder using the same ports has already been initialized.");
+		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
+						"The encoder will NOT be initialized.");
+		return;
 	}
+	PortRegistry::registerPort(top, QuadratureEncoderSensorType);
+	PortRegistry::registerPort(bottom, QuadratureEncoderSensorType);
 }
 
 QuadratureEncoder::~QuadratureEncoder() {
-// TODO Auto-generated destructor stub
+	encoderShutdown(encoder);
+	PortRegistry::deleteRegistryEntry(top);
+	PortRegistry::deleteRegistryEntry(bottom);
 }
 
 int QuadratureEncoder::getValue() {
@@ -52,10 +70,6 @@ int QuadratureEncoder::getValue() {
 	} else {
 		return -encoderGet(encoder);
 	}
-}
-
-void QuadratureEncoder::shutdown() {
-	encoderShutdown(encoder);
 }
 
 void QuadratureEncoder::resetValue() {

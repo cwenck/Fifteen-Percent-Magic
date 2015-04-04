@@ -14,15 +14,20 @@
 
 namespace TRL {
 
-	class Button : public TRL::Sensor {
+	class DigitalSwitch : public TRL::Sensor {
 	private:
 		UniversalPort port;
 	public:
-		Button();
-		virtual ~Button();
+		DigitalSwitch();
+		DigitalSwitch(AnalogPort port);
+		DigitalSwitch(DigitalPort port);
+		virtual ~DigitalSwitch();
 
+		UniversalPort getPort();
 		void setPort(AnalogPort port);
 		void setPort(DigitalPort port);
+
+		int getValue();
 	};
 }
 

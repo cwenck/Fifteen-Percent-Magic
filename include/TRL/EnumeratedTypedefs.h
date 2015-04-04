@@ -244,17 +244,40 @@ namespace TRL {
 		NoLCD = 0,
 		UART_1 = 1,
 		UART_2 = 2
-	} LCDPort;
+	}LCDPort;
 
-	typedef enum _SonarUnit{
+	typedef enum _SonarUnit {
 		CM,
 		INCH
-	} SonarUnit;
+	}SonarUnit;
 
-	typedef enum _SonarUnefinedReturnBehavior{
+	typedef enum _UnefinedBehavior {
 		ReturnHighValue,
 		ReturnLowValue
 	}UnefinedBehavior;
+
+	typedef enum _PortType {
+		AnalogPortType,
+		DigitalPortType,
+		OtherPortType
+	}PortType;
+
+	//Analog ports can be configured as ditgitial inputs
+	typedef enum _PortConfig {
+		DigitalInputPort,
+		AnalogInputPort,
+		OutputPort
+	}PortConfig;
+
+	typedef enum _SensorType {
+		NullSensorType = 0,
+		QuadratureEncoderSensorType,
+		PotentiometerSensorType,
+		DigitalSwitchSensorType,
+		LightSensorType,
+		SonarSensorType
+
+	} SensorType;
 
 }
 
