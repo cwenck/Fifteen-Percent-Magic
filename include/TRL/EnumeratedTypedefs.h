@@ -236,8 +236,8 @@ namespace TRL {
 	}IntegratedEncoderPort;
 
 	typedef enum _EncoderType {
-		QUAD_ENCODER_TYPE = 0,
-		INTEGRATED_ENCODER_TYPE = 1
+		QuadratureEncoderType = 1,
+		IntegratedEncoderType = 2
 	}EncoderType;
 
 	typedef enum _LCDPort {
@@ -275,7 +275,8 @@ namespace TRL {
 		PotentiometerSensorType,
 		DigitalSwitchSensorType,
 		LightSensorType,
-		SonarSensorType
+		SonarSensorType,
+		LineSensorType
 
 	} SensorType;
 

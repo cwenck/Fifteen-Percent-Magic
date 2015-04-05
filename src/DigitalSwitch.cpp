@@ -45,4 +45,8 @@ int DigitalSwitch::getValue(){
 	return Port::isPortActive(port);
 }
 
+SensorType DigitalSwitch::getSensorType(){
+	return DigitalSwitchSensorType;
+}
+
 } /* namespace TRL */

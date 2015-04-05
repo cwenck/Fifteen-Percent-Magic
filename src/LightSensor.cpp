@@ -1,5 +1,5 @@
 /*
-s * LightSensor.cpp
+ s * LightSensor.cpp
  *
  *  Created on: Apr 4, 2015
  *      Author: cwenck
@@ -9,19 +9,15 @@ s * LightSensor.cpp
 
 namespace TRL {
 
-LightSensor::LightSensor() {
-	port = NoAnalogInput;
+LightSensor::LightSensor() :
+		AnalogSensor() {
 }
 
-LightSensor::LightSensor(AnalogPort port){
-	this->port = port;
-	PortRegistry::registerPort(port, LightSensorType);
+LightSensor::LightSensor(AnalogPort port) :
+		AnalogSensor(port, LightSensorType) {
 }
 
 LightSensor::~LightSensor() {
-	PortRegistry::deleteRegistryEntry(port);
 }
-
-
 
 } /* namespace TRL */

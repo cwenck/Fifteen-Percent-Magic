@@ -8,6 +8,8 @@
 #ifndef SENSOR_H_
 #define SENSOR_H_
 
+#include "TRL_BaseInitialization.h"
+
 namespace TRL {
 
 	class Sensor {
@@ -16,6 +18,7 @@ namespace TRL {
 		virtual ~Sensor();
 
 		virtual int getValue() = 0;
+		virtual SensorType getSensorType() = 0;
 	};
 }
 #endif /* SENSOR_H_ */

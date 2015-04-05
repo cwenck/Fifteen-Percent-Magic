@@ -82,7 +82,7 @@ bool Port::isPortDigitalType(UniversalPort port) {
 }
 
 bool Port::isPortAnalogType(UniversalPort port) {
-	if ((port >= 13) && (port <= 20)) {
+	if (((port >= 13) && (port <= 20))) {
 		return true;
 	}
 	return false;
@@ -171,7 +171,7 @@ PortType Port::getPortType(UniversalPort port) {
 
 bool Port::isPortInactive(AnalogPort port) {
 	int value = getAnalogValue(port);
-	if (value > 100) {
+	if (value > 1000) {
 		return true;
 	} else {
 		return false;
@@ -186,11 +186,10 @@ bool Port::isPortInactive(UniversalPort port) {
 	PortType type = getPortType(port);
 	bool value;
 	switch(type){
-	case AnalogInputPort:
+	case AnalogPortType:
 		value = isPortInactive(getAnalogPortFromUniversalPort(port));
-		println(DEBUG, "Port", "isPortInactive", "%d", value);
 		return value;
-	case DigitalInputPort:
+	case DigitalPortType:
 		return digitalRead(port);
 	case OtherPortType:
 		return digitalRead(port);

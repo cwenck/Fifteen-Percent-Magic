@@ -14,6 +14,8 @@
 #include <string.h>
 #include <API.h>
 
+#define PRINT_FORMAT_FILL_BUFFE_CHARS 100
+
 namespace TRL {
 
 	typedef enum _MessageStatusIndicator {

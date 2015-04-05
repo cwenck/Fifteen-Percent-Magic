@@ -12,12 +12,12 @@ namespace TRL {
 void print(MessageStatusIndicator indicator, string className,
 		string functionName, string formatString, ...) {
 	short len = strlen(formatString);
-	char line_chars[len + 1];
+	char line_chars[len + 1 + PRINT_FORMAT_FILL_BUFFE_CHARS];
 
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, len, formatString, arg);
+		vsnprintf(line_chars, len + PRINT_FORMAT_FILL_BUFFE_CHARS, formatString, arg);
 	}
 	va_end(arg);
 
@@ -47,12 +47,12 @@ void print(MessageStatusIndicator indicator, string className,
 
 void print(string formatString, ...) {
 	short len = strlen(formatString);
-	char line_chars[len + 1];
+	char line_chars[len + 1 + PRINT_FORMAT_FILL_BUFFE_CHARS];
 
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, len, formatString, arg);
+		vsnprintf(line_chars, len + PRINT_FORMAT_FILL_BUFFE_CHARS, formatString, arg);
 	}
 	va_end(arg);
 
@@ -62,12 +62,12 @@ void print(string formatString, ...) {
 void println(MessageStatusIndicator indicator, string className,
 		string functionName, string formatString, ...) {
 	short len = strlen(formatString);
-	char line_chars[len + 1];
+	char line_chars[len + 1 + PRINT_FORMAT_FILL_BUFFE_CHARS];
 
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, len, formatString, arg);
+		vsnprintf(line_chars, len + PRINT_FORMAT_FILL_BUFFE_CHARS, formatString, arg);
 	}
 	va_end(arg);
 
@@ -98,12 +98,12 @@ void println(MessageStatusIndicator indicator, string className,
 
 void println(string formatString, ...) {
 	short len = strlen(formatString);
-	char line_chars[len + 1];
+	char line_chars[len + 1 + PRINT_FORMAT_FILL_BUFFE_CHARS];
 
 	va_list arg;
 	va_start(arg, formatString);
 	{
-		vsnprintf(line_chars, len, formatString, arg);
+		vsnprintf(line_chars, len + PRINT_FORMAT_FILL_BUFFE_CHARS, formatString, arg);
 	}
 	va_end(arg);
 

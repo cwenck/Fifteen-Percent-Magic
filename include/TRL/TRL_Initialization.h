@@ -18,6 +18,8 @@
 //Sensor Includes
 #include "Sensor.h"
 #include "AnalogSensor.h"
+#include "LightSensor.h"
+#include "LineSensor.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
 #include "DigitalSwitch.h"

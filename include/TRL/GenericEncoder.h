@@ -13,13 +13,14 @@
 
 namespace TRL {
 
-	class GenericEncoder : public TRL::Sensor{
+	class GenericEncoder : public Sensor{
 
 	public:
 		GenericEncoder();
 		virtual ~GenericEncoder();
 		virtual int getValue() = 0;
-		virtual EncoderType getType() = 0;
+		virtual EncoderType getEncoderType() = 0;
+		virtual SensorType getSensorType() = 0;
 
 	};
 };

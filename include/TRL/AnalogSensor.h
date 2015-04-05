@@ -13,14 +13,15 @@
 
 namespace TRL {
 
-	class AnalogSensor : public TRL::Sensor {
+	class AnalogSensor : public Sensor {
 	protected:
 		AnalogPort port;
+		SensorType type;
 	public:
 		AnalogSensor();
-		AnalogSensor(AnalogPort port);
+		AnalogSensor(AnalogPort port, SensorType type);
 		virtual ~AnalogSensor();
-		virtual SensorType getSensorType() = 0;
+		SensorType getSensorType();
 		int getValue();
 	};
 }

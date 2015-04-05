@@ -77,4 +77,8 @@ Sonar* Sonar::setUnit(SonarUnit unit) {
 	return this;
 }
 
+SensorType Sonar::getSensorType(){
+	return SonarSensorType;
+}
+
 } /* namespace TRL */

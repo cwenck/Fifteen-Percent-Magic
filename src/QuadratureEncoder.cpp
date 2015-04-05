@@ -76,7 +76,11 @@ void QuadratureEncoder::resetValue() {
 	encoderReset(encoder);
 }
 
-EncoderType QuadratureEncoder::getType() {
-	return QUAD_ENCODER_TYPE;
+EncoderType QuadratureEncoder::getEncoderType() {
+	return QuadratureEncoderType;
+}
+
+SensorType QuadratureEncoder::getSensorType(){
+	return QuadratureEncoderSensorType;
 }
 }

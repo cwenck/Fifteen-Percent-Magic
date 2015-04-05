@@ -16,7 +16,7 @@
 
 namespace TRL {
 
-	class Sonar : public TRL::Sensor {
+	class Sonar : public Sensor {
 	private:
 		DigitalPort inputPort;
 		DigitalPort outputPort;
@@ -35,6 +35,8 @@ namespace TRL {
 
 		Sonar* setUndefinedReturnBehavior(UnefinedBehavior behavior);
 		Sonar* setUnit(SonarUnit unit);
+
+		SensorType getSensorType();
 
 	};
 }

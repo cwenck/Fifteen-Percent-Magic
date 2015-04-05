@@ -9,12 +9,11 @@
 #define LIGHTSENSOR_H_
 
 #include "TRL_BaseInitialization.h"
+#include "AnalogSensor.h"
 
 namespace TRL {
 
-	class LightSensor {
-	private:
-		AnalogPort port;
+	class LightSensor : public AnalogSensor{
 	public:
 		LightSensor();
 		LightSensor(AnalogPort port);

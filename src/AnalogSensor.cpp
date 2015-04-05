@@ -11,12 +11,14 @@ namespace TRL {
 
 AnalogSensor::AnalogSensor() {
 	this->port = NoAnalogInput;
+	this->type = NullSensorType;
 }
 
-AnalogSensor::AnalogSensor(AnalogPort port){
+AnalogSensor::AnalogSensor(AnalogPort port, SensorType type){
 	this->port = port;
+	this->type = type;
 	Port::configurePort(AnalogInputPort, port);
-	PortRegistry::registerPort(port, getSensorType());
+	PortRegistry::registerPort(port, type);
 }
 
 AnalogSensor::~AnalogSensor() {
@@ -25,6 +27,10 @@ AnalogSensor::~AnalogSensor() {
 
 int AnalogSensor::getValue(){
 	return Port::getAnalogValue(port);
+}
+
+SensorType AnalogSensor::getSensorType(){
+	return type;
 }
 
 } /* namespace TRL */

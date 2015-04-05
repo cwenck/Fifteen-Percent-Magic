@@ -11,14 +11,12 @@
 #define MAX_POTENTIOMETER_READING 4095
 
 #include "TRL_BaseInitialization.h"
-#include "Sensor.h"
+#include "AnalogSensor.h"
 
 namespace TRL {
 
-	class Potentiometer: public TRL::Sensor {
+	class Potentiometer: public AnalogSensor {
 	private:
-		AnalogPort port;
-
 		//This is set to -1 to disable reading from different positions
 		short numSelections;
 
@@ -40,7 +38,6 @@ namespace TRL {
 		//the highest one is at the part of the potentiometer that returns MAX_POTENTIOMETER_READING
 		bool isSelectionActive(int selectionNumber);
 		bool isSelectionInactive(int selectionNumber);
-		int getValue();
 	};
 }
 

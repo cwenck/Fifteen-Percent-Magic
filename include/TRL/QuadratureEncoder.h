@@ -12,7 +12,7 @@
 
 namespace TRL {
 
-	class QuadratureEncoder : public TRL::GenericEncoder {
+	class QuadratureEncoder : public GenericEncoder {
 	private:
 		DigitalPort top;
 		DigitalPort bottom;
@@ -22,9 +22,10 @@ namespace TRL {
 		QuadratureEncoder(DigitalPort top, DigitalPort bottom);
 		QuadratureEncoder(DigitalPort top, DigitalPort bottom, bool inverted);
 		virtual ~QuadratureEncoder();
-		EncoderType getType();
 		int getValue();
 		void resetValue();	//resets the value to 0
+		EncoderType getEncoderType();
+		SensorType getSensorType();
 
 	};
 }
