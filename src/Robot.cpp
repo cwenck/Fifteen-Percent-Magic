@@ -22,18 +22,18 @@ void Robot::initStatics(){
 }
 
 void Robot::initializeMotors() {
-	frontRightDrive = Motor(MotorPort_10, FrontRight);
-	frontLeftDrive = Motor(MotorPort_9, FrontLeft);
-	backRightDrive = Motor(MotorPort_2, BackRight, true);
-	backLeftDrive = Motor(MotorPort_1, BackLeft);
+	frontRightDrive = Motor(MotorPort_10, FrontRight, "Front Right Drive");
+	frontLeftDrive = Motor(MotorPort_9, FrontLeft, "Front Left Drive");
+	backRightDrive = Motor(MotorPort_2, BackRight, "Back Right Drive", true);
+	backLeftDrive = Motor(MotorPort_1, BackLeft, "Back Left Drive");
 
-	frontRightLift = Motor(MotorPort_3, FrontRight);
-	backRightLift = Motor(MotorPort_5, BackRight);
-	frontLeftLift = Motor(MotorPort_4, FrontLeft, true);
-	backLeftLift = Motor(MotorPort_6, BackLeft, true);
+	frontRightLift = Motor(MotorPort_3, FrontRight, "Front Right Lift");
+	backRightLift = Motor(MotorPort_5, BackRight, "Back Right Lift");
+	frontLeftLift = Motor(MotorPort_4, FrontLeft, "Front Left Lift",true);
+	backLeftLift = Motor(MotorPort_6, BackLeft, "Back Left Lift", true);
 
-	intakeMotor = Motor(MotorPort_7, Intake);
-	intakeArmMotor = Motor(MotorPort_8, Other);
+	intakeMotor = Motor(MotorPort_7, Intake, "Claw");
+	intakeArmMotor = Motor(MotorPort_8, Other, "Claw Arm");
 
 	Motor* liftMotors[4] = { &frontRightLift, &frontLeftLift, &backRightLift,
 			&backLeftLift };

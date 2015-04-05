@@ -16,45 +16,50 @@ Motor::Motor() {
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = NullMotorLocation;
+	this->motorName = MOTOR_NAME_NULL;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location) {
+Motor::Motor(MotorPort port, MotorLocation location, string motorName) {
 	this->reversed = false;
 	this->port = port;
 	this->speed = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
+	this->motorName = motorName;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, short offset) {
+Motor::Motor(MotorPort port, MotorLocation location, string motorName, short offset) {
 	this->reversed = false;
 	this->port = port;
 	this->speed = 0;
 	this->offset = offset;
 	this->encoder = NULL;
 	this->location = location;
+	this->motorName = motorName;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, bool reversed) {
+Motor::Motor(MotorPort port, MotorLocation location, string motorName, bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
+	this->motorName = motorName;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, bool reversed, short offset) {
+Motor::Motor(MotorPort port, MotorLocation location, string motorName, bool reversed, short offset) {
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
+	this->motorName = motorName;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
+Motor::Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder,
 		bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
@@ -62,9 +67,10 @@ Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
 	this->offset = 0;
 	this->encoder = encoder;
 	this->location = location;
+	this->motorName = motorName;
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
+Motor::Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder,
 		bool reversed, short offset) {
 	this->port = port;
 	this->reversed = reversed;
@@ -72,6 +78,7 @@ Motor::Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder,
 	this->offset = offset;
 	this->encoder = encoder;
 	this->location = location;
+	this->motorName = motorName;
 }
 
 Motor::~Motor() {
@@ -154,13 +161,17 @@ void Motor::reverseDirection() {
 }
 
 void Motor::setAllPower(int speed) {
-	for (int i = 1; i < 10; i++) {
+	for (int i = 1; i <= 10; i++) {
 		motorSet(i, speed);
 	}
 }
 
 void Motor::stopAll() {
 	motorStopAll();
+}
+
+string Motor::getName(){
+	return motorName;
 }
 
 }

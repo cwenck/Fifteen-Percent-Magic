@@ -36,6 +36,10 @@ namespace TRL {
 
 		static string getStringForSensorType(SensorType type);
 
+		static bool isPortRegistered(UniversalPort port);
+		static bool isPortRegistered(AnalogPort port);
+		static bool isPortRegistered(DigitalPort port);
+
 	};
 }
 

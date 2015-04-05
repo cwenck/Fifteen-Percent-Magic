@@ -12,6 +12,7 @@
 #include "TRL_BaseInitialization.h"
 
 #include "Motor.h"
+#include "MotorRegistry.h"
 #include "Controller.h"
 #include "LCD.h"
 

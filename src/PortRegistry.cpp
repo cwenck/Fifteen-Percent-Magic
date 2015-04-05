@@ -27,6 +27,7 @@ bool PortRegistry::registerPort(UniversalPort port, SensorType type) {
 		}
 	}
 	println(ERROR, "PortRegistry", "registerPort", "Failed to register port.");
+	println(ERROR, "PortRegistry", "registerPort", "Port already taken.");
 	return false;
 }
 
@@ -42,7 +43,7 @@ bool PortRegistry::deleteRegistryEntry(UniversalPort port) {
 	if (port <= 20) {
 		if (sensors[port] == NullSensorType) {
 			println(WARNING, "PortRegistry", "deleteRegistryEntry",
-					"Port was never registered.");
+					"Port %d was never registered.", port);
 			return false;
 		}
 		sensors[port] = NullSensorType;
@@ -65,8 +66,8 @@ void PortRegistry::resetRegistry() {
 	}
 }
 
-string PortRegistry::getStringForSensorType(SensorType type){
-	switch(type){
+string PortRegistry::getStringForSensorType(SensorType type) {
+	switch (type) {
 	case SonarSensorType:
 		return "Sonar";
 	case QuadratureEncoderSensorType:
@@ -75,10 +76,13 @@ string PortRegistry::getStringForSensorType(SensorType type){
 		return "Potentiometer";
 	case LightSensorType:
 		return "Light Sensor";
+	case LineSensorType:
+		return "Line Sensor";
 	case DigitalSwitchSensorType:
 		return "Switch";
 	default:
-		println(ERROR, "PortRegistry", "getStringForSensorType", "This should never get called");
+		println(ERROR, "PortRegistry", "getStringForSensorType",
+				"This should never get called.");
 		return "";
 	}
 }
@@ -87,13 +91,13 @@ void PortRegistry::printRegistryEntry(UniversalPort port) {
 	if (port <= 20) {
 		if (port == 0) {
 			print("Speaker: ");
-		} else if (port >= 1 && port <= 12){
+		} else if (port >= 1 && port <= 12) {
 			print("Digital_%d: ", Port::getDigitalPortFromUniversalPort(port));
-		} else if (port >= 13 && port <= 20){
+		} else if (port >= 13 && port <= 20) {
 			print("Analog_%d: ", Port::getAnalogPortFromUniversalPort(port));
 		}
-		if(sensors[port] == NullSensorType){
-			println("Not Registed");
+		if (sensors[port] == NullSensorType) {
+			println("Not Registered");
 		} else {
 			println(getStringForSensorType(sensors[port]));
 		}
@@ -101,9 +105,23 @@ void PortRegistry::printRegistryEntry(UniversalPort port) {
 }
 
 void PortRegistry::printRegistry() {
-	for(int i = 0; i <= 21; i++){
+	for (int i = 0; i <= 21; i++) {
+		delay(5);
 		printRegistryEntry(i);
+		delay(5);
 	}
+}
+
+bool PortRegistry::isPortRegistered(UniversalPort port){
+	return !(sensors[port] == NullSensorType);
+}
+
+bool PortRegistry::isPortRegistered(AnalogPort port){
+	isPortRegistered(Port::getUniversalPortNumber(port));
+}
+
+bool PortRegistry::isPortRegistered(DigitalPort port){
+	isPortRegistered(Port::getUniversalPortNumber(port));
 }
 
 } /* namespace TRL */

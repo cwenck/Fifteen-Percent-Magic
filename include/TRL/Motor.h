@@ -12,6 +12,8 @@
 #include "GenericEncoder.h"
 #include "TRL_BaseInitialization.h"
 
+#define MOTOR_NAME_NULL "**[NULL]**"
+
 namespace TRL {
 
 	typedef enum _MotorPort {
@@ -56,18 +58,19 @@ namespace TRL {
 		short offset;
 		MotorPort port;
 		MotorLocation location;
+		string motorName;
 
 		//functions
 		int addOffsetToSpeed(int speed);
 
 	public:
 		Motor();
-		Motor(MotorPort port, MotorLocation location);
-		Motor(MotorPort port, MotorLocation location, short offset);
-		Motor(MotorPort port, MotorLocation location, bool reversed);
-		Motor(MotorPort port, MotorLocation location, bool reversed, short offset);
-		Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed);
-		Motor(MotorPort port, MotorLocation location, GenericEncoder* encoder, bool reversed, short offset);
+		Motor(MotorPort port, MotorLocation location, string motorName);
+		Motor(MotorPort port, MotorLocation location, string motorName, short offset);
+		Motor(MotorPort port, MotorLocation location, string motorName, bool reversed);
+		Motor(MotorPort port, MotorLocation location, string motorName, bool reversed, short offset);
+		Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder, bool reversed);
+		Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder, bool reversed, short offset);
 		virtual ~Motor();
 
 		void setPower(int speed);
@@ -81,6 +84,8 @@ namespace TRL {
 		MotorLocation getLocation();
 		MotorLocationSide getLocationSide();
 		GenericEncoder* getEncoder();
+
+		string getName();
 	};
 }
 #endif /* MOTOR_H_ */
