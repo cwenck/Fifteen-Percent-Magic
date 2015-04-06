@@ -78,8 +78,6 @@ string PortRegistry::getStringForSensorType(SensorType type) {
 		return "Light Sensor";
 	case LineSensorType:
 		return "Line Sensor";
-	case DigitalSwitchSensorType:
-		return "Switch";
 	default:
 		println(ERROR, "PortRegistry", "getStringForSensorType",
 				"This should never get called.");

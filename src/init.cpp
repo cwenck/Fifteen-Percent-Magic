@@ -65,7 +65,10 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
+	//This line initializes the library and must come first.
 	trlInitializeLibrary();
+
+
 }
 
 #ifdef __cplusplus

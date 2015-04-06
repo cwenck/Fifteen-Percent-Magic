@@ -240,6 +240,13 @@ namespace TRL {
 		IntegratedEncoderType = 2
 	}EncoderType;
 
+	typedef enum _Axis{
+		UnsetAxis,
+		xAxis,
+		yAxis,
+		zAxis
+	}Axis;
+
 	typedef enum _LCDPort {
 		NoLCD = 0,
 		UART_1 = 1,

@@ -22,19 +22,14 @@ namespace TRL {
 		AnalogPort port;
 		PROS_Gyro gyroHandle;
 
-		//positive is Counter-Clockwise
-		//negative is Clockwise
-		//Same as with the trig unit circle
-		int degreesRotated;
-		//TODO implement a task to track the degrees the gyro rotates
-
 	public:
 		Gyroscope();
 		Gyroscope(AnalogPort port);
 		Gyroscope(AnalogPort port, int multiplier);
-		virtual ~Gyroscope();
 
 		bool destroy();
+
+		void reset();
 
 		int getValue();
 		SensorType getSensorType();
