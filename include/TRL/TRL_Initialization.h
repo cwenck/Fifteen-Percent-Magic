@@ -16,7 +16,11 @@
 #include "MotorRegistry.h"
 #include "Motor.h"
 #include "Controller.h"
+
+//LCD includes
 #include "LCD.h"
+#include"LCDMenuScreen.h"
+#include "LCDMenuHandler.h"
 
 //Sensor Includes
 #include "Sensor.h"
