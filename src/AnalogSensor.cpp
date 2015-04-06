@@ -22,7 +22,11 @@ AnalogSensor::AnalogSensor(AnalogPort port, SensorType type){
 }
 
 AnalogSensor::~AnalogSensor() {
-	PortRegistry::deleteRegistryEntry(port);
+
+}
+
+bool AnalogSensor::removeFromRegistry(){
+	return PortRegistry::deleteRegistryEntry(port);
 }
 
 int AnalogSensor::getValue(){

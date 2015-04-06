@@ -185,9 +185,9 @@ namespace TRL {
 	////////////////////////////////
 
 	typedef enum _FileMode {
-		FILE_MODE_UNSET,
-		READ,
-		WRITE
+		UnsetFileMode,
+		ReadFileMode,
+		WriteFileMode
 	}FileMode;
 
 	////////////////////////////////
@@ -278,7 +278,45 @@ namespace TRL {
 		SonarSensorType,
 		LineSensorType
 
-	} SensorType;
+	}SensorType;
+
+	//////////////////////////
+	//MOTOR ENUMERATED TYPES//
+	//////////////////////////
+
+	typedef enum _MotorPort {
+		MotorPort_NULL = 0,
+		MotorPort_1 = 1,
+		MotorPort_2 = 2,
+		MotorPort_3 = 3,
+		MotorPort_4 = 4,
+		MotorPort_5 = 5,
+		MotorPort_6 = 6,
+		MotorPort_7 = 7,
+		MotorPort_8 = 8,
+		MotorPort_9 = 9,
+		MotorPort_10 = 10
+	}MotorPort;
+
+	typedef enum _MotorLocation {
+		UnspecifiedMotorLocation = 0,
+		LeftMotorLocation,
+		RightMotorLocation,
+		FrontRightMotorLocation,
+		FrontLeftMotorLocation,
+		CenterRightMotorLocation,
+		CenterLeftMotorLocation,
+		BackRightMotorLocation,
+		BackLeftMotorLocation,
+		IntakeMotorLocation,
+		OtherMotorLocation
+	}MotorLocation;
+
+	typedef enum _MotorLocationSide {
+		NoSide,
+		LeftSide,
+		RightSide
+	}MotorLocationSide;
 
 }
 

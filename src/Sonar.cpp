@@ -33,6 +33,12 @@ Sonar::~Sonar() {
 	PortRegistry::deleteRegistryEntry(outputPort);
 }
 
+bool Sonar::removeFromRegistry() {
+	bool inputSuccess = PortRegistry::deleteRegistryEntry(inputPort);
+	bool outputSuccess = PortRegistry::deleteRegistryEntry(outputPort);
+	return inputSuccess && outputSuccess;
+}
+
 //reads 200 if the value is undefined
 //either there is something right against it or there no object within its range
 //returns -1 if something goes wrong. should never happen
@@ -77,7 +83,7 @@ Sonar* Sonar::setUnit(SonarUnit unit) {
 	return this;
 }
 
-SensorType Sonar::getSensorType(){
+SensorType Sonar::getSensorType() {
 	return SonarSensorType;
 }
 

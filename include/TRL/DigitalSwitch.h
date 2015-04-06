@@ -23,6 +23,8 @@ namespace TRL {
 		DigitalSwitch(DigitalPort port);
 		virtual ~DigitalSwitch();
 
+		bool removeFromRegistry();
+
 		UniversalPort getPort();
 		void setPort(AnalogPort port);
 		void setPort(DigitalPort port);

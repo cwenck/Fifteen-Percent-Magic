@@ -15,7 +15,7 @@ Motor::Motor() {
 	this->speed = 0;
 	this->offset = 0;
 	this->encoder = NULL;
-	this->location = NullMotorLocation;
+	this->location = UnspecifiedMotorLocation;
 	this->motorName = MOTOR_NAME_NULL;
 }
 
@@ -27,9 +27,11 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName) {
 	this->encoder = NULL;
 	this->location = location;
 	this->motorName = motorName;
+	MotorRegistry::registerMotor(this);
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, string motorName, short offset) {
+Motor::Motor(MotorPort port, MotorLocation location, string motorName,
+		short offset) {
 	this->reversed = false;
 	this->port = port;
 	this->speed = 0;
@@ -37,30 +39,35 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName, short off
 	this->encoder = NULL;
 	this->location = location;
 	this->motorName = motorName;
+	MotorRegistry::registerMotor(this);
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, string motorName, bool reversed) {
-	this->port = port;
-	this->reversed = reversed;
-	this->speed = 0;
-	this->offset = 0;
-	this->encoder = NULL;
-	this->location = location;
-	this->motorName = motorName;
-}
-
-Motor::Motor(MotorPort port, MotorLocation location, string motorName, bool reversed, short offset) {
-	this->port = port;
-	this->reversed = reversed;
-	this->speed = 0;
-	this->offset = 0;
-	this->encoder = NULL;
-	this->location = location;
-	this->motorName = motorName;
-}
-
-Motor::Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder,
+Motor::Motor(MotorPort port, MotorLocation location, string motorName,
 		bool reversed) {
+	this->port = port;
+	this->reversed = reversed;
+	this->speed = 0;
+	this->offset = 0;
+	this->encoder = NULL;
+	this->location = location;
+	this->motorName = motorName;
+	MotorRegistry::registerMotor(this);
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, string motorName,
+		bool reversed, short offset) {
+	this->port = port;
+	this->reversed = reversed;
+	this->speed = 0;
+	this->offset = 0;
+	this->encoder = NULL;
+	this->location = location;
+	this->motorName = motorName;
+	MotorRegistry::registerMotor(this);
+}
+
+Motor::Motor(MotorPort port, MotorLocation location, string motorName,
+		GenericEncoder* encoder, bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
@@ -68,10 +75,11 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName, GenericEn
 	this->encoder = encoder;
 	this->location = location;
 	this->motorName = motorName;
+	MotorRegistry::registerMotor(this);
 }
 
-Motor::Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder,
-		bool reversed, short offset) {
+Motor::Motor(MotorPort port, MotorLocation location, string motorName,
+		GenericEncoder* encoder, bool reversed, short offset) {
 	this->port = port;
 	this->reversed = reversed;
 	this->speed = 0;
@@ -79,30 +87,34 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName, GenericEn
 	this->encoder = encoder;
 	this->location = location;
 	this->motorName = motorName;
+	MotorRegistry::registerMotor(this);
 }
 
 Motor::~Motor() {
-	// TODO Auto-generated destructor stub
+	//Nothing needs to be done when destroying this object
 }
 
-int Motor::addOffsetToSpeed(int speed){
+bool Motor::removeFromRegistry(){
+	return MotorRegistry::deleteRegistryEntry(this);
+}
+
+int Motor::addOffsetToSpeed(int speed) {
 	int absSpeed = abs(speed);
-	if(speed < 0){
+	if (speed < 0) {
 		return -(absSpeed + offset);
 	} else {
 		return (absSpeed + offset);
 	}
 
-
 }
 
 void Motor::setPower(int motorSpeed) {
 	if (port == MotorPort_NULL) {
-		println(ERROR, "Motor", "setPower", "Can't power a motor without an assigned port.");
+		println(ERROR, "Motor", "setPower",
+				"Can't power a motor without an assigned port.");
 		return;
 	}
 	this->speed = addOffsetToSpeed(motorSpeed);
-
 
 	if (!reversed) {
 		motorSet(port, -speed);
@@ -113,7 +125,8 @@ void Motor::setPower(int motorSpeed) {
 
 void Motor::stop() {
 	if (port == MotorPort_NULL) {
-		println(ERROR, "Motor", "stop", "Can't stop a motor without an assigned port.");
+		println(ERROR, "Motor", "stop",
+				"Can't stop a motor without an assigned port.");
 		return;
 	}
 	motorStop(port);
@@ -133,21 +146,21 @@ MotorLocation Motor::getLocation() {
 
 MotorLocationSide Motor::getLocationSide() {
 	switch (location) {
-	case Left:
+	case LeftMotorLocation:
 		return LeftSide;
-	case Right:
+	case RightMotorLocation:
 		return RightSide;
-	case FrontRight:
+	case FrontRightMotorLocation:
 		return RightSide;
-	case FrontLeft:
+	case FrontLeftMotorLocation:
 		return LeftSide;
-	case BackRight:
+	case BackRightMotorLocation:
 		return RightSide;
-	case BackLeft:
+	case BackLeftMotorLocation:
 		return LeftSide;
-	case CenterRight:
+	case CenterRightMotorLocation:
 		return RightSide;
-	case CenterLeft:
+	case CenterLeftMotorLocation:
 		return LeftSide;
 	default:
 		return NoSide;
@@ -170,7 +183,7 @@ void Motor::stopAll() {
 	motorStopAll();
 }
 
-string Motor::getName(){
+string Motor::getName() {
 	return motorName;
 }
 

@@ -8,12 +8,13 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-#include "TRL_BaseInitialization.h"
+#include <API.h>
+#include "Typedefs.h"
 
 namespace TRL{
 
 	float getMainBatteryPower();
-
+	string allocateWithNumberOfChars(int numChars);
 }
 
 #endif /* UTIL_H_ */

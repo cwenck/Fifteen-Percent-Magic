@@ -13,9 +13,14 @@
 #include "Typedefs.h"
 #include "EnumeratedTypedefs.h"
 #include "PrintStream.h"
+#include "Util.h"
 
 //File write cooldown time in milliseconds
 #define FILE_WRITE_COOLDOWN_TIME 10000
+
+//NOTE: The default upload process deletes all files on the cortex//
+//Choose Vex->File System->Upload Preserving Filesystem
+//to keep the files intact on the cortex
 
 namespace TRL {
 	class CortexFile {
@@ -26,6 +31,8 @@ namespace TRL {
 		int resetTime;
 		PROS_File fileHandle;
 
+		string fileContents;
+
 		void resetCooldownTimer();
 		void updateCooldownTimer();
 	public:
@@ -33,7 +40,7 @@ namespace TRL {
 		CortexFile(string fileName);
 		virtual ~CortexFile();
 		void writeStringToFile(string textToWrite);
-		string readFileContents();
+		const string readFileContents();
 		int getFileWriteCooldownMillis();
 	};
 }

@@ -13,6 +13,9 @@
 
 namespace TRL {
 
+	//This is needed since the motor hasn't actually been defined yet and is included after this class
+	class Motor;
+
 	class MotorRegistry {
 	private:
 		static string motorNames[10];
@@ -21,11 +24,19 @@ namespace TRL {
 		virtual ~MotorRegistry();
 
 		static bool registerMotor(MotorPort port, string motorName);
-		static bool registerMotor(Motor &motor);
+		static bool registerMotor(Motor* motor);
+
 		static bool deleteRegistryEntry(MotorPort port);
+		static bool deleteRegistryEntry(Motor* motor);
 
 		static void printMotorRegistryEntry(MotorPort port);
 		static void printMotorRegistry();
+
+		//checks if the port is registered to a motor with the motor's name
+		static bool isMotorRegistered(Motor* motor);
+
+		//only checks if the port is registered to a motor
+		static bool isMotorRegisteredToPort(MotorPort port);
 	};
 
 }

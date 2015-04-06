@@ -55,18 +55,18 @@ namespace TRL {
 		short clawArmPower;
 
 		//Motors
-		Motor frontRightDrive;
-		Motor frontLeftDrive;
-		Motor backRightDrive;
-		Motor backLeftDrive;
-
-		Motor frontRightLift;
-		Motor backRightLift;
-		Motor frontLeftLift;
-		Motor backLeftLift;
-
-		Motor intakeMotor;
-		Motor intakeArmMotor;
+//		Motor frontRightDrive;
+//		Motor frontLeftDrive;
+//		Motor backRightDrive;
+//		Motor backLeftDrive;
+//
+//		Motor frontRightLift;
+//		Motor backRightLift;
+//		Motor frontLeftLift;
+//		Motor backLeftLift;
+//
+//		Motor intakeMotor;
+//		Motor intakeArmMotor;
 
 		void initializeMotors();
 	public:

@@ -11,22 +11,24 @@ namespace TRL {
 
 CortexFile::CortexFile() {
 	this->fileName = "";
-	this->fileMode = FILE_MODE_UNSET;
+	this->fileMode = UnsetFileMode;
 	this->cooldownTimer = 0;
 	this->resetTime = millis();
 	this->fileHandle = 0;
+	this->fileContents = "";
 }
 
 CortexFile::CortexFile(string fileName) {
 	this->fileName = fileName;
-	this->fileMode = FILE_MODE_UNSET;
+	this->fileMode = UnsetFileMode;
 	this->cooldownTimer = 0;
 	this->resetTime = millis();
 	this->fileHandle = 0;
+	this->fileContents = "";
 }
 
 CortexFile::~CortexFile() {
-	// TODO Auto-generated destructor stub
+	free((void *)this->fileContents);
 }
 
 //Overwrites the existing contents of the file
@@ -37,35 +39,36 @@ void CortexFile::writeStringToFile(string textToWrite) {
 	if (cooldownTimer > 0) {
 		return;
 	}
-	println(LOG, "CortexFile", "writeStringToFile", "Writing file. Don't turn off the cortex!");
-	fileMode = WRITE;
+	println(LOG, "CortexFile", "writeStringToFile",
+			"Writing file. Don't turn off the cortex!");
+	fileMode = WriteFileMode;
 	fileHandle = fopen(fileName, "w");
 	{
 		fprint(textToWrite, fileHandle);
 		fflush(fileHandle);
 	}
 	fclose(fileHandle);
-	fileMode = FILE_MODE_UNSET;
+	fileMode = UnsetFileMode;
 	println(LOG, "CortexFile", "writeStringToFile", "Finished writing file.");
 	resetCooldownTimer();
 }
 
-string CortexFile::readFileContents() {
+const string CortexFile::readFileContents() {
 	//TODO readFileContents is not working properly
-	fileMode = READ;
+	fileMode = ReadFileMode;
 	fileHandle = fopen(fileName, "r");
+	int fileChars = fcount(fileHandle) + 1;
+	fileContents = allocateWithNumberOfChars(fileChars);
 	{
-		char *contents = 0;
-		int fileChars = fcount(fileHandle) + 1;
-		char tempStr[fileChars];
-		contents = tempStr;
-		contents = fgets(contents, fileChars, fileHandle);
-		println(DEBUG, "CortexFile", "writeStringToFile", contents);
+//		char *contents = 0;
+//		char tempStr[fileChars];
+//		contents = tempStr;
+		fgets((char *)fileContents, fileChars, fileHandle);
 	}
 	fclose(fileHandle);
-	fileMode = FILE_MODE_UNSET;
-	println(DEBUG, "CortexFile", "writeStringToFile", "");
-	return "";
+	fileMode = UnsetFileMode;
+//	println(DEBUG, "CortexFile", "writeStringToFile", contents);
+	return fileContents;
 }
 
 void CortexFile::resetCooldownTimer() {
@@ -76,15 +79,15 @@ void CortexFile::resetCooldownTimer() {
 void CortexFile::updateCooldownTimer() {
 	int elapsedTime = millis() - resetTime;
 	int newTimerValue = FILE_WRITE_COOLDOWN_TIME - elapsedTime;
-	if(cooldownTimer > newTimerValue){
+	if (cooldownTimer > newTimerValue) {
 		cooldownTimer = newTimerValue;
 	}
-	if(cooldownTimer < 0){
+	if (cooldownTimer < 0) {
 		cooldownTimer = 0;
 	}
 }
 
-int CortexFile::getFileWriteCooldownMillis(){
+int CortexFile::getFileWriteCooldownMillis() {
 	updateCooldownTimer();
 	return cooldownTimer;
 }

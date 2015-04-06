@@ -65,7 +65,7 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
-	initializeLibrary();
+	trlInitializeLibrary();
 }
 
 #ifdef __cplusplus

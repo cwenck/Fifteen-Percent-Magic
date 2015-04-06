@@ -22,41 +22,37 @@ void print(MessageStatusIndicator indicator, string className,
 	va_end(arg);
 
 	//print prefix
-	printf("[");
+	delay(2);
+	print("[");
 	switch (indicator) {
 	case ERROR:
-		printf("ERROR");
+		print("ERROR");
 		break;
 	case WARNING:
-		printf("WARNING");
+		print("WARNING");
 		break;
 	case DEBUG:
-		printf("DEBUG");
+		print("DEBUG");
 		break;
 	case LOG:
-		printf("LOG");
+		print("LOG");
 		break;
 	}
-	printf("] [");
-	printf(className);
-	printf("::");
-	printf(functionName);
-	printf("()] ");
-	printf(line_chars);
+	print("] [");
+	print(className);
+	print("::");
+	print(functionName);
+	print("()] ");
+	delay(2);
+	print(line_chars);
+	delay(6);
+
 }
 
-void print(string formatString, ...) {
-	short len = strlen(formatString);
-	char line_chars[len + 1 + PRINT_FORMAT_FILL_BUFFE_CHARS];
 
-	va_list arg;
-	va_start(arg, formatString);
-	{
-		vsnprintf(line_chars, len + PRINT_FORMAT_FILL_BUFFE_CHARS, formatString, arg);
-	}
-	va_end(arg);
-
-	printf(line_chars);
+//Note using ::functionName() uses the function from the global namespace
+void print(string text){
+	::print(text);
 }
 
 void println(MessageStatusIndicator indicator, string className,
@@ -72,28 +68,31 @@ void println(MessageStatusIndicator indicator, string className,
 	va_end(arg);
 
 //print prefix
-	printf("[");
+	delay(2);
+	print("[");
 	switch (indicator) {
 	case ERROR:
-		printf("ERROR");
+		print("ERROR");
 		break;
 	case WARNING:
-		printf("WARNING");
+		print("WARNING");
 		break;
 	case DEBUG:
-		printf("DEBUG");
+		print("DEBUG");
 		break;
 	case LOG:
-		printf("LOG");
+		print("LOG");
 		break;
 	}
-	printf("] [");
-	printf(className);
-	printf("::");
-	printf(functionName);
-	printf("()] ");
-	printf(line_chars);
-	printf("\n\r");
+	print("] [");
+	print(className);
+	print("::");
+	print(functionName);
+	print("()] ");
+	delay(2);
+	print(line_chars);
+	print("\n\r");
+	delay(6);
 }
 
 void println(string formatString, ...) {
@@ -107,8 +106,10 @@ void println(string formatString, ...) {
 	}
 	va_end(arg);
 
-	printf(line_chars);
-	printf("\n\r");
+	delay(2);
+	print(line_chars);
+	print("\n\r");
+	delay(6);
 }
 
 } /* namespace TRL */

@@ -9,46 +9,13 @@
 #define MOTOR_H_
 
 #include <API.h>
+#include "MotorRegistry.h"
 #include "GenericEncoder.h"
 #include "TRL_BaseInitialization.h"
 
 #define MOTOR_NAME_NULL "**[NULL]**"
 
 namespace TRL {
-
-	typedef enum _MotorPort {
-		MotorPort_NULL = 0,
-		MotorPort_1 = 1,
-		MotorPort_2 = 2,
-		MotorPort_3 = 3,
-		MotorPort_4 = 4,
-		MotorPort_5 = 5,
-		MotorPort_6 = 6,
-		MotorPort_7 = 7,
-		MotorPort_8 = 8,
-		MotorPort_9 = 9,
-		MotorPort_10 = 10
-	}MotorPort;
-
-	typedef enum _MotorLocation {
-		NullMotorLocation = 0,
-		Left,
-		Right,
-		FrontRight,
-		FrontLeft,
-		CenterRight,
-		CenterLeft,
-		BackRight,
-		BackLeft,
-		Intake,
-		Other
-	}MotorLocation;
-
-	typedef enum _MotorLocationSide {
-		NoSide,
-		LeftSide,
-		RightSide
-	}MotorLocationSide;
 
 	class Motor {
 	private:
@@ -73,6 +40,8 @@ namespace TRL {
 		Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder, bool reversed, short offset);
 		virtual ~Motor();
 
+		bool removeFromRegistry();
+
 		void setPower(int speed);
 		void stop();
 		void reverseDirection();
@@ -86,6 +55,7 @@ namespace TRL {
 		GenericEncoder* getEncoder();
 
 		string getName();
+
 	};
 }
 #endif /* MOTOR_H_ */

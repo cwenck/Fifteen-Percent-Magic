@@ -13,4 +13,8 @@ float getMainBatteryPower() {
 	return ((float) powerLevelMain()) / 1000.0f;
 }
 
+string allocateWithNumberOfChars(int numChars){
+	return (string)malloc(sizeof(char) * (numChars));
+}
+
 } /* namespace TRL */

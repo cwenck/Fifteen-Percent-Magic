@@ -19,6 +19,7 @@
 #include "PrintStream.h"
 #include "Port.h"
 #include "PortRegistry.h"
+#include "Util.h"
 #include "CortexFile.h"
 
 #endif /* TRL_BASEINITIALIZATION_H_ */

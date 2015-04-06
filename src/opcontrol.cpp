@@ -58,26 +58,25 @@ extern "C" {
 using namespace TRL;
 
 void operatorControl() {
-//	CortexFile file = CortexFile("auton");
-//	file.writeStringToFile("This is a test file.");
-//	print(file.readFileContents());
-
-//	Port::configurePort(AnalogInputPort, 0);
-//	DigitalSwitch btn = DigitalSwitch(Digital_1);
-
+	println(LOG, "Main", "operatorControl", "Driver control started.");
+//	RegistryHelper::printEntireRegistry();
 	LCD::instance.setBacklight(true);
+
+	CortexFile file = CortexFile("auton");
+//	file.writeStringToFile("This is a test file.");
+	println(DEBUG, "Main", "operatorControl", file.readFileContents());
 
 //	Sensor* sensor = 0;
 
+	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
+	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
+
 	while (true) {
-		delay(100);
+		delay(5000);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
-		Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
-		Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 		LCD::instance.displayBatteryStatus();
 
 //		Port::isPortInactive(Analog_1);
-
 //		println(DEBUG, "Main", "operatorControl", "Val:%d", sensor->getValue());
 
 	}

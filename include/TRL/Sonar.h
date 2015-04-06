@@ -29,6 +29,8 @@ namespace TRL {
 		Sonar(DigitalPort inputPort, DigitalPort outputPort);
 		virtual ~Sonar();
 
+		bool removeFromRegistry();
+
 		int getValue();
 		int getValueInInches();
 		int getValueInCM();

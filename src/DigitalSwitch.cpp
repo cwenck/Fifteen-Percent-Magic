@@ -26,7 +26,11 @@ DigitalSwitch::DigitalSwitch(DigitalPort port){
 }
 
 DigitalSwitch::~DigitalSwitch() {
-	PortRegistry::deleteRegistryEntry(port);
+	//Nothing needs to be done when destroying this object
+}
+
+bool DigitalSwitch::removeFromRegistry(){
+	return PortRegistry::deleteRegistryEntry(port);
 }
 
 void DigitalSwitch::setPort(AnalogPort port){

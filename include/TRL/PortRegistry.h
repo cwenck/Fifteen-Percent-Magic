@@ -24,7 +24,7 @@ namespace TRL {
 
 		static void resetRegistry();
 		static void printRegistryEntry(UniversalPort port);
-		static void printRegistry();
+		static void printPortRegistry();
 
 		static bool deleteRegistryEntry(UniversalPort port);
 		static bool deleteRegistryEntry(AnalogPort port);

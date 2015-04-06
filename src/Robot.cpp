@@ -22,28 +22,28 @@ void Robot::initStatics(){
 }
 
 void Robot::initializeMotors() {
-	frontRightDrive = Motor(MotorPort_10, FrontRight, "Front Right Drive");
-	frontLeftDrive = Motor(MotorPort_9, FrontLeft, "Front Left Drive");
-	backRightDrive = Motor(MotorPort_2, BackRight, "Back Right Drive", true);
-	backLeftDrive = Motor(MotorPort_1, BackLeft, "Back Left Drive");
+//	frontRightDrive = Motor(MotorPort_10, FrontRightMotorLocation, "Front Right Drive");
+//	frontLeftDrive = Motor(MotorPort_9, FrontLeftMotorLocation, "Front Left Drive");
+//	backRightDrive = Motor(MotorPort_2, BackRightMotorLocation, "Back Right Drive", true);
+//	backLeftDrive = Motor(MotorPort_1, BackLeftMotorLocation, "Back Left Drive");
+//
+//	frontRightLift = Motor(MotorPort_3, FrontRightMotorLocation, "Front Right Lift");
+//	backRightLift = Motor(MotorPort_5, BackRightMotorLocation, "Back Right Lift");
+//	frontLeftLift = Motor(MotorPort_4, FrontLeftMotorLocation, "Front Left Lift",true);
+//	backLeftLift = Motor(MotorPort_6, BackLeftMotorLocation, "Back Left Lift", true);
+//
+//	intakeMotor = Motor(MotorPort_7, IntakeMotorLocation, "Claw");
+//	intakeArmMotor = Motor(MotorPort_8, OtherMotorLocation, "Claw Arm");
 
-	frontRightLift = Motor(MotorPort_3, FrontRight, "Front Right Lift");
-	backRightLift = Motor(MotorPort_5, BackRight, "Back Right Lift");
-	frontLeftLift = Motor(MotorPort_4, FrontLeft, "Front Left Lift",true);
-	backLeftLift = Motor(MotorPort_6, BackLeft, "Back Left Lift", true);
-
-	intakeMotor = Motor(MotorPort_7, Intake, "Claw");
-	intakeArmMotor = Motor(MotorPort_8, Other, "Claw Arm");
-
-	Motor* liftMotors[4] = { &frontRightLift, &frontLeftLift, &backRightLift,
-			&backLeftLift };
-	Motor* driveMotors[4] = { &frontRightDrive, &frontLeftDrive,
-			&backRightDrive, &backLeftDrive };
-
-	setDriveMotors(driveMotors, 4);	//last number is the number of drive motors
-	setLiftMotors(liftMotors, 4);	//last number is the number of lift motors
-	setIntakeMotors(&intakeMotor, &intakeArmMotor);
-	println(LOG, "Robot", "initializeMotors", "Motors Initialized.");
+//	Motor* liftMotors[4] = { &frontRightLift, &frontLeftLift, &backRightLift,
+//			&backLeftLift };
+//	Motor* driveMotors[4] = { &frontRightDrive, &frontLeftDrive,
+//			&backRightDrive, &backLeftDrive };
+//
+//	setDriveMotors(driveMotors, 4);	//last number is the number of drive motors
+//	setLiftMotors(liftMotors, 4);	//last number is the number of lift motors
+//	setIntakeMotors(&intakeMotor, &intakeArmMotor);
+//	println(LOG, "Robot", "initializeMotors", "Motors Initialized.");
 }
 
 Robot::Robot() {
@@ -466,16 +466,16 @@ void Robot::drive(int power, DriveDirection dir) {
 			Motor* motor = driveMotors[i];
 			MotorLocation location = motor->getLocation();
 			switch (location) {
-			case FrontRight:
+			case FrontRightMotorLocation:
 				motor->setPower(-power);
 				break;
-			case FrontLeft:
+			case FrontLeftMotorLocation:
 				motor->setPower(power);
 				break;
-			case BackRight:
+			case BackRightMotorLocation:
 				motor->setPower(power);
 				break;
-			case BackLeft:
+			case BackLeftMotorLocation:
 				motor->setPower(-power);
 			default:
 				printf(
@@ -541,16 +541,16 @@ void Robot::drive(int power, DriveDirection dir) {
 			Motor* motor = driveMotors[i];
 			MotorLocation location = motor->getLocation();
 			switch (location) {
-			case FrontRight:
+			case FrontRightMotorLocation:
 				motor->setPower(power);
 				break;
-			case FrontLeft:
+			case FrontLeftMotorLocation:
 				motor->setPower(-power);
 				break;
-			case BackRight:
+			case BackRightMotorLocation:
 				motor->setPower(-power);
 				break;
-			case BackLeft:
+			case BackLeftMotorLocation:
 				motor->setPower(power);
 			default:
 				printf(
@@ -565,16 +565,16 @@ void Robot::drive(int power, DriveDirection dir) {
 			Motor* motor = driveMotors[i];
 			MotorLocation location = motor->getLocation();
 			switch (location) {
-			case FrontRight:
+			case FrontRightMotorLocation:
 				motor->setPower(-power);
 				break;
-			case FrontLeft:
+			case FrontLeftMotorLocation:
 				motor->setPower(power);
 				break;
-			case BackRight:
+			case BackRightMotorLocation:
 				motor->setPower(power);
 				break;
-			case BackLeft:
+			case BackLeftMotorLocation:
 				motor->setPower(-power);
 			default:
 				printf(

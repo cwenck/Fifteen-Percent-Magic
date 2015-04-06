@@ -9,10 +9,12 @@
 
 namespace TRL {
 
-void initializeLibrary() {
+void trlInitializeLibrary() {
 	Robot::initStatics();
 	AutonomousRoutines::initStatics();
 	LCD::initStatics();
+	MotorList::initialize();
+	SensorList::initialize();
 }
 
 }

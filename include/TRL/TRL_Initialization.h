@@ -9,10 +9,12 @@
 #define TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_
 
 //Include All Files Of the Library So Only This File Needs To Be Linked To main.h
+
+//List of Primitive includes that don't require any classes from this list
 #include "TRL_BaseInitialization.h"
 
-#include "Motor.h"
 #include "MotorRegistry.h"
+#include "Motor.h"
 #include "Controller.h"
 #include "LCD.h"
 
@@ -26,14 +28,19 @@
 #include "DigitalSwitch.h"
 #include "Sonar.h"
 
-
-
+//PID
 #include "PID.h"
+
+//Above classes of library classes
+//Classes for altering the behavior of this particular robot
+
+#include "MotorAndSensorSetup.h"
+
 #include "Robot.h"
 #include "AutonomousRoutines.h"
 
 namespace TRL{
-	void initializeLibrary();
+	void trlInitializeLibrary();
 }
 
 #endif /* TERMINATOR_ROBOTICS_LIBRARY_INITILIZATION_H_ */

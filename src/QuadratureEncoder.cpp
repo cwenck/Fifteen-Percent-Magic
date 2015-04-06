@@ -60,8 +60,12 @@ QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom,
 
 QuadratureEncoder::~QuadratureEncoder() {
 	encoderShutdown(encoder);
-	PortRegistry::deleteRegistryEntry(top);
-	PortRegistry::deleteRegistryEntry(bottom);
+}
+
+bool QuadratureEncoder::removeFromRegistry(){
+	bool topSuccess = PortRegistry::deleteRegistryEntry(top);
+	bool bottomSuccess = PortRegistry::deleteRegistryEntry(bottom);
+	return topSuccess && bottomSuccess;
 }
 
 int QuadratureEncoder::getValue() {

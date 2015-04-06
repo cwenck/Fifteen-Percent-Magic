@@ -21,6 +21,9 @@ namespace TRL {
 		AnalogSensor();
 		AnalogSensor(AnalogPort port, SensorType type);
 		virtual ~AnalogSensor();
+		
+		bool removeFromRegistry();
+
 		SensorType getSensorType();
 		int getValue();
 	};

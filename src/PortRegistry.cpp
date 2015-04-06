@@ -92,9 +92,9 @@ void PortRegistry::printRegistryEntry(UniversalPort port) {
 		if (port == 0) {
 			print("Speaker: ");
 		} else if (port >= 1 && port <= 12) {
-			print("Digital_%d: ", Port::getDigitalPortFromUniversalPort(port));
+			printf("Digital_%d: ", Port::getDigitalPortFromUniversalPort(port));
 		} else if (port >= 13 && port <= 20) {
-			print("Analog_%d: ", Port::getAnalogPortFromUniversalPort(port));
+			printf("Analog_%d: ", Port::getAnalogPortFromUniversalPort(port));
 		}
 		if (sensors[port] == NullSensorType) {
 			println("Not Registered");
@@ -104,24 +104,32 @@ void PortRegistry::printRegistryEntry(UniversalPort port) {
 	}
 }
 
-void PortRegistry::printRegistry() {
+void PortRegistry::printPortRegistry() {
+	delay(5);
+	println("|------------------------------|");
+	delay(5);
+	println("|        PORT REGISTRY         |");
+	delay(5);
+	println("|------------------------------|");
 	for (int i = 0; i <= 21; i++) {
 		delay(5);
 		printRegistryEntry(i);
 		delay(5);
 	}
+	println("================================");
+	delay(5);
 }
 
-bool PortRegistry::isPortRegistered(UniversalPort port){
+bool PortRegistry::isPortRegistered(UniversalPort port) {
 	return !(sensors[port] == NullSensorType);
 }
 
-bool PortRegistry::isPortRegistered(AnalogPort port){
-	isPortRegistered(Port::getUniversalPortNumber(port));
+bool PortRegistry::isPortRegistered(AnalogPort port) {
+	return isPortRegistered(Port::getUniversalPortNumber(port));
 }
 
-bool PortRegistry::isPortRegistered(DigitalPort port){
-	isPortRegistered(Port::getUniversalPortNumber(port));
+bool PortRegistry::isPortRegistered(DigitalPort port) {
+	return isPortRegistered(Port::getUniversalPortNumber(port));
 }
 
 } /* namespace TRL */

@@ -26,7 +26,10 @@ namespace TRL {
 	}MessageStatusIndicator;
 
 	void print(MessageStatusIndicator indicator, string className, string functionName,string formatString, ...);
-	void print(string formatString, ...);
+
+	//This is the fastest print statement since no formatting needs to be done
+	void print(string text);
+	//if you need this equivelent with formatting use the PROS function printf(string formatString, ...)
 
 	void println(MessageStatusIndicator indicator, string className, string functionName, string formatString, ...);
 	void println(string formatString, ...);
