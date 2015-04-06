@@ -40,7 +40,7 @@ namespace TRL {
 		Motor(MotorPort port, MotorLocation location, string motorName, GenericEncoder* encoder, bool reversed, short offset);
 		virtual ~Motor();
 
-		bool removeFromRegistry();
+		bool destroy();
 
 		void setPower(int speed);
 		void stop();

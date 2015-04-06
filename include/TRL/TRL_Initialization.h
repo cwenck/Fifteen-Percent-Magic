@@ -25,8 +25,10 @@
 #include "LineSensor.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
-#include "DigitalSwitch.h"
 #include "Sonar.h"
+#include "Gyroscope.h"
+#include "DigitalSwitch.h"
+#include "Bumper.h"
 
 //PID
 #include "PID.h"

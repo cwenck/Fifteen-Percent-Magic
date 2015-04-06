@@ -23,7 +23,7 @@ namespace TRL {
 		QuadratureEncoder(DigitalPort top, DigitalPort bottom, bool inverted);
 		virtual ~QuadratureEncoder();
 
-		bool removeFromRegistry();
+		bool destroy();
 
 		int getValue();
 		void resetValue();	//resets the value to 0

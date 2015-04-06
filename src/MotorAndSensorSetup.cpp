@@ -36,7 +36,7 @@ void MotorList::initialize() {
 	motor_8 = Motor(MotorPort_8, UnspecifiedMotorLocation, "Port 8");
 	motor_9 = Motor(MotorPort_9, UnspecifiedMotorLocation, "Port 9");
 	motor_10 = Motor(MotorPort_10, UnspecifiedMotorLocation, "Port 10");
-	println(LOG, "MotorSetup", "initialize", "All motors intitialized");
+	println(LOG, "MotorSetup", "initialize", "All motors initialized");
 }
 
 MotorList::MotorList() {
@@ -59,7 +59,7 @@ Potentiometer SensorList::example;
 
 void SensorList::initialize(){
 	example = Potentiometer(Analog_4);
-	println(LOG, "SensorSetup", "initialize", "All sensors intitialized");
+	println(LOG, "SensorSetup", "initialize", "All sensors initialized");
 }
 
 ////////////////////////

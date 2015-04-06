@@ -19,5 +19,6 @@ typedef short UniversalPort;
 typedef void* PROS_Encoder;
 typedef FILE* PROS_File;
 typedef Ultrasonic PROS_Sonar;
+typedef Gyro PROS_Gyro;
 
 #endif /* ENUMERATEDTYPES_H_ */

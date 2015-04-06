@@ -22,10 +22,10 @@ AnalogSensor::AnalogSensor(AnalogPort port, SensorType type){
 }
 
 AnalogSensor::~AnalogSensor() {
-
+	//Nothing needs to be done when destroying this object
 }
 
-bool AnalogSensor::removeFromRegistry(){
+bool AnalogSensor::destory(){
 	return PortRegistry::deleteRegistryEntry(port);
 }
 

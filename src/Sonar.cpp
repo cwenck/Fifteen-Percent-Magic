@@ -28,12 +28,11 @@ Sonar::Sonar(DigitalPort yellowInputPort, DigitalPort orangeOutputPort) {
 }
 
 Sonar::~Sonar() {
-	ultrasonicShutdown(prosSonar);
-	PortRegistry::deleteRegistryEntry(inputPort);
-	PortRegistry::deleteRegistryEntry(outputPort);
+	//Nothing needs to be done when destroying this object
 }
 
-bool Sonar::removeFromRegistry() {
+bool Sonar::destroy() {
+	ultrasonicShutdown(prosSonar);
 	bool inputSuccess = PortRegistry::deleteRegistryEntry(inputPort);
 	bool outputSuccess = PortRegistry::deleteRegistryEntry(outputPort);
 	return inputSuccess && outputSuccess;

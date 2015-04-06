@@ -59,10 +59,11 @@ QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom,
 }
 
 QuadratureEncoder::~QuadratureEncoder() {
-	encoderShutdown(encoder);
+	//Nothing needs to be done when destroying this object
 }
 
-bool QuadratureEncoder::removeFromRegistry(){
+bool QuadratureEncoder::destroy(){
+	encoderShutdown(encoder);
 	bool topSuccess = PortRegistry::deleteRegistryEntry(top);
 	bool bottomSuccess = PortRegistry::deleteRegistryEntry(bottom);
 	return topSuccess && bottomSuccess;

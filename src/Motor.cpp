@@ -94,7 +94,7 @@ Motor::~Motor() {
 	//Nothing needs to be done when destroying this object
 }
 
-bool Motor::removeFromRegistry(){
+bool Motor::destroy(){
 	return MotorRegistry::deleteRegistryEntry(this);
 }
 

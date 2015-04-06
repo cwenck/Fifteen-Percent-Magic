@@ -11,25 +11,28 @@ namespace TRL {
 
 DigitalSwitch::DigitalSwitch() {
 	this->port = NULL_UNIVERSAL_PORT;
+	this->type = NullSensorType;
 }
 
-DigitalSwitch::DigitalSwitch(AnalogPort port){
+DigitalSwitch::DigitalSwitch(AnalogPort port, SensorType type){
 	this->port = Port::getUniversalPortNumber(port);
+	this->type = type;
 	Port::configurePort(DigitalInputPort, port);
-	PortRegistry::registerPort(port, DigitalSwitchSensorType);
+	PortRegistry::registerPort(port, type);
 }
 
-DigitalSwitch::DigitalSwitch(DigitalPort port){
+DigitalSwitch::DigitalSwitch(DigitalPort port, SensorType type){
 	this->port = Port::getUniversalPortNumber(port);
+	this->type = type;
 	Port::configurePort(DigitalInputPort, port);
-	PortRegistry::registerPort(port, DigitalSwitchSensorType);
+	PortRegistry::registerPort(port, type);
 }
 
 DigitalSwitch::~DigitalSwitch() {
 	//Nothing needs to be done when destroying this object
 }
 
-bool DigitalSwitch::removeFromRegistry(){
+bool DigitalSwitch::destroy(){
 	return PortRegistry::deleteRegistryEntry(port);
 }
 
@@ -47,10 +50,6 @@ UniversalPort DigitalSwitch::getPort(){
 
 int DigitalSwitch::getValue(){
 	return Port::isPortActive(port);
-}
-
-SensorType DigitalSwitch::getSensorType(){
-	return DigitalSwitchSensorType;
 }
 
 } /* namespace TRL */

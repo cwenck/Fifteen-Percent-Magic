@@ -273,10 +273,13 @@ namespace TRL {
 		NullSensorType = 0,
 		QuadratureEncoderSensorType,
 		PotentiometerSensorType,
-		DigitalSwitchSensorType,
 		LightSensorType,
 		SonarSensorType,
-		LineSensorType
+		LineSensorType,
+		BumperSensorType,
+		LimitSwitchSensorType,
+		GyroscopeSensorType,
+		AccelerometerSensorType
 
 	}SensorType;
 
