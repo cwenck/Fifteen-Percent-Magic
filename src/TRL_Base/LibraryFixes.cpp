@@ -12,13 +12,13 @@ extern "C" {
 void* __dso_handle;
 
 void __cxa_pure_virtual() {
-	printf(
+	print(
 			"----------------------------------------------------------------------\n\r");
-	printf(
+	print(
 			"[Error] Virtual Function Error! Stopping execution of the program.\n\r");
-	printf(
+	print(
 			"\tCheck to make sure all virtual functions are defined in child classes.\n\r");
-	printf(
+	print(
 			"----------------------------------------------------------------------\n\r");
 	while (1) {
 		delay(500);

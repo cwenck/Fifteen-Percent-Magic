@@ -9,12 +9,14 @@
 #define UTIL_H_
 
 #include <API.h>
+#include <string.h>
 #include "Typedefs.h"
 
-namespace TRL{
-
+namespace TRL {
 	float getMainBatteryPower();
-	string allocateWithNumberOfChars(int numChars);
+	string allocateStringForNumberOfChars(int numChars);
+	string strsub(string* storeStr, string str, int startChar);
+	string strsub(string* storeStr, string str, int startChar, int endChar);
 }
 
 #endif /* UTIL_H_ */

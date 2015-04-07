@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/DigitalSwitch.h"
+#include "TRl/DigitalSwitch.h"
 
 namespace TRL {
 
@@ -50,6 +50,10 @@ UniversalPort DigitalSwitch::getPort(){
 
 int DigitalSwitch::getValue(){
 	return Port::isPortActive(port);
+}
+
+SensorType DigitalSwitch::getSensorType(){
+	return type;
 }
 
 } /* namespace TRL */

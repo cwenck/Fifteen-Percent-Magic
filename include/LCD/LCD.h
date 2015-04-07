@@ -8,8 +8,8 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#include "TRL_BaseInitialization.h"
-#include "Util.h"
+#include "../TRL/TRL_BaseInitialization.h"
+#include "../TRL/Util.h"
 
 //LCD Special Character Constants
 #define LCD_DOWN_TRIANGLE_ARROW 0xF5
@@ -43,6 +43,10 @@ namespace TRL {
 		bool isCenterButtonPressed();
 		bool isRightButtonPressed();
 
+		bool isOnlyLeftButtonPressed();
+		bool isOnlyCenterButtonPressed();
+		bool isOnlyRightButtonPressed();
+
 		LCD* setPort(LCDPort port);
 
 		LCD* setBacklight(bool backlight);
@@ -51,10 +55,18 @@ namespace TRL {
 
 		LCD* clear();
 
+		LCD* displayString(short line, const string text);
+		LCD* displayFormattedString(short line, const string formatString, ...);
 		LCD* displayCenteredString(short line, const string text);
 		LCD* displayFormattedCenteredString(short line,
 				const string formatString, ...);
-		LCD* displayBatteryStatus();
+
+		LCD* displayHorizontalNavigation(short line, string leftNavigationLabel, string rightNavigationLabel);
+		LCD* displayLeftNavigation(short line, string leftNavigationLabel);
+		LCD* displayRightNavigation(short line, string rightNavigationLabel);
+		LCD* displayDownNavigation(short line, string labelText);
+
+		LCD* displayMainBatteryStatus(short line);
 	};
 
 }

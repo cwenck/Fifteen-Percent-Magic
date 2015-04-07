@@ -18,9 +18,7 @@
 #include "Controller.h"
 
 //LCD includes
-#include "LCD.h"
-#include"LCDMenuScreen.h"
-#include "LCDMenuHandler.h"
+#include "../LCD/LCD_Includes.h"
 
 //Sensor Includes
 #include "Sensor.h"

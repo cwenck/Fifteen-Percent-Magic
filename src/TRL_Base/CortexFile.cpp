@@ -58,7 +58,7 @@ const string CortexFile::readFileContents() {
 	fileMode = ReadFileMode;
 	fileHandle = fopen(fileName, "r");
 	int fileChars = fcount(fileHandle) + 1;
-	fileContents = allocateWithNumberOfChars(fileChars);
+	fileContents = allocateStringForNumberOfChars(fileChars);
 	{
 //		char *contents = 0;
 //		char tempStr[fileChars];

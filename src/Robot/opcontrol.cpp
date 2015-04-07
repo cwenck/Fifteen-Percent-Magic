@@ -33,6 +33,7 @@
  */
 
 #include "main.h"
+#include "TrueTest.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,24 +61,24 @@ using namespace TRL;
 void operatorControl() {
 	println(LOG, "Main", "operatorControl", "Driver control started.");
 //	RegistryHelper::printEntireRegistry();
-	LCD::instance.setBacklight(true);
-
-	CortexFile file = CortexFile("auton");
-//	file.writeStringToFile("This is a test file.");
-	println(DEBUG, "Main", "operatorControl", file.readFileContents());
-
-//	Sensor* sensor = 0;
+//	LCD::instance.setBacklight(true);
+//	TrueTest::startTask();
+//			->displayHorizontalNavigation(2, "Auton", "Sensors");
+//	LCD::instance.displayLeftNavigation(1, "Battery is a really long label")->displayRightNavigation(2, "Auton is a really long label");
+	LCDMenuHandler* menu = new LCDMenuHandler();
+	menu->start(&LCD::instance);
 
 	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
 	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
 	while (true) {
-		delay(5000);
+
+//		LCD::instance.displayMainBatteryStatus(1);
+		delay(200);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
-		LCD::instance.displayBatteryStatus();
+//		LCD::instance.displayBatteryStatus();
 
 //		Port::isPortInactive(Analog_1);
-//		println(DEBUG, "Main", "operatorControl", "Val:%d", sensor->getValue());
 
 	}
 }

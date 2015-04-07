@@ -15,4 +15,11 @@ extern "C" {
 	extern void* __dso_handle;
 }
 
+
+//Enable the use of new and delete
+void* operator new(size_t);
+void* operator new[](size_t);
+void operator delete(void* ptr);
+void operator delete[](void* ptr);
+
 #endif /* LIBRARYFIXES_H_ */

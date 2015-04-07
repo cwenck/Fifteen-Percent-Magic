@@ -14,7 +14,7 @@
 
 namespace TRL {
 
-	class DigitalSwitch : Sensor {
+	class DigitalSwitch : public Sensor {
 	private:
 		UniversalPort port;
 		SensorType type;
@@ -31,7 +31,7 @@ namespace TRL {
 		void setPort(DigitalPort port);
 
 		int getValue();
-		virtual SensorType getSensorType() = 0;
+		SensorType getSensorType();
 	};
 }
 
