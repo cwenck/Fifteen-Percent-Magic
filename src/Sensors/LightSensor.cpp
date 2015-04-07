@@ -14,10 +14,18 @@ LightSensor::LightSensor() :
 }
 
 LightSensor::LightSensor(AnalogPort port) :
-		AnalogSensor(port, LightSensorType) {
+		AnalogSensor(port, this) {
 }
 
 LightSensor::~LightSensor() {
+}
+
+SensorType LightSensor::getSensorType() {
+	return LightSensorType;
+}
+
+string LightSensor::getSensorName() {
+	return "Light Sensor";
 }
 
 } /* namespace TRL */

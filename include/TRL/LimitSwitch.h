@@ -18,6 +18,9 @@ namespace TRL {
 		LimitSwitch(AnalogPort port);
 		LimitSwitch(DigitalPort port);
 		virtual ~LimitSwitch();
+
+		SensorType getSensorType();
+		string getSensorName();
 	};
 }
 

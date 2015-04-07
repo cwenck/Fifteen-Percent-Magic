@@ -13,14 +13,16 @@
 //List of Primitive includes that don't require any classes from this list
 #include "TRL_BaseInitialization.h"
 
+#include "Controller.h"
+
 #include "MotorRegistry.h"
 #include "Motor.h"
-#include "Controller.h"
 
 //LCD includes
 #include "../LCD/LCD_Includes.h"
 
 //Sensor Includes
+#include "SensorRegistry.h"
 #include "Sensor.h"
 #include "AnalogSensor.h"
 #include "LightSensor.h"

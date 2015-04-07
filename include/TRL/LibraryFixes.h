@@ -15,6 +15,7 @@ extern "C" {
 	extern void* __dso_handle;
 }
 
+int snprintf ( char * s, size_t n, const char * format, ... );
 
 //Enable the use of new and delete
 void* operator new(size_t);

@@ -9,14 +9,15 @@
 
 namespace TRL {
 
-Gyroscope::Gyroscope() {
+Gyroscope::Gyroscope() : Sensor(){
 	this->port = NoAnalogInput;
 	this->gyroHandle = 0;
 }
 
-Gyroscope::Gyroscope(AnalogPort port) {
+Gyroscope::Gyroscope(AnalogPort port) :
+		Sensor(port) {
 	this->port = port;
-	PortRegistry::registerPort(port, GyroscopeSensorType);
+	SensorRegistry::registerSensor(this);
 	this->gyroHandle = gyroInit(Port::getAnalogPortNumber(port),
 			DEFAULT_GYRO_MULTIPLIER);
 }
@@ -25,9 +26,10 @@ Gyroscope::Gyroscope(AnalogPort port) {
 //positive values will increase the number of degrees reported for a fixed actual rotation,
 //while negative values will decrease the number of degrees reported
 //min value of -DEFAULT_GYRO_MULTIPLIER
-Gyroscope::Gyroscope(AnalogPort port, int multiplier) {
+Gyroscope::Gyroscope(AnalogPort port, int multiplier) :
+		Sensor(port) {
 	this->port = port;
-	PortRegistry::registerPort(port, GyroscopeSensorType);
+	SensorRegistry::registerSensor(this);
 	if (abs(multiplier) < DEFAULT_GYRO_MULTIPLIER) {
 		println(WARNING, "Gyroscope", "Gyroscope",
 				"The multiplier value of %d was less than the minimum value of -%d. The gyroscope is being initialized with the default multiplier value.",
@@ -43,7 +45,7 @@ Gyroscope::Gyroscope(AnalogPort port, int multiplier) {
 
 bool Gyroscope::destroy() {
 	gyroShutdown(gyroHandle);
-	return PortRegistry::deleteRegistryEntry(port);
+	return SensorRegistry::deleteRegistryEntry(port);
 }
 
 /*
@@ -55,16 +57,19 @@ int Gyroscope::getValue() {
 	return gyroGet(gyroHandle);
 }
 
-
 /*
  * Reset's the number of degree's the gyro reads to 0
  */
-void Gyroscope::reset(){
+void Gyroscope::reset() {
 	gyroReset(gyroHandle);
 }
 
-SensorType getSensorType() {
+SensorType Gyroscope::getSensorType() {
 	return GyroscopeSensorType;
+}
+
+string Gyroscope::getSensorName() {
+	return "Gyroscope";
 }
 
 } /* namespace TRL */

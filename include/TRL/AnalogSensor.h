@@ -9,6 +9,7 @@
 #define ANALOGSENSOR_H_
 
 #include "TRL_BaseInitialization.h"
+#include "SensorRegistry.h"
 #include "Sensor.h"
 
 namespace TRL {
@@ -16,16 +17,16 @@ namespace TRL {
 	class AnalogSensor : public Sensor {
 	protected:
 		AnalogPort port;
-		SensorType type;
 	public:
 		AnalogSensor();
-		AnalogSensor(AnalogPort port, SensorType type);
+		AnalogSensor(AnalogPort port, Sensor* childSensor);
 		virtual ~AnalogSensor();
 		
 		bool destory();
 
-		SensorType getSensorType();
 		int getValue();
+		virtual SensorType getSensorType() = 0;
+		virtual string getSensorName() = 0;
 	};
 }
 

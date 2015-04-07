@@ -9,6 +9,7 @@
 #define BUTTON_H_
 
 #include "TRL_BaseInitialization.h"
+#include "SensorRegistry.h"
 #include "Sensor.h"
 
 
@@ -17,11 +18,10 @@ namespace TRL {
 	class DigitalSwitch : public Sensor {
 	private:
 		UniversalPort port;
-		SensorType type;
 	public:
 		DigitalSwitch();
-		DigitalSwitch(AnalogPort port, SensorType type);
-		DigitalSwitch(DigitalPort port, SensorType type);
+		DigitalSwitch(AnalogPort port, Sensor* childSensor);
+		DigitalSwitch(DigitalPort port, Sensor* childSensor);
 		virtual ~DigitalSwitch();
 
 		bool destroy();
@@ -31,7 +31,8 @@ namespace TRL {
 		void setPort(DigitalPort port);
 
 		int getValue();
-		SensorType getSensorType();
+		virtual SensorType getSensorType() = 0;
+		virtual string getSensorName() = 0;
 	};
 }
 

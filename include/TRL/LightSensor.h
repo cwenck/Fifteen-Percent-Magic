@@ -18,6 +18,9 @@ namespace TRL {
 		LightSensor();
 		LightSensor(AnalogPort port);
 		virtual ~LightSensor();
+
+		SensorType getSensorType();
+		string getSensorName();
 	};
 
 }

@@ -18,6 +18,9 @@ namespace TRL {
 		LineSensor();
 		LineSensor(AnalogPort port);
 		virtual ~LineSensor();
+
+		SensorType getSensorType();
+		string getSensorName();
 	};
 }
 

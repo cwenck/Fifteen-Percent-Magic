@@ -9,16 +9,25 @@
 
 namespace TRL {
 
-LineSensor::LineSensor() : AnalogSensor() {
+LineSensor::LineSensor() :
+		AnalogSensor() {
 
 }
 
 LineSensor::LineSensor(AnalogPort port) :
-		AnalogSensor(port, LineSensorType) {
+		AnalogSensor(port, this) {
 
 }
 
 LineSensor::~LineSensor() {
+}
+
+SensorType LineSensor::getSensorType(){
+	return LineSensorType;
+}
+
+string LineSensor::getSensorName(){
+	return "Line Sensor";
 }
 
 } /* namespace TRL */

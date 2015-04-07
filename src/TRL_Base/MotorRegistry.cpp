@@ -9,9 +9,8 @@
 
 namespace TRL {
 
-string MotorRegistry::motorNames[10] = { MOTOR_NAME_NULL, MOTOR_NAME_NULL,
-		MOTOR_NAME_NULL, MOTOR_NAME_NULL, MOTOR_NAME_NULL, MOTOR_NAME_NULL,
-		MOTOR_NAME_NULL, MOTOR_NAME_NULL, MOTOR_NAME_NULL, MOTOR_NAME_NULL };
+Motor* MotorRegistry::motors[10] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL };
 
 MotorRegistry::MotorRegistry() {
 	//Nothing needs to be done since this is a static only class
@@ -19,24 +18,6 @@ MotorRegistry::MotorRegistry() {
 
 MotorRegistry::~MotorRegistry() {
 	//Nothing needs to be done since this is a static only class
-}
-
-bool MotorRegistry::registerMotor(MotorPort port, string motorName) {
-	if (port == MotorPort_NULL) {
-		println(ERROR, "MotorRegistry", "registerMotor",
-				"Failed to register motor. Motor port not assigned.");
-		return false;
-	}
-
-	int index = port - 1;
-	if (strcmp(motorNames[index], MOTOR_NAME_NULL) == 0) {
-		println(ERROR, "MotorRegistry", "registerMotor",
-				"Failed to register motor [%s]. Motor port already taken.",
-				"motorName");
-		return false;
-	}
-	motorNames[index] = motorName;
-	return true;
 }
 
 bool MotorRegistry::registerMotor(Motor* motor) {
@@ -47,14 +28,13 @@ bool MotorRegistry::registerMotor(Motor* motor) {
 	}
 
 	int index = motor->getPort() - 1;
-	if (strcmp(motorNames[index], MOTOR_NAME_NULL) != 0) {
+	if (motors[index] != NULL) {
 		println(ERROR, "MotorRegistry", "registerMotor",
 				"Failed to register motor [%s]. Motor port already taken.",
 				motor->getName());
 		return false;
 	}
-	motorNames[index] = motor->getName();
-//	println(LOG, "MotorRegistry", "registerMotor", "Motor %s registered to port %d.", motor->getName(), motor->getPort());
+	motors[index] = motor;
 	return true;
 }
 
@@ -66,13 +46,13 @@ bool MotorRegistry::deleteRegistryEntry(MotorPort port) {
 	}
 
 	int index = port - 1;
-	if (strcmp(motorNames[index], MOTOR_NAME_NULL) == 0) {
+	if (motors[index] == NULL) {
 		println(WARNING, "MotorRegistry", "deleteRegistryEntry",
 				"Motor was never registered to port %d.", port);
 		return false;
 	}
 
-	motorNames[index] = MOTOR_NAME_NULL;
+	motors[index] = NULL;
 	return true;
 }
 
@@ -83,10 +63,10 @@ bool MotorRegistry::deleteRegistryEntry(Motor* motor) {
 void MotorRegistry::printMotorRegistryEntry(MotorPort port) {
 	int index = port - 1;
 	printf("MotorPort_%d: ", port);
-	if (strcmp(motorNames[index], MOTOR_NAME_NULL) == 0) {
+	if (motors[index] == NULL) {
 		println("Not Registered");
 	} else {
-		println(motorNames[index]);
+		println(motors[index]->getName());
 	}
 }
 
@@ -108,7 +88,7 @@ void MotorRegistry::printMotorRegistry() {
 
 bool MotorRegistry::isMotorRegistered(Motor* motor) {
 	int index = motor->getPort() - 1;
-	if (strcmp(motorNames[index], motor->getName()) == 0) {
+	if (motors[index] == motor) {
 		return true;
 	} else {
 		return false;
@@ -117,11 +97,33 @@ bool MotorRegistry::isMotorRegistered(Motor* motor) {
 
 bool MotorRegistry::isMotorRegisteredToPort(MotorPort port) {
 	int index = port - 1;
-	if (strcmp(motorNames[index], MOTOR_NAME_NULL) == 0) {
+	if (motors[index] == NULL) {
 		return false;
 	} else {
 		return true;
 	}
+}
+
+short MotorRegistry::getNumberOfRegisteredMotors() {
+	int num = 0;
+	for (int i = 0; i < 10; i++) {
+		if (motors[i] != NULL) {
+			num++;
+		}
+	}
+	return num;
+}
+
+Motor** MotorRegistry::getRegisteredMotorsArray() {
+	Motor** registeredMotors = new Motor*[getNumberOfRegisteredMotors()];
+	int currentFillingIndex = 0;
+	for (int i = 0; i < 10; i++) {
+		if (motors[i] != NULL) {
+			registeredMotors[currentFillingIndex] = motors[i];
+			currentFillingIndex++;
+		}
+	}
+	return registeredMotors;
 }
 
 } /* namespace TRL */

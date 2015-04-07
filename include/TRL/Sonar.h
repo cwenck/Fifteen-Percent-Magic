@@ -9,6 +9,7 @@
 #define SONAR_H_
 
 #include "TRL_BaseInitialization.h"
+#include "SensorRegistry.h"
 #include "Sensor.h"
 
 #define SONAR_MAX_CM 200
@@ -39,6 +40,7 @@ namespace TRL {
 		Sonar* setUnit(SonarUnit unit);
 
 		SensorType getSensorType();
+		string getSensorName();
 
 	};
 }

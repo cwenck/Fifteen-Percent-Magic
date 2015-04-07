@@ -18,12 +18,11 @@ namespace TRL {
 
 	class MotorRegistry {
 	private:
-		static string motorNames[10];
+		static Motor* motors[10];
 	public:
 		MotorRegistry();
 		virtual ~MotorRegistry();
 
-		static bool registerMotor(MotorPort port, string motorName);
 		static bool registerMotor(Motor* motor);
 
 		static bool deleteRegistryEntry(MotorPort port);
@@ -37,6 +36,13 @@ namespace TRL {
 
 		//only checks if the port is registered to a motor
 		static bool isMotorRegisteredToPort(MotorPort port);
+
+		static short getNumberOfRegisteredMotors();
+
+		//The full array of registered motors is returned
+		//This is a copy of the array so it is readOnly
+		//and should be deleted with delete[]
+		static Motor** getRegisteredMotorsArray();
 	};
 
 }

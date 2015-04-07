@@ -13,6 +13,7 @@
 //wrapper type for strings in c
 typedef const char* string;
 
+#define UNIVERSAL_PORT_NULL -1
 typedef short UniversalPort;
 
 //types that are wrappers for default pros types are prefixed with "PROS_"

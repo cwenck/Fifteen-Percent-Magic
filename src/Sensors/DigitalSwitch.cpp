@@ -9,51 +9,47 @@
 
 namespace TRL {
 
-DigitalSwitch::DigitalSwitch() {
+DigitalSwitch::DigitalSwitch() :
+		Sensor() {
 	this->port = NULL_UNIVERSAL_PORT;
-	this->type = NullSensorType;
 }
 
-DigitalSwitch::DigitalSwitch(AnalogPort port, SensorType type){
+DigitalSwitch::DigitalSwitch(AnalogPort port, Sensor* childSensor) :
+		Sensor(port) {
 	this->port = Port::getUniversalPortNumber(port);
-	this->type = type;
 	Port::configurePort(DigitalInputPort, port);
-	PortRegistry::registerPort(port, type);
+	SensorRegistry::registerSensor(childSensor);
 }
 
-DigitalSwitch::DigitalSwitch(DigitalPort port, SensorType type){
+DigitalSwitch::DigitalSwitch(DigitalPort port, Sensor* childSensor) :
+		Sensor(port) {
 	this->port = Port::getUniversalPortNumber(port);
-	this->type = type;
 	Port::configurePort(DigitalInputPort, port);
-	PortRegistry::registerPort(port, type);
+	SensorRegistry::registerSensor(childSensor);
 }
 
 DigitalSwitch::~DigitalSwitch() {
 	//Nothing needs to be done when destroying this object
 }
 
-bool DigitalSwitch::destroy(){
-	return PortRegistry::deleteRegistryEntry(port);
+bool DigitalSwitch::destroy() {
+	return SensorRegistry::deleteRegistryEntry(port);
 }
 
-void DigitalSwitch::setPort(AnalogPort port){
+void DigitalSwitch::setPort(AnalogPort port) {
 	this->port = Port::getUniversalPortNumber(port);
 }
 
-void DigitalSwitch::setPort(DigitalPort port){
+void DigitalSwitch::setPort(DigitalPort port) {
 	this->port = Port::getUniversalPortNumber(port);
 }
 
-UniversalPort DigitalSwitch::getPort(){
+UniversalPort DigitalSwitch::getPort() {
 	return port;
 }
 
-int DigitalSwitch::getValue(){
+int DigitalSwitch::getValue() {
 	return Port::isPortActive(port);
-}
-
-SensorType DigitalSwitch::getSensorType(){
-	return type;
 }
 
 } /* namespace TRL */

@@ -25,7 +25,6 @@ float getMainBatteryPower() {
 string allocateStringForNumberOfChars(int numChars) {
 	//add 1 to account for the null terminator
 	return new char[numChars + 1];
-//	return (string) malloc(sizeof(char) * (numChars + 1));
 }
 
 /*

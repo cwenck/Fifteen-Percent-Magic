@@ -9,16 +9,26 @@
 
 namespace TRL {
 
-Accelerometer::Accelerometer() {
+Accelerometer::Accelerometer() :
+		AnalogSensor() {
 	this->axis = UnsetAxis;
 }
 
 Accelerometer::Accelerometer(AnalogPort port, Axis axis) :
-		AnalogSensor(port, AccelerometerSensorType) {
+		AnalogSensor(port, this) {
 	this->axis = axis;
 }
 
 Axis Accelerometer::getAxis() {
 	return axis;
 }
+
+SensorType Accelerometer::getSensorType() {
+	return AccelerometerSensorType;
+}
+
+string Accelerometer::getSensorName() {
+	return "Accelerometer";
+}
+
 } /* namespace TRL */

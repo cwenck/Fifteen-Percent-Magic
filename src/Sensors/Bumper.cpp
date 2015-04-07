@@ -15,17 +15,25 @@ Bumper::Bumper() :
 }
 
 Bumper::Bumper(AnalogPort port) :
-		DigitalSwitch(port, BumperSensorType) {
+		DigitalSwitch(port, this) {
 
 }
 
 Bumper::Bumper(DigitalPort port) :
-		DigitalSwitch(port, BumperSensorType) {
+		DigitalSwitch(port, this) {
 
 }
 
 Bumper::~Bumper() {
 
+}
+
+SensorType Bumper::getSensorType(){
+	return BumperSensorType;
+}
+
+string Bumper::getSensorName(){
+	return "Bumper";
 }
 
 } /* namespace TRL */

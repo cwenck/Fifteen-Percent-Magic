@@ -13,6 +13,7 @@
 #include "Typedefs.h"
 #include "EnumeratedTypedefs.h"
 #include "PrintStream.h"
+#include "Util.h"
 
 namespace TRL {
 	class Port {
@@ -62,6 +63,8 @@ namespace TRL {
 		static void configurePort(PortConfig config, UniversalPort port);
 		static void configurePort(PortConfig config, DigitalPort port);
 		static void configurePort(PortConfig config, AnalogPort port);
+
+		static string getPortName(UniversalPort port);
 	};
 }
 

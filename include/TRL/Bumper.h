@@ -18,6 +18,9 @@ namespace TRL {
 		Bumper(AnalogPort port);
 		Bumper(DigitalPort port);
 		virtual ~Bumper();
+
+		SensorType getSensorType();
+		string getSensorName();
 	};
 }
 #endif /* BUMPER_H_ */

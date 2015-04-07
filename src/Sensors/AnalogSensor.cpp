@@ -9,32 +9,27 @@
 
 namespace TRL {
 
-AnalogSensor::AnalogSensor() {
+AnalogSensor::AnalogSensor() : Sensor(){
 	this->port = NoAnalogInput;
-	this->type = NullSensorType;
 }
 
-AnalogSensor::AnalogSensor(AnalogPort port, SensorType type){
+AnalogSensor::AnalogSensor(AnalogPort port, Sensor* childSensor) :
+		Sensor(port) {
 	this->port = port;
-	this->type = type;
 	Port::configurePort(AnalogInputPort, port);
-	PortRegistry::registerPort(port, type);
+	SensorRegistry::registerSensor(childSensor);
 }
 
 AnalogSensor::~AnalogSensor() {
 	//Nothing needs to be done when destroying this object
 }
 
-bool AnalogSensor::destory(){
-	return PortRegistry::deleteRegistryEntry(port);
+bool AnalogSensor::destory() {
+	return SensorRegistry::deleteRegistryEntry(port);
 }
 
-int AnalogSensor::getValue(){
+int AnalogSensor::getValue() {
 	return Port::getAnalogValue(port);
-}
-
-SensorType AnalogSensor::getSensorType(){
-	return type;
 }
 
 } /* namespace TRL */

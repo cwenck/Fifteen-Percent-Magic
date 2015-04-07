@@ -9,17 +9,20 @@
 #define MOTORANDSENSORSETUP_H_
 
 #include "MotorRegistry.h"
-#include "PortRegistry.h"
+#include "SensorRegistry.h"
 
 #include "Motor.h"
 
 #include "Sensor.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
-#include "DigitalSwitch.h"
+#include "LimitSwitch.h"
+#include "Bumper.h"
 #include "Potentiometer.h"
 #include "LightSensor.h"
 #include "LineSensor.h"
+#include "Accelerometer.h"
+#include "Gyroscope.h"
 
 namespace TRL {
 
@@ -32,16 +35,16 @@ namespace TRL {
 		//These are just generic names for the template
 		//You are encouraged to rename them using eclipse's
 		//refactor->rename feature in the right click menu
-		static Motor motor_1;
-		static Motor motor_2;
-		static Motor motor_3;
-		static Motor motor_4;
-		static Motor motor_5;
-		static Motor motor_6;
-		static Motor motor_7;
-		static Motor motor_8;
-		static Motor motor_9;
-		static Motor motor_10;
+		static Motor* motor_1;
+		static Motor* motor_2;
+		static Motor* motor_3;
+		static Motor* motor_4;
+		static Motor* motor_5;
+		static Motor* motor_6;
+		static Motor* motor_7;
+		static Motor* motor_8;
+		static Motor* motor_9;
+		static Motor* motor_10;
 	};
 
 	class SensorList {
@@ -51,7 +54,8 @@ namespace TRL {
 
 		static void initialize();
 
-		static Potentiometer example;
+		static Potentiometer* potentiometer;
+		static LimitSwitch* limit;
 	};
 
 	class RegistryHelper {

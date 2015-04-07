@@ -9,12 +9,13 @@
 
 namespace TRL {
 
-QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom) {
+QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom) :
+		GenericEncoder(top, bottom) {
 	if ((top == 10) || (bottom == 10)) {
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
 				"The Quadrature Encoder will not function if either wire is plugged into port 10.");
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
-						"The encoder will NOT be initialized.");
+				"The encoder will NOT be initialized.");
 		return;
 	}
 	this->top = top;
@@ -26,20 +27,20 @@ QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom) {
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
 				"An encoder using the same ports has already been initialized.");
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
-						"The encoder will NOT be initialized.");
+				"The encoder will NOT be initialized.");
 		return;
 	}
-	PortRegistry::registerPort(top, QuadratureEncoderSensorType);
-	PortRegistry::registerPort(bottom, QuadratureEncoderSensorType);
+	SensorRegistry::registerSensor(this);
 }
 
 QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom,
-		bool inverted) {
+		bool inverted) :
+		GenericEncoder(top, bottom) {
 	if ((top == 10) || (bottom == 10)) {
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
 				"The Quadrature Encoder will not function if either wire is plugged into port 10.");
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
-						"The encoder will NOT be initialized.");
+				"The encoder will NOT be initialized.");
 		return;
 	}
 	this->top = top;
@@ -51,21 +52,20 @@ QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom,
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
 				"An encoder using the same ports has already been initialized.");
 		println(ERROR, "QuadratureEncoder", "QuadratureEncoder",
-						"The encoder will NOT be initialized.");
+				"The encoder will NOT be initialized.");
 		return;
 	}
-	PortRegistry::registerPort(top, QuadratureEncoderSensorType);
-	PortRegistry::registerPort(bottom, QuadratureEncoderSensorType);
+	SensorRegistry::registerSensor(this);
 }
 
-QuadratureEncoder::~QuadratureEncoder() {
+QuadratureEncoder::~QuadratureEncoder(){
 	//Nothing needs to be done when destroying this object
 }
 
-bool QuadratureEncoder::destroy(){
+bool QuadratureEncoder::destroy() {
 	encoderShutdown(encoder);
-	bool topSuccess = PortRegistry::deleteRegistryEntry(top);
-	bool bottomSuccess = PortRegistry::deleteRegistryEntry(bottom);
+	bool topSuccess = SensorRegistry::deleteRegistryEntry(top);
+	bool bottomSuccess = SensorRegistry::deleteRegistryEntry(bottom);
 	return topSuccess && bottomSuccess;
 }
 
@@ -85,7 +85,12 @@ EncoderType QuadratureEncoder::getEncoderType() {
 	return QuadratureEncoderType;
 }
 
-SensorType QuadratureEncoder::getSensorType(){
+SensorType QuadratureEncoder::getSensorType() {
 	return QuadratureEncoderSensorType;
 }
+
+string QuadratureEncoder::getSensorName() {
+	return "Quadrature Encoder";
+}
+
 }

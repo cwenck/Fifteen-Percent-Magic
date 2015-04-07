@@ -20,6 +20,8 @@ namespace TRL {
 		Accelerometer(AnalogPort port, Axis axis);
 
 		Axis getAxis();
+		SensorType getSensorType();
+		string getSensorName();
 	};
 }
 

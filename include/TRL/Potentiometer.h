@@ -38,6 +38,9 @@ namespace TRL {
 		//the highest one is at the part of the potentiometer that returns MAX_POTENTIOMETER_READING
 		bool isSelectionActive(int selectionNumber);
 		bool isSelectionInactive(int selectionNumber);
+
+		SensorType getSensorType();
+		string getSensorName();
 	};
 }
 

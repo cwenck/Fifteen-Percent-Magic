@@ -185,7 +185,7 @@ bool Port::isPortInactive(DigitalPort port) {
 bool Port::isPortInactive(UniversalPort port) {
 	PortType type = getPortType(port);
 	bool value;
-	switch(type){
+	switch (type) {
 	case AnalogPortType:
 		value = isPortInactive(getAnalogPortFromUniversalPort(port));
 		return value;
@@ -209,13 +209,13 @@ bool Port::isPortActive(UniversalPort port) {
 	return !isPortInactive(port);
 }
 
-int Port::getAnalogValue(AnalogPort port){
+int Port::getAnalogValue(AnalogPort port) {
 	return analogRead(getAnalogPortNumber(port));
 }
 
 //returns -1 if the port isn't analog
-int Port::getAnalogValue(UniversalPort port){
-	if(isPortAnalogType(port)){
+int Port::getAnalogValue(UniversalPort port) {
+	if (isPortAnalogType(port)) {
 		return analogRead(getAnalogPortNumber(port));
 	}
 	return -1;
@@ -241,22 +241,46 @@ void Port::configurePort(PortConfig config, DigitalPort port) {
 	configurePort(config, getUniversalPortNumber(port));
 }
 
-void Port::configurePort(PortConfig config, AnalogPort port){
+void Port::configurePort(PortConfig config, AnalogPort port) {
 	configurePort(config, getUniversalPortNumber(port));
 }
 
-AnalogPort Port::getAnalogPortFromUniversalPort(UniversalPort port){
-	if(isPortAnalogType(port)){
+AnalogPort Port::getAnalogPortFromUniversalPort(UniversalPort port) {
+	if (isPortAnalogType(port)) {
 		return (AnalogPort) getAnalogPortNumber(port);
 	}
 	return NoAnalogInput;
 }
 
-DigitalPort Port::getDigitalPortFromUniversalPort(UniversalPort port){
-	if(isPortDigitalType(port)){
+DigitalPort Port::getDigitalPortFromUniversalPort(UniversalPort port) {
+	if (isPortDigitalType(port)) {
 		return (DigitalPort) getDigitalPortNumber(port);
 	}
 	return NoDigitalInput;
+}
+
+/*
+ * Function to get the name for a port
+ *
+ * The string you get should be deleted when you are finished with delete[]
+ *
+ * @param port the universal port number to get the name for
+ */
+string Port::getPortName(UniversalPort port) {
+	string portName = "";
+	if (port == 0) {
+		portName = allocateStringForNumberOfChars(7);
+		snprintf((char *) portName, 8, "%s", "Speaker");
+	} else if (port >= 1 && port <= 12) {
+		portName = allocateStringForNumberOfChars(10);
+		snprintf((char *) portName, 11, "Digital %d",
+				Port::getDigitalPortFromUniversalPort(port));
+	} else if (port >= 13 && port <= 20) {
+		portName = allocateStringForNumberOfChars(9);
+		snprintf((char *) portName, 10, "Analog %d",
+				Port::getAnalogPortFromUniversalPort(port));
+	}
+	return portName;
 }
 
 } /* namespace TRL */

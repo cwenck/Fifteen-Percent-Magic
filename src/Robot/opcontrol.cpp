@@ -60,13 +60,9 @@ using namespace TRL;
 
 void operatorControl() {
 	println(LOG, "Main", "operatorControl", "Driver control started.");
-//	RegistryHelper::printEntireRegistry();
-//	LCD::instance.setBacklight(true);
-//	TrueTest::startTask();
-//			->displayHorizontalNavigation(2, "Auton", "Sensors");
-//	LCD::instance.displayLeftNavigation(1, "Battery is a really long label")->displayRightNavigation(2, "Auton is a really long label");
-	LCDMenuHandler* menu = new LCDMenuHandler();
-	menu->start(&LCD::instance);
+	RegistryHelper::printEntireRegistry();
+//	LCDMenuHandler* menu = new LCDMenuHandler();
+//	menu->start(&LCD::instance);
 
 	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
 	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);

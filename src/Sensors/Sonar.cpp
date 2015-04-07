@@ -9,7 +9,7 @@
 
 namespace TRL {
 
-Sonar::Sonar() {
+Sonar::Sonar() : Sensor(){
 	this->inputPort = NoDigitalInput;
 	this->outputPort = NoDigitalInput;
 	this->unit = CM;
@@ -17,14 +17,13 @@ Sonar::Sonar() {
 	prosSonar = 0;
 }
 
-Sonar::Sonar(DigitalPort yellowInputPort, DigitalPort orangeOutputPort) {
+Sonar::Sonar(DigitalPort yellowInputPort, DigitalPort orangeOutputPort) : Sensor(yellowInputPort, orangeOutputPort){
 	this->inputPort = yellowInputPort;
 	this->outputPort = orangeOutputPort;
 	this->unit = CM;
 	this->behavior = ReturnLowValue;
 	prosSonar = ultrasonicInit(outputPort, inputPort);
-	PortRegistry::registerPort(inputPort, SonarSensorType);
-	PortRegistry::registerPort(outputPort, SonarSensorType);
+	SensorRegistry::registerSensor(this);
 }
 
 Sonar::~Sonar() {
@@ -33,8 +32,8 @@ Sonar::~Sonar() {
 
 bool Sonar::destroy() {
 	ultrasonicShutdown(prosSonar);
-	bool inputSuccess = PortRegistry::deleteRegistryEntry(inputPort);
-	bool outputSuccess = PortRegistry::deleteRegistryEntry(outputPort);
+	bool inputSuccess = SensorRegistry::deleteRegistryEntry(inputPort);
+	bool outputSuccess = SensorRegistry::deleteRegistryEntry(outputPort);
 	return inputSuccess && outputSuccess;
 }
 
@@ -84,6 +83,10 @@ Sonar* Sonar::setUnit(SonarUnit unit) {
 
 SensorType Sonar::getSensorType() {
 	return SonarSensorType;
+}
+
+string Sonar::getSensorName(){
+	return "Sonar";
 }
 
 } /* namespace TRL */

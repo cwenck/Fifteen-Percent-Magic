@@ -15,16 +15,23 @@ LimitSwitch::LimitSwitch() :
 }
 
 LimitSwitch::LimitSwitch(AnalogPort port) :
-		DigitalSwitch(port, LimitSwitchSensorType) {
+		DigitalSwitch(port, this) {
 
 }
 
 LimitSwitch::LimitSwitch(DigitalPort port) :
-		DigitalSwitch(port, LimitSwitchSensorType) {
+		DigitalSwitch(port, this) {
 
 }
 
 LimitSwitch::~LimitSwitch() {
+}
+
+SensorType LimitSwitch::getSensorType() {
+	return LimitSwitchSensorType;
+}
+string LimitSwitch::getSensorName() {
+	return "Limit Switch";
 }
 
 } /* namespace TRL */

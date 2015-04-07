@@ -15,7 +15,7 @@ Potentiometer::Potentiometer() :
 }
 
 Potentiometer::Potentiometer(AnalogPort port) :
-		AnalogSensor(port, PotentiometerSensorType) {
+		AnalogSensor(port, this) {
 	numSelections = -1;
 }
 
@@ -62,5 +62,13 @@ bool Potentiometer::isSelectionActive(int selectionNumber) {
 
 bool Potentiometer::isSelectionInactive(int selectionNumber) {
 	return !isSelectionActive(selectionNumber);
+}
+
+SensorType Potentiometer::getSensorType() {
+	return PotentiometerSensorType;
+}
+
+string Potentiometer::getSensorName() {
+	return "Potentiometer";
 }
 } /* namespace TRL */

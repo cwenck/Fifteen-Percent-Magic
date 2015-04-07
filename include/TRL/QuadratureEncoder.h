@@ -29,6 +29,7 @@ namespace TRL {
 		void resetValue();	//resets the value to 0
 		EncoderType getEncoderType();
 		SensorType getSensorType();
+		string getSensorName();
 
 	};
 }

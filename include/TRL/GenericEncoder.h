@@ -13,14 +13,16 @@
 
 namespace TRL {
 
-	class GenericEncoder : public Sensor{
+	class GenericEncoder : public Sensor {
 
 	public:
 		GenericEncoder();
+		GenericEncoder(DigitalPort top, DigitalPort bottom);
 		virtual ~GenericEncoder();
 		virtual int getValue() = 0;
 		virtual EncoderType getEncoderType() = 0;
 		virtual SensorType getSensorType() = 0;
+		virtual string getSensorName() = 0;
 
 	};
 };

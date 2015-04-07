@@ -18,7 +18,6 @@ LCDMainAutonScreen::~LCDMainAutonScreen() {
 void LCDMainAutonScreen::display(LCD* lcd) {
 	lcd->displayHorizontalNavigation(1, "Battery", "Sensor");
 	lcd->displayDownNavigation(2, "Autonomous");
-
 }
 
 } /* namespace TRL */
