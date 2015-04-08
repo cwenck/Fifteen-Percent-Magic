@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/MotorAndSensorSetup.h"
+#include "Robot/MotorAndSensorSetup.h"
 
 namespace TRL {
 

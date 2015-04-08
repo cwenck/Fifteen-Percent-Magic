@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/Potentiometer.h"
+#include "Sensors/Potentiometer.h"
 
 namespace TRL {
 

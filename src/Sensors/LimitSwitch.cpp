@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/LimitSwitch.h"
+#include "Sensors/LimitSwitch.h"
 
 namespace TRL {
 

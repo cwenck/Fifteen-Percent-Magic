@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/Sensor.h"
+#include "Sensors/Sensor.h"
 
 namespace TRL {
 

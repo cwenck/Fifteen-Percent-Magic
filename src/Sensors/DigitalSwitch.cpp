@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRl/DigitalSwitch.h"
+#include "Sensors/DigitalSwitch.h"
 
 namespace TRL {
 

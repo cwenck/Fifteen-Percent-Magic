@@ -13,7 +13,6 @@ Port::Port() {
 }
 
 Port::~Port() {
-	// TODO Auto-generated destructor stub
 }
 
 UniversalPort Port::getUniversalPortNumber(AnalogPort port) {

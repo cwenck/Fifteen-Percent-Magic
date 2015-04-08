@@ -5,7 +5,7 @@
  *      Author: cwenck
  */
 
-#include "TRL/QuadratureEncoder.h"
+#include "Sensors/QuadratureEncoder.h"
 
 namespace TRL {
 

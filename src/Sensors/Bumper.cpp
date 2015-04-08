@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/Bumper.h"
+#include "Sensors/Bumper.h"
 
 namespace TRL {
 

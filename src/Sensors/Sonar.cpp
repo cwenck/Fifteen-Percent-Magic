@@ -5,7 +5,7 @@
  *      Author: cwenck
  */
 
-#include "TRL/Sonar.h"
+#include "Sensors/Sonar.h"
 
 namespace TRL {
 

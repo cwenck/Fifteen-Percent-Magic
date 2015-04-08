@@ -5,7 +5,7 @@
  *      Author: cwenck
  */
 
-#include "TRL/AnalogSensor.h"
+#include "Sensors/AnalogSensor.h"
 
 namespace TRL {
 

@@ -8,6 +8,8 @@
 #ifndef LCDSENSORMAINSCREEN_H_
 #define LCDSENSORMAINSCREEN_H_
 
+#include "../TRL/TRL_BaseIncludes.h"
+#include "LCD.h"
 #include "LCDMenuScreen.h"
 
 namespace TRL {

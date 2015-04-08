@@ -8,6 +8,8 @@
 #ifndef LCD_INCLUDES_H_
 #define LCD_INCLUDES_H_
 
+#include "../TRL/TRL_BaseIncludes.h"
+
 #include "LCD.h"
 #include "LCDMenuScreen.h"
 #include "LCDMainAutonScreen.h"

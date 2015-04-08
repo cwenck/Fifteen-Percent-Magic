@@ -5,7 +5,7 @@
  *      Author: cwenck
  */
 
-#include "TRL/LineSensor.h"
+#include "Sensors/LineSensor.h"
 
 namespace TRL {
 

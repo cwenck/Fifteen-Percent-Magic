@@ -5,7 +5,7 @@
  *      Author: cwenck
  */
 
-#include "TRL/LightSensor.h"
+#include "Sensors/LightSensor.h"
 
 namespace TRL {
 

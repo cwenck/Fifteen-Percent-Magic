@@ -33,7 +33,6 @@
  */
 
 #include "main.h"
-#include "TrueTest.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -5,7 +5,7 @@
  *      Author: cwenck
  */
 
-#include "TRL/Robot.h"
+#include "Robot/Robot.h"
 
 namespace TRL {
 ///////////////////////////////

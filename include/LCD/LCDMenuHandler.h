@@ -8,9 +8,7 @@
 #ifndef LCDMENUHANDLER_H_
 #define LCDMENUHANDLER_H_
 
-#include "../TRL/TRL_BaseInitialization.h"
 #include "LCD_Includes.h"
-
 
 #define LCD_LONG_PRESS_TIME_MILLIS 1000
 

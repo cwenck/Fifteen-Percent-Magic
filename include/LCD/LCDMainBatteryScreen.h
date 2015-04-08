@@ -8,6 +8,7 @@
 #ifndef LCDMAINBATTERYSCREEN_H_
 #define LCDMAINBATTERYSCREEN_H_
 
+#include "../TRL/TRL_BaseIncludes.h"
 #include "LCD.h"
 #include "LCDMenuScreen.h"
 

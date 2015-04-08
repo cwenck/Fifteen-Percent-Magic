@@ -8,6 +8,8 @@
 #ifndef LCDHOMESCREEN_H_
 #define LCDHOMESCREEN_H_
 
+#include "../TRL/TRL_BaseIncludes.h"
+#include "LCD.h"
 #include "LCDMenuScreen.h"
 
 namespace TRL {

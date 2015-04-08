@@ -8,7 +8,8 @@
 #ifndef LCDSPECIFICBATTERYSCREEN_H_
 #define LCDSPECIFICBATTERYSCREEN_H_
 
-#include "../TRL/TRL_BaseInitialization.h"
+#include "../TRL/TRL_BaseIncludes.h"
+#include "LCD.h"
 #include "LCDMenuScreen.h"
 
 namespace TRL {

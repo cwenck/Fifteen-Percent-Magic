@@ -8,10 +8,10 @@
 #ifndef LCDSPECIFICSENSORSCREEN_H_
 #define LCDSPECIFICSENSORSCREEN_H_
 
-#include "../TRL/TRL_BaseInitialization.h"
-#include "../TRL/SensorRegistry.h"
-#include "../TRL/Sensor.h"
+#include "../TRL/TRL_BaseIncludes.h"
+#include "LCD.h"
 #include "LCDMenuScreen.h"
+#include "../Sensors/Sensor_Includes.h"
 
 namespace TRL {
 	class LCDSpecificSensorScreen : public LCDMenuScreen {

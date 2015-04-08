@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/GenericEncoder.h"
+#include "Sensors/GenericEncoder.h"
 
 namespace TRL {
 

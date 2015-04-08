@@ -8,8 +8,7 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#include "../TRL/TRL_BaseInitialization.h"
-#include "../TRL/Util.h"
+#include "../TRL/TRL_BaseIncludes.h"
 
 //LCD Special Character Constants
 #define LCD_DOWN_TRIANGLE_ARROW 0xF5

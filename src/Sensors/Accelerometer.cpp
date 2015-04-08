@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/Accelerometer.h"
+#include "Sensors/Accelerometer.h"
 
 namespace TRL {
 

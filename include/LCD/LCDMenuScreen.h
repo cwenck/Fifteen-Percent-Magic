@@ -8,7 +8,7 @@
 #ifndef LCDMENUSCREEN_H_
 #define LCDMENUSCREEN_H_
 
-#include "../TRL/TRL_BaseInitialization.h"
+#include "../TRL/TRL_BaseIncludes.h"
 #include "LCD.h"
 
 #define NO_SCREEN 0

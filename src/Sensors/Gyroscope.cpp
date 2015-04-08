@@ -5,7 +5,7 @@
  *      Author: guywenck
  */
 
-#include "TRL/Gyroscope.h"
+#include "Sensors/Gyroscope.h"
 
 namespace TRL {
 

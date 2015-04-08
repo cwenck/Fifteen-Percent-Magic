@@ -8,7 +8,11 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 
-#include "TRL_BaseInitialization.h"
+//#include "TRL_BaseIncludes.h"
+#include "EnumeratedTypedefs.h"
+#include "Constants.h"
+#include "PrintStream.h"
+#include "Typedefs.h"
 
 #define NUMBER_NON_SHIFTED_INPUTS 18
 
