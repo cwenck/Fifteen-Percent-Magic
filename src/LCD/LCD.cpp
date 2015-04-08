@@ -320,7 +320,7 @@ LCD* LCD::displayDownNavigation(short line, string labelText) {
 }
 
 LCD* LCD::displayMainBatteryStatus(short line) {
-	displayFormattedCenteredString(line, "Main: %.2fV", getMainBatteryPower());
+	displayFormattedCenteredString(line, "Main: %.2fV", getPrimaryBatteryPower());
 	return this;
 }
 

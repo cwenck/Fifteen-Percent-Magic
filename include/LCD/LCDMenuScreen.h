@@ -46,6 +46,8 @@ namespace TRL {
 		virtual LCDMenuScreen* onLongLeftButtonPress();
 		virtual LCDMenuScreen* onLongCenterButtonPress();
 		virtual LCDMenuScreen* onLongRightButtonPress();
+
+		void printRefrences();
 	};
 }
 

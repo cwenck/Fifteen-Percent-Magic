@@ -240,7 +240,7 @@ namespace TRL {
 		IntegratedEncoderType = 2
 	}EncoderType;
 
-	typedef enum _Axis{
+	typedef enum _Axis {
 		UnsetAxis,
 		xAxis,
 		yAxis,
@@ -327,6 +327,16 @@ namespace TRL {
 		LeftSide,
 		RightSide
 	}MotorLocationSide;
+
+	////////////////////
+	//BATTERY TYPEDEFS//
+	////////////////////
+
+	typedef enum _BatteryType {
+		PrimaryBatteryType = 0,
+		BackupBatteryType = 1,
+		PowerExpanderBatteryType = 2
+	}BatteryType;
 
 }
 

@@ -16,16 +16,14 @@
 namespace TRL {
 	class LCDSpecificSensorScreen : public LCDMenuScreen {
 	private:
-	public:
 		Sensor* sensor;
+	public:
 		LCDSpecificSensorScreen();
 		LCDSpecificSensorScreen(Sensor* sensor);
 		virtual ~LCDSpecificSensorScreen();
 
 		void setSensor(Sensor* sensor);
 		void display(LCD* lcd);
-
-		void printRefrences();
 
 		static LCDSpecificSensorScreen** getSpecificSensorScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 	};

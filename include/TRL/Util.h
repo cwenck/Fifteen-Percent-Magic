@@ -13,7 +13,9 @@
 #include "Typedefs.h"
 
 namespace TRL {
-	float getMainBatteryPower();
+	float getPrimaryBatteryPower();
+	float getBackupBatteryPower();
+
 	string allocateStringForNumberOfChars(int numChars);
 	string strsub(string* storeStr, string str, int startChar);
 	string strsub(string* storeStr, string str, int startChar, int endChar);

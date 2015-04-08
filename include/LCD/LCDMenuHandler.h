@@ -24,6 +24,7 @@ namespace TRL {
 		LCDMainBatteryScreen* mainBatteryScreen;
 		LCDMainSensorScreen* mainSensorScreen;
 		LCDSpecificSensorScreen** specificSensorScreens;
+		LCDSpecificBatteryScreen** specificBatteryScreens;
 
 		//////////////////////////////////
 		//Don't touch anthing below here//

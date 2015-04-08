@@ -88,4 +88,9 @@ LCDMenuScreen* LCDMenuScreen::onLongRightButtonPress() {
 	return rightScreen;
 }
 
+void LCDMenuScreen::printRefrences() {
+	println("This:%d :: %d %d %d %d", this, homeScreen, leftScreen, enterScreen,
+			rightScreen);
+}
+
 } /* namespace TRL */

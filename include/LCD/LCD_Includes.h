@@ -14,6 +14,7 @@
 #include "LCDMainBatteryScreen.h"
 #include "LCDMainSensorScreen.h"
 #include "LCDSpecificSensorScreen.h"
+#include "LCDSpecificBatteryScreen.h"
 #include "LCDMenuHandler.h"
 
 #endif /* LCD_INCLUDES_H_ */

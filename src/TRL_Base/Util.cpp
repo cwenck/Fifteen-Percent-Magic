@@ -9,8 +9,18 @@
 
 namespace TRL {
 
-float getMainBatteryPower() {
+/*
+ * @return returns the voltage on the primary battery in volts
+ */
+float getPrimaryBatteryPower() {
 	return ((float) powerLevelMain()) / 1000.0f;
+}
+
+/*
+ * @return returns the voltage on the backup battery in volts
+ */
+float getBackupBatteryPower() {
+	return ((float) powerLevelBackup()) / 1000.0f;
 }
 
 /*

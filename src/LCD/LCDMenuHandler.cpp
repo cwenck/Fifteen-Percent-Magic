@@ -20,6 +20,9 @@ void LCDMenuHandler::initScreens() {
 
 	specificSensorScreens = LCDSpecificSensorScreen::getSpecificSensorScreens(
 			mainAutonScreen, false);
+	specificBatteryScreens =
+			LCDSpecificBatteryScreen::getSpecificBatteryScreens(
+					mainAutonScreen, true);
 }
 
 LCDMenuHandler::~LCDMenuHandler() {
@@ -28,11 +31,9 @@ LCDMenuHandler::~LCDMenuHandler() {
 	delete mainBatteryScreen;
 	delete mainSensorScreen;
 
-	//delete the object array
-	delete[] specificSensorScreens[0];
-
-	//delete the pointers to those objects
+	//delete the arrays of screens
 	delete[] specificSensorScreens;
+	delete[] specificBatteryScreens;
 }
 
 void LCDMenuHandler::initScreenRelationships(LCD *displayLCD) {
@@ -43,7 +44,7 @@ void LCDMenuHandler::initScreenRelationships(LCD *displayLCD) {
 			mainAutonScreen, mainSensorScreen);
 
 	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainSensorScreen,
-			mainBatteryScreen, mainAutonScreen);
+			specificBatteryScreens[0], mainAutonScreen);
 
 	if (SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates() == 0) {
 		mainSensorScreen->setReferencedScreens(mainAutonScreen, mainAutonScreen,

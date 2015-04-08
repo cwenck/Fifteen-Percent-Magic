@@ -1,61 +1,66 @@
 /*
- * LCDSpecificSensorScreen.cpp
+ * LCDSpecificBatteryScreen.cpp
  *
- *  Created on: Apr 7, 2015
+ *  Created on: Apr 8, 2015
  *      Author: cwenck
  */
 
-#include "LCD/LCDSpecificSensorScreen.h"
+#include "LCD/LCDSpecificBatteryScreen.h"
 
 namespace TRL {
 
-LCDSpecificSensorScreen::LCDSpecificSensorScreen() {
-	this->sensor = NULL;
+LCDSpecificBatteryScreen::LCDSpecificBatteryScreen() {
+	this->battery = PrimaryBatteryType;
 }
 
-LCDSpecificSensorScreen::LCDSpecificSensorScreen(Sensor* sensor) {
-	this->sensor = sensor;
+LCDSpecificBatteryScreen::~LCDSpecificBatteryScreen() {
 }
 
-LCDSpecificSensorScreen::~LCDSpecificSensorScreen() {
-	println("Destroyed screen with sensor %s", sensor->getSensorName());
+void LCDSpecificBatteryScreen::setBattry(BatteryType type) {
+	this->battery = type;
 }
 
-void LCDSpecificSensorScreen::setSensor(Sensor* sensor) {
-	this->sensor = sensor;
+void LCDSpecificBatteryScreen::display(LCD* lcd) {
+	lcd->clear();
+	switch (battery) {
+	case PrimaryBatteryType:
+		lcd->displayCenteredString(1, "Primary");
+		lcd->displayFormattedCenteredString(2, "%.2fV",
+				getPrimaryBatteryPower());
+		return;
+	case BackupBatteryType:
+		lcd->displayCenteredString(1, "Backup");
+		lcd->displayFormattedCenteredString(2, "%.2fV",
+				getBackupBatteryPower());
+		return;
+	case PowerExpanderBatteryType:
+		lcd->displayCenteredString(1, "Power Expander");
+		return;
+	}
 }
-
-void LCDSpecificSensorScreen::display(LCD* lcd) {
-	lcd->displayCenteredString(1, sensor->getSensorName());
-	string portName = Port::getShortPortName(sensor->getMainPort());
-	lcd->displayFormattedString(2, "%s:%d", portName, sensor->getValue());
-	delete[] portName;
-}
-
 /*
- * Get the specific sensor screens for use in the LCDMenuHandler
+ * Get the specific battery screens for use in the LCDMenuHandler
  *
- * The array of LCDSpecificSensorScreens needs to be deteted with delete[] array
+ * The array of LCDSpecificBatteryScreens needs to be deteted with delete[] array
  * but so does the array of actual objects so you ALSO need to do delete[] array[0]
  *
  * @param homeScreen the screen you want these specific screens to go to when you hold down the center button
  * @param loopScreens do you want the screens to loop or end once the end of the array is reached
  */
-LCDSpecificSensorScreen** LCDSpecificSensorScreen::getSpecificSensorScreens(
+
+LCDSpecificBatteryScreen** LCDSpecificBatteryScreen::getSpecificBatteryScreens(
 		LCDMenuScreen* homeScreen, bool loopScreens) {
-	int size = SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates();
-	Sensor** sensors =
-			SensorRegistry::getRegisteredSensorsArrayWithoutDuplicates();
-	LCDSpecificSensorScreen** screenPointers =
-			new LCDSpecificSensorScreen*[size];
+	int size = 3;
+	LCDSpecificBatteryScreen** screenPointers =
+			new LCDSpecificBatteryScreen*[size];
+
 	//Two for loops are needed so that the entire array can be initialized before
 	//refrences to those elements are assigned
 	for (int i = 0; i < size; i++) {
-		screenPointers[i] = new LCDSpecificSensorScreen(sensors[i]);
+		screenPointers[i] = new LCDSpecificBatteryScreen();
 	}
 	for (int i = 0; i < size; i++) {
 		if (loopScreens) {
-			//Sensor Specific screens loop
 			if (i == 0) {
 				if (size == 1) {
 					screenPointers[0]->setReferencedScreens(homeScreen,
@@ -76,7 +81,6 @@ LCDSpecificSensorScreen** LCDSpecificSensorScreen::getSpecificSensorScreens(
 						screenPointers[i + 1]);
 			}
 		} else {
-			//Sensor Specific screens don't loop
 			if (i == 0) {
 				if (size == 1) {
 					screenPointers[0]->setReferencedScreens(homeScreen,
@@ -98,7 +102,10 @@ LCDSpecificSensorScreen** LCDSpecificSensorScreen::getSpecificSensorScreens(
 			}
 		}
 	}
-	delete[] sensors;
+	screenPointers[0]->setBattry(PrimaryBatteryType);
+	screenPointers[1]->setBattry(BackupBatteryType);
+	screenPointers[2]->setBattry(PowerExpanderBatteryType);
 	return screenPointers;
 }
+
 } /* namespace TRL */
