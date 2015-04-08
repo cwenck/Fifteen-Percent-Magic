@@ -13,6 +13,7 @@
 #include "LCDMainAutonScreen.h"
 #include "LCDMainBatteryScreen.h"
 #include "LCDMainSensorScreen.h"
+#include "LCDSpecificSensorScreen.h"
 #include "LCDMenuHandler.h"
 
 #endif /* LCD_INCLUDES_H_ */

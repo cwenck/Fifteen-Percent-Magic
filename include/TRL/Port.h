@@ -65,6 +65,7 @@ namespace TRL {
 		static void configurePort(PortConfig config, AnalogPort port);
 
 		static string getPortName(UniversalPort port);
+		static string getShortPortName(UniversalPort port);
 	};
 }
 

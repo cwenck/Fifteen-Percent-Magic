@@ -283,4 +283,28 @@ string Port::getPortName(UniversalPort port) {
 	return portName;
 }
 
+/*
+ * Function to get the name for a port
+ *
+ * The string you get should be deleted when you are finished with delete[]
+ *
+ * @param port the universal port number to get the name for
+ */
+string Port::getShortPortName(UniversalPort port){
+	string portName = "";
+	if (port == 0) {
+		portName = allocateStringForNumberOfChars(4);
+		snprintf((char *) portName, 5, "%s", "Spkr");
+	} else if (port >= 1 && port <= 12) {
+		portName = allocateStringForNumberOfChars(8);
+		snprintf((char *) portName, 9, "Digtl %d",
+				Port::getDigitalPortFromUniversalPort(port));
+	} else if (port >= 13 && port <= 20) {
+		portName = allocateStringForNumberOfChars(7);
+		snprintf((char *) portName, 8, "Analg %d",
+				Port::getAnalogPortFromUniversalPort(port));
+	}
+	return portName;
+}
+
 } /* namespace TRL */

@@ -14,6 +14,12 @@ void LCDMenuHandler::initScreens() {
 	mainAutonScreen = new LCDMainAutonScreen();
 	mainBatteryScreen = new LCDMainBatteryScreen();
 	mainSensorScreen = new LCDMainSensorScreen();
+
+	//Set the start screen
+	currentScreen = mainAutonScreen;
+
+	specificSensorScreens = LCDSpecificSensorScreen::getSpecificSensorScreens(
+			mainAutonScreen, false);
 }
 
 LCDMenuHandler::~LCDMenuHandler() {
@@ -21,6 +27,12 @@ LCDMenuHandler::~LCDMenuHandler() {
 	delete mainAutonScreen;
 	delete mainBatteryScreen;
 	delete mainSensorScreen;
+
+	//delete the object array
+	delete[] specificSensorScreens[0];
+
+	//delete the pointers to those objects
+	delete[] specificSensorScreens;
 }
 
 void LCDMenuHandler::initScreenRelationships(LCD *displayLCD) {
@@ -33,11 +45,13 @@ void LCDMenuHandler::initScreenRelationships(LCD *displayLCD) {
 	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainSensorScreen,
 			mainBatteryScreen, mainAutonScreen);
 
-	mainSensorScreen->setReferencedScreens(mainAutonScreen, mainAutonScreen,
-			mainSensorScreen, mainBatteryScreen);
-
-	//Set the start screen
-	currentScreen = mainAutonScreen;
+	if (SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates() == 0) {
+		mainSensorScreen->setReferencedScreens(mainAutonScreen, mainAutonScreen,
+				mainSensorScreen, mainBatteryScreen);
+	} else {
+		mainSensorScreen->setReferencedScreens(mainAutonScreen, mainAutonScreen,
+				specificSensorScreens[0], mainBatteryScreen);
+	}
 }
 
 //the parameter is a requirement of a function being run in its own task
@@ -45,7 +59,6 @@ void LCDMenuHandler::run(void* lcdMenuHandlerInstance) {
 	LCDMenuHandler* handler = (LCDMenuHandler*) lcdMenuHandlerInstance;
 	handler->lcd->enableBacklight();
 	while (handler->running) {
-		println("TIME: %d", millis());
 		handler->updateLCDButtonPresses();
 		if (handler->currentScreen == NULL) {
 			println(ERROR, "LCDMenuHandler", "run",
@@ -53,7 +66,7 @@ void LCDMenuHandler::run(void* lcdMenuHandlerInstance) {
 			handler->stop();
 			break;
 		} else {
-			handler->currentScreen->display(handler->lcd);	//Memory leak is in here
+			handler->currentScreen->display(handler->lcd);
 		}
 
 		if (handler->wasShortLeftJustReleased) {
@@ -81,8 +94,7 @@ void LCDMenuHandler::run(void* lcdMenuHandlerInstance) {
 					handler->currentScreen->onLongRightButtonPress();
 			handler->updateLCDButtonPresses();
 		}
-
-//		delay(20);
+		delay(20);
 	}
 }
 
@@ -92,7 +104,6 @@ void LCDMenuHandler::start(LCD* lcd) {
 		return;
 	}
 	running = true;
-	println("This1: %d", this);
 	taskHandle = taskCreate(run, TASK_DEFAULT_STACK_SIZE, this,
 			TASK_PRIORITY_DEFAULT + 1);
 }

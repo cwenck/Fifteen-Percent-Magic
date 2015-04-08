@@ -58,7 +58,7 @@ QuadratureEncoder::QuadratureEncoder(DigitalPort top, DigitalPort bottom,
 	SensorRegistry::registerSensor(this);
 }
 
-QuadratureEncoder::~QuadratureEncoder(){
+QuadratureEncoder::~QuadratureEncoder() {
 	//Nothing needs to be done when destroying this object
 }
 
@@ -90,7 +90,7 @@ SensorType QuadratureEncoder::getSensorType() {
 }
 
 string QuadratureEncoder::getSensorName() {
-	return "Quadrature Encoder";
+	return "Quad Encoder";
 }
 
 }

@@ -14,8 +14,6 @@
 #include "Motor.h"
 
 #include "Sensor.h"
-#include "GenericEncoder.h"
-#include "QuadratureEncoder.h"
 #include "LimitSwitch.h"
 #include "Bumper.h"
 #include "Potentiometer.h"
@@ -23,6 +21,8 @@
 #include "LineSensor.h"
 #include "Accelerometer.h"
 #include "Gyroscope.h"
+#include "GenericEncoder.h"
+#include "QuadratureEncoder.h"
 
 namespace TRL {
 
@@ -56,6 +56,7 @@ namespace TRL {
 
 		static Potentiometer* potentiometer;
 		static LimitSwitch* limit;
+		static QuadratureEncoder* quad;
 	};
 
 	class RegistryHelper {

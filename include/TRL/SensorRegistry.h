@@ -15,9 +15,10 @@
 #include "Port.h"
 #include "Sensor.h"
 
-class Sensor;
-
 namespace TRL {
+
+	class Sensor;
+
 	class SensorRegistry {
 	private:
 		static Sensor* sensors[21];
@@ -42,11 +43,13 @@ namespace TRL {
 		static bool isSensorRegistered(DigitalPort port);
 
 		static short getNumberOfRegisteredSensors();
+		static short getNumberOfRegisteredSensorsWithoutDuplicates();
 
 		//The full array of registered motors is returned
 		//This is a copy of the array so it is readOnly
 		//and should be deleted with delete[]
 		static Sensor** getRegisteredSensorsArray();
+		static Sensor** getRegisteredSensorsArrayWithoutDuplicates();
 
 	};
 }

@@ -39,13 +39,13 @@ namespace TRL {
 		//return this if you wish to stay on the current menu screen
 		//override these functions in the child class to alter their functionality
 		//they will automatically get called by the LCDMenuHandler Class
-		LCDMenuScreen* onShortLeftButtonPress();
-		LCDMenuScreen* onShortCenterButtonPress();
-		LCDMenuScreen* onShortRightButtonPress();
+		virtual LCDMenuScreen* onShortLeftButtonPress();
+		virtual LCDMenuScreen* onShortCenterButtonPress();
+		virtual LCDMenuScreen* onShortRightButtonPress();
 
-		LCDMenuScreen* onLongLeftButtonPress();
-		LCDMenuScreen* onLongCenterButtonPress();
-		LCDMenuScreen* onLongRightButtonPress();
+		virtual LCDMenuScreen* onLongLeftButtonPress();
+		virtual LCDMenuScreen* onLongCenterButtonPress();
+		virtual LCDMenuScreen* onLongRightButtonPress();
 	};
 }
 

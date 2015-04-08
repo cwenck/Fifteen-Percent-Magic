@@ -56,10 +56,12 @@ MotorList::~MotorList() {
 
 Potentiometer* SensorList::potentiometer;
 LimitSwitch* SensorList::limit;
+QuadratureEncoder* SensorList::quad;
 
 void SensorList::initialize() {
 	potentiometer = new Potentiometer(Analog_4);
 	limit = new LimitSwitch(Analog_1);
+	quad = new QuadratureEncoder(Digital_1, Digital_2);
 	println(LOG, "SensorSetup", "initialize", "All sensors initialized");
 }
 

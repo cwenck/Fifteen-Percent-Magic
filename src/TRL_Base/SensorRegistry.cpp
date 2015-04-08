@@ -90,13 +90,6 @@ void SensorRegistry::resetRegistry() {
 
 void SensorRegistry::printRegistryEntry(UniversalPort port) {
 	if (port <= 20) {
-//		if (port == 0) {
-//			print("Speaker: ");
-//		} else if (port >= 1 && port <= 12) {
-//			printf("Digital_%d: ", Port::getDigitalPortFromUniversalPort(port));
-//		} else if (port >= 13 && port <= 20) {
-//			printf("Analog_%d: ", Port::getAnalogPortFromUniversalPort(port));
-//		}
 		print(Port::getPortName(port));
 		print(": ");
 		if (sensors[port] == NULL) {
@@ -155,6 +148,44 @@ Sensor** SensorRegistry::getRegisteredSensorsArray() {
 		}
 	}
 	return registeredSensors;
+}
+
+short SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates() {
+	int numSensors = getNumberOfRegisteredSensors();
+	Sensor** registeredSensors = getRegisteredSensorsArray();
+	int numDuplicates = 0;
+	for (int i = 0; i < numSensors; i++) {
+		if (registeredSensors[i]->isTwoPortSensor()) {
+			numDuplicates++;
+		}
+	}
+	numDuplicates /= 2;
+	return numSensors - numDuplicates;
+}
+
+Sensor** SensorRegistry::getRegisteredSensorsArrayWithoutDuplicates() {
+	int size = getNumberOfRegisteredSensorsWithoutDuplicates();
+
+	Sensor** sensorsWithoutDuplicates = new Sensor*[size];
+	Sensor** allSensors = getRegisteredSensorsArray();
+
+	int currentFillingIndex = 0;
+	for (int i = 0; i < getNumberOfRegisteredSensors(); i++) {
+		Sensor* sensorToCheckFor = allSensors[i];
+		bool foundInArrayAlready = false;
+		for (int j = 0; j < size; j++) {
+			if(sensorsWithoutDuplicates[j] == sensorToCheckFor){
+				foundInArrayAlready = true;
+				break;
+			}
+		}
+		if(!foundInArrayAlready){
+			sensorsWithoutDuplicates[currentFillingIndex] = sensorToCheckFor;
+			currentFillingIndex++;
+		}
+	}
+	delete[] allSensors;
+	return sensorsWithoutDuplicates;
 }
 
 } /* namespace TRL */

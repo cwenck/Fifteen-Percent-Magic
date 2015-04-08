@@ -15,12 +15,6 @@
 #define LCD_LONG_PRESS_TIME_MILLIS 1000
 
 namespace TRL {
-//CRASHES AFTER ROUGHLY 3 MINUTES OF THE CORTEX BEING ON
-//DOESN't AUTO RESET AFTER
-//THINKING IT IS RUNNING OUT OF FREE MEMEMORY
-//First CRASH 190000ms delay 20ms
-//Second CRASH 56000ms delay 0ms
-//Third CRASH
 	class LCDMenuHandler {
 	private:
 		//List of all screens. They should all be pointers
@@ -29,6 +23,7 @@ namespace TRL {
 		LCDMainAutonScreen* mainAutonScreen;
 		LCDMainBatteryScreen* mainBatteryScreen;
 		LCDMainSensorScreen* mainSensorScreen;
+		LCDSpecificSensorScreen** specificSensorScreens;
 
 		//////////////////////////////////
 		//Don't touch anthing below here//

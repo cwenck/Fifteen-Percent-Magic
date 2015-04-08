@@ -8,7 +8,9 @@
 #ifndef QUADRATUREENCODER_H_
 #define QUADRATUREENCODER_H_
 
-#include "main.h"
+#include "TRL_BaseInitialization.h"
+#include "SensorRegistry.h"
+#include "GenericEncoder.h"
 
 namespace TRL {
 
