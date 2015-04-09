@@ -10,12 +10,10 @@
 namespace TRL {
 
 LCDMainSensorScreen::LCDMainSensorScreen() {
-	// TODO Auto-generated constructor stub
 
 }
 
 LCDMainSensorScreen::~LCDMainSensorScreen() {
-	// TODO Auto-generated destructor stub
 }
 
 void LCDMainSensorScreen::display(LCD* lcd) {

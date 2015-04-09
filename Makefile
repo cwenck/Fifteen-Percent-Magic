@@ -6,7 +6,7 @@ ROOT=.
 BINDIR=$(ROOT)/bin
 
 # Subdirectories to include in the build
-SUBDIRS=src src/LCD src/Sensors src/Robot src/TRL_Base src/Motor
+SUBDIRS=src src/LCD src/Sensors src/Robot src/TRL src/Motor
 
 # Nothing below here needs to be modified by typical users
 

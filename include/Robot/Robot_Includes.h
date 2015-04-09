@@ -15,6 +15,7 @@
 
 #include "MotorAndSensorSetup.h"
 #include "Robot.h"
+#include "AutonomusRoutineRegistry.h"
 #include "AutonomousRoutines.h"
 
 #endif /* ROBOT_INCLUDES_H_ */

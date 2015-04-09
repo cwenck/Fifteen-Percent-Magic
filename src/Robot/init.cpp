@@ -68,7 +68,8 @@ void initialize() {
 	//This line initializes the library and must come first.
 	trlInitializeLibrary();
 
-
+	LCDMenuHandler* menu = new LCDMenuHandler();
+	menu->start(&LCD::instance);
 }
 
 #ifdef __cplusplus

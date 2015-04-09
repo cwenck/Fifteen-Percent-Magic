@@ -59,31 +59,15 @@ using namespace TRL;
 
 void operatorControl() {
 	println(LOG, "Main", "operatorControl", "Driver control started.");
-	RegistryHelper::printEntireRegistry();
-
-//	Sensor** sensors =
-//			SensorRegistry::getRegisteredSensorsArrayWithoutDuplicates();
-//	for (int i = 0;
-//			i
-//					< SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates();
-//			i++) {
-//		println(sensors[i]->getSensorName());
-//		println(Port::getPortName(sensors[i]->getMainPort()));
-//	}
-	LCDMenuHandler* menu = new LCDMenuHandler();
-	menu->start(&LCD::instance);
+//	RegistryHelper::printEntireRegistry();
 
 	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
 	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
 	while (true) {
 
-//		LCD::instance.displayMainBatteryStatus(1);
 		delay(200);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
-//		LCD::instance.displayBatteryStatus();
-
-//		Port::isPortInactive(Analog_1);
 
 	}
 }

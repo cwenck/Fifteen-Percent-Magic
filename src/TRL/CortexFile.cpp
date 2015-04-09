@@ -54,20 +54,15 @@ void CortexFile::writeStringToFile(string textToWrite) {
 }
 
 const string CortexFile::readFileContents() {
-	//TODO readFileContents is not working properly
 	fileMode = ReadFileMode;
 	fileHandle = fopen(fileName, "r");
 	int fileChars = fcount(fileHandle) + 1;
 	fileContents = allocateStringForNumberOfChars(fileChars);
 	{
-//		char *contents = 0;
-//		char tempStr[fileChars];
-//		contents = tempStr;
 		fgets((char *)fileContents, fileChars, fileHandle);
 	}
 	fclose(fileHandle);
 	fileMode = UnsetFileMode;
-//	println(DEBUG, "CortexFile", "writeStringToFile", contents);
 	return fileContents;
 }
 

@@ -16,7 +16,6 @@ GenericEncoder::GenericEncoder(DigitalPort top, DigitalPort bottom) : Sensor(top
 }
 
 GenericEncoder::~GenericEncoder() {
-	// TODO Auto-generated destructor stub
 }
 
 } /* namespace TRL */

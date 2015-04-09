@@ -107,7 +107,6 @@ PID::PID(float kp, float ki, float kd, Sensor* sensor,
 }
 
 PID::~PID() {
-	// TODO Auto-generated destructor stub
 }
 
 void PID::setKp(float postionConstant) {

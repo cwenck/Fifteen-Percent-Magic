@@ -87,7 +87,6 @@ Robot::Robot() {
 }
 
 Robot::~Robot() {
-	// TODO Auto-generated destructor stub
 }
 
 ////////////////////

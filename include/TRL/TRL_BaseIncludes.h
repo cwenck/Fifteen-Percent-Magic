@@ -16,6 +16,7 @@
 #include "LibraryFixes.h"
 #include "Typedefs.h"
 #include "EnumeratedTypedefs.h"
+#include "VariableArray.h"
 #include "PrintStream.h"
 #include "Controller.h"
 #include "Util.h"
