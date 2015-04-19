@@ -38,14 +38,6 @@ void MotorList::initialize() {
 	println(LOG, "MotorSetup", "initialize", "All motors initialized");
 }
 
-MotorList::MotorList() {
-	//Nothing should be done here since this is a static class;
-}
-
-MotorList::~MotorList() {
-	//Nothing should be done here since this is a static class;
-}
-
 ///////////////////////
 ///END OF MOTOR SETUP//
 ///////////////////////
@@ -68,6 +60,24 @@ void SensorList::initialize() {
 ////////////////////////
 ///END OF SENSOR SETUP//
 ////////////////////////
+
+/////////////////////////
+///START OF AUTON SETUP//
+/////////////////////////
+
+AutonRoutine* AutonList::routineOne;
+AutonRoutine* AutonList::routineTwo;
+
+void AutonList::initialize(){
+	routineOne = new AutonRoutine(RED, POLE, RedPolePositionNumberOne,
+			"test 1", AutonFunctions::redAuton);
+	routineTwo = new AutonRoutine(BLUE, POLE, RedPolePositionNumberOne,
+				"test 2", AutonFunctions::blueAuton);
+}
+
+///////////////////////
+///END OF AUTON SETUP//
+///////////////////////
 
 /////////////////////////////
 ///START OF REGISTRY HELPER//

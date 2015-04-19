@@ -16,8 +16,8 @@ namespace TRL {
 
 	class MotorList {
 	public:
-		MotorList();
-		virtual ~MotorList();
+		MotorList() {}
+		virtual ~MotorList() {}
 		static void initialize();
 
 		//These are just generic names for the template
@@ -37,14 +37,26 @@ namespace TRL {
 
 	class SensorList {
 	public:
-		SensorList();
-		virtual ~SensorList();
+		SensorList() {}
+		virtual ~SensorList() {}
 
 		static void initialize();
 
 		static Potentiometer* potentiometer;
 		static LimitSwitch* limit;
 		static QuadratureEncoder* quad;
+	};
+
+
+	class AutonList {
+	public:
+		AutonList() {}
+		virtual ~AutonList() {}
+
+		static void initialize();
+
+		static AutonRoutine* routineOne;
+		static AutonRoutine* routineTwo;
 	};
 
 	class RegistryHelper {

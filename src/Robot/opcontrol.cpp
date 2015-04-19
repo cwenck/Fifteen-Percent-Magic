@@ -55,15 +55,20 @@ extern "C" {
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
+
 using namespace TRL;
+
+void routineTest() {
+
+}
 
 void operatorControl() {
 	println(LOG, "Main", "operatorControl", "Driver control started.");
 //	RegistryHelper::printEntireRegistry();
-
 	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
 	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
+	AutonRegistry::printRoutines();
 	while (true) {
 
 		delay(200);

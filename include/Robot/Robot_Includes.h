@@ -13,9 +13,10 @@
 #include "../Motor/Motor_Includes.h"
 
 
+#include "AutonRegistry.h"
+#include "AutonRoutine.h"
 #include "MotorAndSensorSetup.h"
 #include "Robot.h"
-#include "AutonomusRoutineRegistry.h"
-#include "AutonomousRoutines.h"
+#include "AutonFunctions.h"
 
 #endif /* ROBOT_INCLUDES_H_ */

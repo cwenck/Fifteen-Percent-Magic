@@ -56,8 +56,6 @@ extern "C" {
 using namespace TRL;
 
 void autonomous() {
-	LCD::instance.displayFormattedCenteredString(1, "Auton Running");
-	AutonomousRoutines::instance.runAutonomusRountine(RED, AUTO_LOADER, 0);
 }
 
 #ifdef __cplusplus

@@ -24,6 +24,11 @@ namespace TRL {
 		BLUE
 	}AllianceColor;
 
+	typedef enum _AutonIdentifier {
+		//this is an example name these should be changed
+		RedPolePositionNumberOne
+	}AutonIdentifier;
+
 	typedef enum _InputControlMode {
 		MasterOnly,
 		SlaveOnly,

@@ -31,7 +31,7 @@ namespace TRL {
 
 		int getHighestUsedIndex() {
 			int highest = arrayCapacity - 1;
-			for (int i = highest; i > 0; i--) {
+			for (int i = highest; i >= 0; i--) {
 				if (arrayStart[i] != NULL) {
 					break;
 				}
@@ -134,7 +134,7 @@ namespace TRL {
 
 		void add(T object) {
 			refreshArraySize();
-			set(arraySize + 1, object);
+			set(arraySize, object);
 		}
 
 		T* toArray() {

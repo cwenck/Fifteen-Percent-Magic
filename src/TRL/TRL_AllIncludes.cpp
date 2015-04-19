@@ -11,10 +11,11 @@ namespace TRL {
 
 void trlInitializeLibrary() {
 	Robot::initStatics();
-	AutonomousRoutines::initStatics();
 	LCD::initStatics();
+	AutonRegistry::initStatics();
 	MotorList::initialize();
 	SensorList::initialize();
+	AutonList::initialize();
 }
 
 }
