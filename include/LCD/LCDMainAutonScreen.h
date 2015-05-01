@@ -8,9 +8,7 @@
 #ifndef LCDHOMESCREEN_H_
 #define LCDHOMESCREEN_H_
 
-#include "../TRL/TRL_BaseIncludes.h"
-#include "LCD.h"
-#include "LCDMenuScreen.h"
+#include "LCDChildMenuScreenIncludes.h"
 
 namespace TRL {
 
@@ -19,7 +17,7 @@ namespace TRL {
 		LCDMainAutonScreen();
 		virtual ~LCDMainAutonScreen();
 
-		void display(LCD* lcd);
+		void display();
 	};
 }
 

@@ -9,32 +9,62 @@
 
 namespace TRL {
 
+void Setup::setupRobot() {
+	MotorList::initialize();
+	SensorList::initialize();
+	AutonList::initialize();
+	RobotControls::initialize();
+}
+
+/////////////////////
+//START OF CONTROLS//
+/////////////////////
+
+ControllerInput RobotControls::intakeBalls;
+ControllerInput RobotControls::shootBall;
+
+ControllerStick* RobotControls::driveStick;
+ControllerStick* RobotControls::strafeStick;
+
+ControllerInput RobotControls::orientationForward;
+ControllerInput RobotControls::orientationBackward;
+
+void RobotControls::initialize() {
+	intakeBalls = Ch2;
+	shootBall = Btn6U;
+
+	driveStick = ControllerStick::leftMaster;
+	strafeStick = ControllerStick::shiftedLeftMaster;
+
+	orientationForward = ShiftedInput_Btn8U;
+	orientationBackward = ShiftedInput_Btn8D;
+}
+
+void RobotControls::setupControllers() {
+	Controller::instance->setJoystickDeadzone(MASTER_CONTROLLER, 10);
+	Controller::instance->setJoystickDeadzone(SLAVE_CONTROLLER, 10);
+}
+
+///////////////////
+//END OF CONTROLS//
+///////////////////
+
 /////////////////////////
 ///START OF MOTOR SETUP//
 /////////////////////////
 
-Motor* MotorList::motor_1;
-Motor* MotorList::motor_2;
-Motor* MotorList::motor_3;
-Motor* MotorList::motor_4;
-Motor* MotorList::motor_5;
-Motor* MotorList::motor_6;
-Motor* MotorList::motor_7;
-Motor* MotorList::motor_8;
-Motor* MotorList::motor_9;
-Motor* MotorList::motor_10;
+Motor* MotorList::testMotor;
+Motor* MotorList::leftLaucherWheelMotorOne;
+Motor* MotorList::leftLaucherWheelMotorTwo;
+Motor* MotorList::rightLaucherWheelMotorOne;
+Motor* MotorList::rightLaucherWheelMotorTwo;
 
 void MotorList::initialize() {
-	motor_1 = new Motor(MotorPort_1, UnspecifiedMotorLocation, "Port 1");
-	motor_2 = new Motor(MotorPort_2, UnspecifiedMotorLocation, "Port 2");
-	motor_3 = new Motor(MotorPort_3, UnspecifiedMotorLocation, "Port 3");
-	motor_4 = new Motor(MotorPort_4, UnspecifiedMotorLocation, "Port 4");
-	motor_5 = new Motor(MotorPort_5, UnspecifiedMotorLocation, "Port 5");
-	motor_6 = new Motor(MotorPort_6, UnspecifiedMotorLocation, "Port 6");
-	motor_7 = new Motor(MotorPort_7, UnspecifiedMotorLocation, "Port 7");
-	motor_8 = new Motor(MotorPort_8, UnspecifiedMotorLocation, "Port 8");
-	motor_9 = new Motor(MotorPort_9, UnspecifiedMotorLocation, "Port 9");
-	motor_10 = new Motor(MotorPort_10, UnspecifiedMotorLocation, "Port 10");
+	testMotor = new Motor(MotorPort_9, UnspecifiedMotorLocation, "Test Motor");
+	leftLaucherWheelMotorOne = new Motor(MotorPort_2, OtherMotorLocation, "Left Wheel");
+	leftLaucherWheelMotorTwo = new Motor(MotorPort_3, OtherMotorLocation, "Left Wheel");
+	rightLaucherWheelMotorOne = new Motor(MotorPort_4, OtherMotorLocation, "Right Wheel");
+	rightLaucherWheelMotorTwo = new Motor(MotorPort_5, OtherMotorLocation, "Right Wheel");
 	println(LOG, "MotorSetup", "initialize", "All motors initialized");
 }
 
@@ -46,13 +76,9 @@ void MotorList::initialize() {
 ///START OF SENSOR SETUP//
 //////////////////////////
 
-Potentiometer* SensorList::potentiometer;
-LimitSwitch* SensorList::limit;
 QuadratureEncoder* SensorList::quad;
 
 void SensorList::initialize() {
-	potentiometer = new Potentiometer(Analog_4);
-	limit = new LimitSwitch(Analog_1);
 	quad = new QuadratureEncoder(Digital_1, Digital_2);
 	println(LOG, "SensorSetup", "initialize", "All sensors initialized");
 }
@@ -68,11 +94,11 @@ void SensorList::initialize() {
 AutonRoutine* AutonList::routineOne;
 AutonRoutine* AutonList::routineTwo;
 
-void AutonList::initialize(){
-	routineOne = new AutonRoutine(RED, POLE, RedPolePositionNumberOne,
-			"test 1", AutonFunctions::redAuton);
+void AutonList::initialize() {
+	routineOne = new AutonRoutine(RED, POLE, RedPolePositionNumberOne, "test 1",
+			AutonFunctions::redAuton);
 	routineTwo = new AutonRoutine(BLUE, POLE, RedPolePositionNumberOne,
-				"test 2", AutonFunctions::blueAuton);
+			"test 2", AutonFunctions::blueAuton);
 }
 
 ///////////////////////

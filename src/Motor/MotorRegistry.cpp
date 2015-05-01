@@ -114,12 +114,12 @@ short MotorRegistry::getNumberOfRegisteredMotors() {
 	return num;
 }
 
-Motor** MotorRegistry::getRegisteredMotorsArray() {
-	Motor** registeredMotors = new Motor*[getNumberOfRegisteredMotors()];
+Array<Motor*>* MotorRegistry::getRegisteredMotorsArray() {
+	Array<Motor*>* registeredMotors = new Array<Motor*>(getNumberOfRegisteredMotors());
 	int currentFillingIndex = 0;
 	for (int i = 0; i < 10; i++) {
 		if (motors[i] != NULL) {
-			registeredMotors[currentFillingIndex] = motors[i];
+			registeredMotors->at(currentFillingIndex) = motors[i];
 			currentFillingIndex++;
 		}
 	}

@@ -14,7 +14,7 @@ ASMSRC:=$(wildcard *.$(ASMEXT))
 ASMOBJ:=$(patsubst %.o,$(BINDIR)/%.o,$(ASMSRC:.$(ASMEXT)=.o))
 HEADERS:=$(wildcard *.$(HEXT))
 ### Special section for Cortex projects ###
-HEADERS_2:=$(wildcard $(ROOT)/include/*.$(HEXT))
+HEADERS_2:=$(wildcard ../include/*.$(HEXT))
 ### End special section ###
 CSRC=$(wildcard *.$(CEXT))
 COBJ:=$(patsubst %.o,$(BINDIR)/%.o,$(CSRC:.$(CEXT)=.o))

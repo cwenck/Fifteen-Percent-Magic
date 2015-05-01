@@ -10,6 +10,7 @@
 namespace TRL {
 
 VariableArray<AutonRoutine*>* AutonRegistry::routines;
+AutonRoutine* AutonRegistry::activeRoutine;
 
 void AutonRegistry::initStatics(){
 	routines = new VariableArray<AutonRoutine*>;
@@ -56,6 +57,21 @@ AutonRoutine* AutonRegistry::getRoutine(AllianceColor color,
 void AutonRegistry::runRoutine(AllianceColor color, RobotStartLocation location,
 		AutonIdentifier identifier) {
 	getRoutine(color, location, identifier)->run();
+}
+
+void AutonRegistry::setActiveRoutine(AutonRoutine* routine){
+	activeRoutine = routine;
+}
+
+void AutonRegistry::runActiveRoutine(){
+	if(activeRoutine == NULL){
+		return;
+	}
+	activeRoutine->run();
+}
+
+void AutonRegistry::clearActiveRoutine(){
+	activeRoutine = NULL;
 }
 
 } /* namespace TRL */

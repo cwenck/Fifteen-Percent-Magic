@@ -8,9 +8,7 @@
 #ifndef LCDSPECIFICBATTERYSCREEN_H_
 #define LCDSPECIFICBATTERYSCREEN_H_
 
-#include "../TRL/TRL_BaseIncludes.h"
-#include "LCD.h"
-#include "LCDMenuScreen.h"
+#include "LCDChildMenuScreenIncludes.h"
 
 namespace TRL {
 
@@ -22,7 +20,7 @@ namespace TRL {
 		virtual ~LCDSpecificBatteryScreen();
 
 		void setBattry(BatteryType type);
-		void display(LCD* lcd);
+		void display();
 
 		static LCDSpecificBatteryScreen** getSpecificBatteryScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 	};

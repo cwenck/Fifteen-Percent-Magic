@@ -8,15 +8,21 @@
 #ifndef TRL_BASEINCLUDES_H_
 #define TRL_BASEINCLUDES_H_
 
+#include <API.h>
 #include <string.h>
 #include <stdarg.h>
-#include <API.h>
 
+#ifndef NULL
+#define NULL 0
+#endif
+
+#include "MathPlus.h"
 #include "Constants.h"
 #include "LibraryFixes.h"
 #include "Typedefs.h"
 #include "EnumeratedTypedefs.h"
 #include "VariableArray.h"
+#include "Array.h"
 #include "PrintStream.h"
 #include "Controller.h"
 #include "Util.h"

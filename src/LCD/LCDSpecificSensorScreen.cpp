@@ -25,7 +25,7 @@ void LCDSpecificSensorScreen::setSensor(Sensor* sensor) {
 	this->sensor = sensor;
 }
 
-void LCDSpecificSensorScreen::display(LCD* lcd) {
+void LCDSpecificSensorScreen::display() {
 	lcd->displayCenteredString(1, sensor->getSensorName());
 	string portName = Port::getShortPortName(sensor->getMainPort());
 	lcd->displayFormattedString(2, "%s:%d", portName, sensor->getValue());

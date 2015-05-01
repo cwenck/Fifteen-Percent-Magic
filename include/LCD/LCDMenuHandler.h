@@ -18,11 +18,15 @@ namespace TRL {
 		//List of all screens. They should all be pointers
 		void initScreens();
 		void initScreenRelationships(LCD *lcd);
+
 		LCDMainAutonScreen* mainAutonScreen;
 		LCDMainBatteryScreen* mainBatteryScreen;
 		LCDMainSensorScreen* mainSensorScreen;
+		LCDMainMotorScreen* mainMotorScreen;
+
 		LCDSpecificSensorScreen** specificSensorScreens;
 		LCDSpecificBatteryScreen** specificBatteryScreens;
+		Array<LCDSpecificMotorScreen*>* specificMotorScreens;
 
 		//////////////////////////////////
 		//Don't touch anthing below here//

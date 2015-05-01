@@ -23,7 +23,9 @@ namespace TRL {
 
 		/*
 		 * universal port numbers are as follows
-		 * range from 0-26
+		 * range from -10 to 26
+		 * -1 through -10 are IME port
+		 * -1 is the first IME in the chain and they decrease by one per encoder
 		 * is the Speaker port,
 		 * pins 1-12 are the standard Digital I/O,
 		 * 13-20 are the Analog I/O,
@@ -34,17 +36,22 @@ namespace TRL {
 
 		static UniversalPort getUniversalPortNumber(AnalogPort port);
 		static UniversalPort getUniversalPortNumber(DigitalPort port);
+		static UniversalPort getUniversalPortNumber(IntegratedEncoderPort port);
 
 		static AnalogPort getAnalogPortFromUniversalPort(UniversalPort port);
 		static DigitalPort getDigitalPortFromUniversalPort(UniversalPort port);
+		static IntegratedEncoderPort getIntegratedEncoderPortFromUniversalPort(UniversalPort port);
 
 		static bool isPortAnalogType(UniversalPort port);
 		static bool isPortDigitalType(UniversalPort port);
+		static bool isPortIntegratedEncoderType(UniversalPort port);
 
 		static short getAnalogPortNumber(AnalogPort port);
 		static short getAnalogPortNumber(UniversalPort port);
 		static short getDigitalPortNumber(DigitalPort port);
 		static short getDigitalPortNumber(UniversalPort port);
+		static short getIntegratedEncoderPortNumber(IntegratedEncoderPort port);
+		static short getIntegratedEncoderPortNumber(UniversalPort port);
 
 		static PortType getPortType(UniversalPort port);
 

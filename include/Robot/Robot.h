@@ -8,69 +8,27 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
-#include "Robot_Includes.h"
+//#include "Robot_Includes.h"
+
+#include "../TRL/TRL_BaseIncludes.h"
+#include "../Sensors/Sensor_Includes.h"
+#include "../Motor/Motor_Includes.h"
+#include "MotorAndSensorSetup.h"
 
 namespace TRL {
 
 	class Robot {
 	private:
 
-		PID pid_liftController;
-		PID pid_driveController;
-
-		Motor* driveMotors[6];
-		Motor* liftMotors[10];
-		Motor* clawMotor;
-		Motor* clawArmMotor;
-
 		DriveOrientation orientation;
 
-		char numDriveMotors;
-		char numLiftMotors;
+		Array<Motor*>* driveMotors;
+		Array<Motor*>* liftMotors;
 
+		int leftDrivePower;
+		int rightDrivePower;
 
-		//Controller Buttons
-		ControllerInput y_drive_stick;
-		ControllerInput x_drive_stick;
-
-		ControllerInput y_strafe_stick;
-		ControllerInput x_strafe_stick;
-
-		short controllerDeadzoneMagnitude;
-
-		ControllerInput lift_up;
-		ControllerInput lift_down;
-
-		ControllerInput claw_open;
-		ControllerInput claw_close;
-
-		ControllerInput claw_rotate;
-
-		ControllerInput orientation_forward;
-		ControllerInput orientation_backward;
-
-		short liftPower;
-		short clawOpenPower;
-		short clawClosePower;
-		short clawArmPower;
-
-		//Motors
-//		Motor frontRightDrive;
-//		Motor frontLeftDrive;
-//		Motor backRightDrive;
-//		Motor backLeftDrive;
-//
-//		Motor frontRightLift;
-//		Motor backRightLift;
-//		Motor frontLeftLift;
-//		Motor backLeftLift;
-//
-//		Motor intakeMotor;
-//		Motor intakeArmMotor;
-
-		void initializeMotors();
 	public:
-
 		//Constructor + Destructor
 		Robot();
 		static void initStatics();
@@ -89,27 +47,38 @@ namespace TRL {
 		// Controller Input
 		void handleInput(InputControlMode controlMode);
 
-		void driveOrientationInputController(InputControlMode controlMode);
-		void driveOrientationController(Controller &controller);
+//		void driveOrientationInputController(InputControlMode controlMode);
+		void driveOrientationMirrorController(Controller &controller);
 
-		void driveInputController(InputControlMode controlMode);
+		/////////
+		//DRIVE//
+		/////////
+
+//		void driveInputController(InputControlMode controlMode);
+		void powerDrive(int leftDriveSpeed, int rightDriveSpeed);
+		void powerDrive();
+		int calcDriveFromAngle(int angle, int maxPow);
 		void driveController(Controller &controller);
-
-		void liftInputController(InputControlMode controlMode);
-		void liftController(Controller &controller);
-
-		void intakeInputController(InputControlMode controlMode);
-		void intakeController(Controller &controller);
+		void softTurnDriveController(Controller *controller);
+		void printDriveSpeed();
 
 
 
 
-		//Set Motor Pointers
-		bool setDriveMotors(Motor* driveMotors[], char numDriveMotors);
-		bool setLiftMotors(Motor* liftMotors[], char numLiftMotors);
-		void setIntakeMotors(Motor* claw, Motor* clawArm);
+//		void liftInputController(InputControlMode controlMode);
+//		void liftController(Controller &controller);
 
-		//Drive Orientation
+//		void intakeInputController(InputControlMode controlMode);
+//		void intakeController(Controller &controller);
+
+//Set Motor Pointers
+		bool setDriveMotors(char numMotors, Motor** driveMotors);
+		bool setDriveMotors(Array<Motor*>* driveMotors);
+		bool setLiftMotors(Array<Motor*>* liftMotors);
+		bool setLiftMotors(char numMotors, Motor** liftMotors);
+//		void setIntakeMotors(Motor* intake);
+
+//Drive Orientation
 		void setDriveOrientation(DriveOrientation orientation);
 		void reverseDriveOrientation();
 
@@ -118,16 +87,8 @@ namespace TRL {
 		void stopDriveMotors();
 
 		//Lift
-		void lift(int power, LiftDirection dir);
-		void stopLift();
-
-		//Claw
-		void claw(int power, ClawDirection dir);
-		void stopClaw();
-
-		//Claw Arm
-		void clawArm(int power, ClawArmDirection dir);
-		void stopClawArm();
+//		void lift(int power, LiftDirection dir);
+//		void stopLift();
 
 	};
 }

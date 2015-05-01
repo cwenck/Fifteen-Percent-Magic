@@ -16,8 +16,8 @@ LCDMainSensorScreen::LCDMainSensorScreen() {
 LCDMainSensorScreen::~LCDMainSensorScreen() {
 }
 
-void LCDMainSensorScreen::display(LCD* lcd) {
-	lcd->displayHorizontalNavigation(1, "Auton", "Battery");
+void LCDMainSensorScreen::display() {
+	lcd->displayHorizontalNavigation(1, "Auton", "Motors");
 	lcd->displayDownNavigation(2, "Sensors");
 }
 

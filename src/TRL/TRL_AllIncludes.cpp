@@ -10,12 +10,10 @@
 namespace TRL {
 
 void trlInitializeLibrary() {
+	Controller::initInstance();
 	Robot::initStatics();
 	LCD::initStatics();
 	AutonRegistry::initStatics();
-	MotorList::initialize();
-	SensorList::initialize();
-	AutonList::initialize();
+	Setup::setupRobot();
 }
-
 }

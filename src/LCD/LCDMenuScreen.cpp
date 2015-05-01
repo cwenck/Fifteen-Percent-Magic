@@ -14,10 +14,35 @@ LCDMenuScreen::LCDMenuScreen() {
 	this->leftScreen = NO_SCREEN;
 	this->enterScreen = NO_SCREEN;
 	this->rightScreen = NO_SCREEN;
+	this->lcd = NULL;
+}
+
+LCDMenuScreen::LCDMenuScreen(LCD* lcd){
+	this->homeScreen = NO_SCREEN;
+	this->leftScreen = NO_SCREEN;
+	this->enterScreen = NO_SCREEN;
+	this->rightScreen = NO_SCREEN;
+	this->lcd = lcd;
 }
 
 LCDMenuScreen::~LCDMenuScreen() {
 
+}
+
+void LCDMenuScreen::setDisplayLCD(LCD* lcd){
+	this->lcd = lcd;
+}
+
+void LCDMenuScreen::setScreenArrayLCD(int size, LCDMenuScreen** screens, LCD* lcd){
+	for(int i = 0; i < size; i++){
+		screens[i]->setDisplayLCD(lcd);
+	}
+}
+
+void LCDMenuScreen::setScreenArrayLCD(Array<LCDMenuScreen*>* screens, LCD* lcd){
+	for(int i = 0; i < screens->size(); i++){
+		screens->at(i)->setDisplayLCD(lcd);
+	}
 }
 
 void LCDMenuScreen::setReferencedScreens(LCDMenuScreen* homeScreen,

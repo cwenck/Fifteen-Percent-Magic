@@ -8,7 +8,7 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 
-//#include "TRL_BaseIncludes.h"
+#include "MathPlus.h"
 #include "EnumeratedTypedefs.h"
 #include "Constants.h"
 #include "PrintStream.h"
@@ -17,7 +17,37 @@
 #define NUMBER_NON_SHIFTED_INPUTS 18
 
 namespace TRL {
-class Controller {
+
+	class Controller;
+
+	class ControllerStick {
+	private:
+		Controller* controller;
+		ControllerInput xCh;
+		ControllerInput yCh;
+	public:
+		static ControllerStick* leftMaster;
+		static ControllerStick* rightMaster;
+		static ControllerStick* leftSlave;
+		static ControllerStick* rightSlave;
+
+		static ControllerStick* shiftedLeftMaster;
+		static ControllerStick* shiftedRightMaster;
+		static ControllerStick* shiftedLeftSlave;
+		static ControllerStick* shiftedRightSlave;
+
+		static void initStatics();
+
+		ControllerStick();
+		ControllerStick(Controller* controller, ControllerInput xChannel, ControllerInput yChannel);
+		~ControllerStick();
+
+		float getStickAngle();
+		int getX();
+		int getY();
+	};
+
+	class Controller {
 	private:
 		ControllerShiftButton masterShiftKey;
 		ControllerShiftButton slaveShiftKey;
@@ -27,6 +57,10 @@ class Controller {
 		short slaveRightStickDeadzoneMagnitude;
 
 	public:
+		//Instance//
+		static Controller* instance;
+		static void initInstance();
+
 		//CONSTRUCTORS AND DESTRUCTOR//
 		Controller();
 		virtual ~Controller();
@@ -45,7 +79,7 @@ class Controller {
 
 		//SHIFT FUNCTIONS//
 		void setShiftKey(ControllerType type, ControllerShiftButton input);
-		bool isControllerShifted(ControllerType type); //returns true if the controller's shift button is pressed
+		bool isControllerShifted(ControllerType type);//returns true if the controller's shift button is pressed
 		bool isShiftedInputType(ControllerInput in);
 		bool isNonShiftedInputType(ControllerInput in);
 		bool isSlaveControllerInput(ControllerInput in);
@@ -66,8 +100,6 @@ class Controller {
 		int getInputControllerNumber(ControllerInput in);
 
 		//CONTROLLER INFO FUNCTIONS
-
-
 
 	};
 }

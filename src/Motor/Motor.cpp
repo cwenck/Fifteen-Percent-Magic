@@ -12,7 +12,9 @@ namespace TRL {
 Motor::Motor() {
 	this->port = MotorPort_NULL;
 	this->reversed = false;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = UnspecifiedMotorLocation;
@@ -22,7 +24,9 @@ Motor::Motor() {
 Motor::Motor(MotorPort port, MotorLocation location, string motorName) {
 	this->reversed = false;
 	this->port = port;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
@@ -34,7 +38,9 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName,
 		short offset) {
 	this->reversed = false;
 	this->port = port;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = offset;
 	this->encoder = NULL;
 	this->location = location;
@@ -46,7 +52,9 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName,
 		bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
@@ -58,7 +66,9 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName,
 		bool reversed, short offset) {
 	this->port = port;
 	this->reversed = reversed;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = 0;
 	this->encoder = NULL;
 	this->location = location;
@@ -70,7 +80,9 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName,
 		GenericEncoder* encoder, bool reversed) {
 	this->port = port;
 	this->reversed = reversed;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = 0;
 	this->encoder = encoder;
 	this->location = location;
@@ -82,7 +94,9 @@ Motor::Motor(MotorPort port, MotorLocation location, string motorName,
 		GenericEncoder* encoder, bool reversed, short offset) {
 	this->port = port;
 	this->reversed = reversed;
-	this->speed = 0;
+	this->power = 0;
+	this->rawPower = 0;
+	this->powerPercent = 0;
 	this->offset = offset;
 	this->encoder = encoder;
 	this->location = location;
@@ -94,33 +108,62 @@ Motor::~Motor() {
 	//Nothing needs to be done when destroying this object
 }
 
-bool Motor::destroy(){
+bool Motor::destroy() {
 	return MotorRegistry::deleteRegistryEntry(this);
 }
 
-int Motor::addOffsetToSpeed(int speed) {
-	int absSpeed = abs(speed);
-	if (speed < 0) {
-		return -(absSpeed + offset);
-	} else {
-		return (absSpeed + offset);
-	}
-
-}
-
-void Motor::setPower(int motorSpeed) {
+void Motor::setPower(int speed) {
 	if (port == MotorPort_NULL) {
 		println(ERROR, "Motor", "setPower",
 				"Can't power a motor without an assigned port.");
 		return;
 	}
-	this->speed = addOffsetToSpeed(motorSpeed);
+
+	this->rawPower = speed;
 
 	if (!reversed) {
 		motorSet(port, -speed);
 	} else {
 		motorSet(port, speed);
 	}
+}
+
+void Motor::setAdjustedPower(int speed) {
+	float percent = (float) speed / 127.f;
+	setAdjustedPowerPercentage(percent);
+}
+
+void Motor::setAdjustedPowerPercentage(float percent) {
+	float raw;
+	bool negative = false;
+
+	if (percent < 0) {
+		negative = true;
+		percent = -percent;
+	}
+
+	//add offset
+	percent += ((float) offset / 127.f);
+
+	if ((percent != 0) && (percent != 1)) {
+		raw = (1142.960337f * pow(percent, 6))
+				+ (-2020.933431f * pow(percent, 5))
+				+ (953.2769417f * pow(percent, 4))
+				+ (223.0240568f * pow(percent, 3))
+				+ (-261.678053f * pow(percent, 2)) + (87.55209092f * percent)
+				+ 1.736995488f;
+	} else {
+		raw = percent * 127;
+	}
+
+	if (negative) {
+		raw = -raw;
+	}
+
+	this->power = (int) (127 * percent);
+	this->powerPercent = percent;
+
+	setPower((int) raw);
 }
 
 void Motor::stop() {
@@ -173,7 +216,7 @@ void Motor::reverseDirection() {
 	printf("%d\n\r", reversed);
 }
 
-void Motor::setAllPower(int speed) {
+void Motor::setAllRawPower(int speed) {
 	for (int i = 1; i <= 10; i++) {
 		motorSet(i, speed);
 	}

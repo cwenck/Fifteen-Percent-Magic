@@ -73,6 +73,31 @@ UniversalPort Port::getUniversalPortNumber(DigitalPort port) {
 	}
 }
 
+UniversalPort Port::getUniversalPortNumber(IntegratedEncoderPort port) {
+	switch (port) {
+	case IntegratedEncoder_1:
+		return -1;
+	case IntegratedEncoder_2:
+		return -2;
+	case IntegratedEncoder_3:
+		return -3;
+	case IntegratedEncoder_4:
+		return -4;
+	case IntegratedEncoder_5:
+		return -5;
+	case IntegratedEncoder_6:
+		return -6;
+	case IntegratedEncoder_7:
+		return -7;
+	case IntegratedEncoder_8:
+		return -8;
+	default:
+		println(ERROR, "Port", "getUniversalPortNumber",
+				"This statement should never get called.");
+		return -1;
+	}
+}
+
 bool Port::isPortDigitalType(UniversalPort port) {
 	if ((port >= 1) && (port <= 12)) {
 		return true;
@@ -82,6 +107,13 @@ bool Port::isPortDigitalType(UniversalPort port) {
 
 bool Port::isPortAnalogType(UniversalPort port) {
 	if (((port >= 13) && (port <= 20))) {
+		return true;
+	}
+	return false;
+}
+
+bool Port::isPortIntegratedEncoderType(UniversalPort port) {
+	if (((port >= -8) && (port <= -1))) {
 		return true;
 	}
 	return false;
@@ -158,11 +190,48 @@ short Port::getDigitalPortNumber(UniversalPort port) {
 	return NULL_UNIVERSAL_PORT;
 }
 
+short Port::getIntegratedEncoderPortNumber(IntegratedEncoderPort port) {
+	switch (port) {
+	case IntegratedEncoder_1:
+		return 0;
+	case IntegratedEncoder_2:
+		return 1;
+	case IntegratedEncoder_3:
+		return 2;
+	case IntegratedEncoder_4:
+		return 3;
+	case IntegratedEncoder_5:
+		return 4;
+	case IntegratedEncoder_6:
+		return 5;
+	case IntegratedEncoder_7:
+		return 6;
+	case IntegratedEncoder_8:
+		return 7;
+	default:
+		println(ERROR, "Port", "getUniversalPortNumber",
+				"This statement should never get called.");
+		return -1;
+	}
+}
+
+/*
+ * @return returns -1 if the port is not an integrated encoder port
+ */
+short Port::getIntegratedEncoderPortNumber(UniversalPort port) {
+	if (!isPortIntegratedEncoderType(port)) {
+		return -1;
+	}
+	return (-port) - 1;
+}
+
 PortType Port::getPortType(UniversalPort port) {
 	if (isPortAnalogType(port)) {
 		return AnalogPortType;
 	} else if (isPortDigitalType(port)) {
 		return DigitalPortType;
+	} else if (isPortIntegratedEncoderType(port)) {
+		return IntegratedEncoderPortType;
 	} else {
 		return OtherPortType;
 	}
@@ -190,10 +259,9 @@ bool Port::isPortInactive(UniversalPort port) {
 		return value;
 	case DigitalPortType:
 		return digitalRead(port);
-	case OtherPortType:
-		return digitalRead(port);
+	default:
+		return -1;
 	}
-	return -1;
 }
 
 bool Port::isPortActive(AnalogPort port) {
@@ -258,6 +326,14 @@ DigitalPort Port::getDigitalPortFromUniversalPort(UniversalPort port) {
 	return NoDigitalInput;
 }
 
+IntegratedEncoderPort Port::getIntegratedEncoderPortFromUniversalPort(
+		UniversalPort port) {
+	if (isPortIntegratedEncoderType(port)) {
+		return (IntegratedEncoderPort) getIntegratedEncoderPortNumber(port);
+	}
+	return NoIntegratedEncoderInput;
+}
+
 /*
  * Function to get the name for a port
  *
@@ -269,15 +345,19 @@ string Port::getPortName(UniversalPort port) {
 	string portName = "";
 	if (port == 0) {
 		portName = allocateStringForNumberOfChars(7);
-		snprintf((char *) portName, 8, "%s", "Speaker");
+		snprintf((char *) portName, 8, "Speaker");
 	} else if (port >= 1 && port <= 12) {
 		portName = allocateStringForNumberOfChars(10);
 		snprintf((char *) portName, 11, "Digital %d",
 				Port::getDigitalPortFromUniversalPort(port));
 	} else if (port >= 13 && port <= 20) {
-		portName = allocateStringForNumberOfChars(9);
+		portName = allocateStringForNumberOfChars(8);
 		snprintf((char *) portName, 10, "Analog %d",
 				Port::getAnalogPortFromUniversalPort(port));
+	} else if (port >= -10 && port <= -1) {
+		portName = allocateStringForNumberOfChars(6);
+		snprintf((char *) portName, 10, "IME %d",
+				Port::getIntegratedEncoderPortFromUniversalPort(port));
 	}
 	return portName;
 }
@@ -289,11 +369,11 @@ string Port::getPortName(UniversalPort port) {
  *
  * @param port the universal port number to get the name for
  */
-string Port::getShortPortName(UniversalPort port){
+string Port::getShortPortName(UniversalPort port) {
 	string portName = "";
 	if (port == 0) {
 		portName = allocateStringForNumberOfChars(4);
-		snprintf((char *) portName, 5, "%s", "Spkr");
+		snprintf((char *) portName, 5, "Spkr");
 	} else if (port >= 1 && port <= 12) {
 		portName = allocateStringForNumberOfChars(8);
 		snprintf((char *) portName, 9, "Digtl %d",
@@ -302,6 +382,10 @@ string Port::getShortPortName(UniversalPort port){
 		portName = allocateStringForNumberOfChars(7);
 		snprintf((char *) portName, 8, "Analg %d",
 				Port::getAnalogPortFromUniversalPort(port));
+	} else if (port >= -10 && port <= -1) {
+		portName = allocateStringForNumberOfChars(6);
+		snprintf((char *) portName, 10, "IME %d",
+				Port::getIntegratedEncoderPortFromUniversalPort(port));
 	}
 	return portName;
 }

@@ -13,6 +13,9 @@
 #include "Motor.h"
 
 
+#define PID_LOOP_DELAY_TIME_MILLIS 20
+#define PID_LOOP_DELAY_TIME_SEC (PID_LOOP_DELAY_TIME_MILLIS / 1000.f)
+
 namespace TRL {
 
 	class PID {
@@ -24,16 +27,16 @@ namespace TRL {
 		Sensor* sensor;
 		int target;
 		int sensorValue;
-		int prevSensorValue;
+		int prevError;
 		int error;
 
-		int integral;
-		int rangeWhereIntegralComponentIsActive;
+		float integral;
+		int integralSpeedThreshold;
 		bool shouldIgnoreIntegralBounds;
 		int integralMax;	//should be positive
 		int integralMin;	//should be positive
 
-		int derivative;
+		float derivative;
 
 		void (*setMotorSpeedFunction)(int speed); //function pointer with a parameter of int
 
@@ -56,12 +59,23 @@ namespace TRL {
 		void setKi(float integralConstant);
 		void setKd(float derivativeConstant);
 
+		//Only is active below this value (max of 127)
+		void setIntegralPositionSpeedThroshold(int threshold);
+		void setIntegralBounds(int maxMagnitude);
+		void disableIntegralBounds();
+
 		void setErrorTolerance(int errorTolerance);
 		void setChecksRequiredToBreakPID(int numberOfChecks);
 
 		void setTarget(int target);
 		void goToSetTarget();
 		void goToTarget(int target);
+
+		int getKp(){return kp;}
+		int getKi(){return ki;}
+		int getKd(){return kd;}
+
+		int getCurrentError(){return error;}
 	};
 }
 

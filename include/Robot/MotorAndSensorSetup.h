@@ -8,55 +8,62 @@
 #ifndef MOTORANDSENSORSETUP_H_
 #define MOTORANDSENSORSETUP_H_
 
-//#include "../Sensors/Sensor_Includes.h"
-//#include "../Motor/Motor_Includes.h"
 #include "Robot_Includes.h"
 
 namespace TRL {
 
+	namespace Setup {
+		void setupRobot();
+	};
+
 	class MotorList {
 	public:
-		MotorList() {}
-		virtual ~MotorList() {}
 		static void initialize();
 
 		//These are just generic names for the template
 		//You are encouraged to rename them using eclipse's
 		//refactor->rename feature in the right click menu
-		static Motor* motor_1;
-		static Motor* motor_2;
-		static Motor* motor_3;
-		static Motor* motor_4;
-		static Motor* motor_5;
-		static Motor* motor_6;
-		static Motor* motor_7;
-		static Motor* motor_8;
-		static Motor* motor_9;
-		static Motor* motor_10;
+		static Motor* testMotor;
+		static Motor* leftLaucherWheelMotorOne;
+		static Motor* leftLaucherWheelMotorTwo;
+		static Motor* rightLaucherWheelMotorOne;
+		static Motor* rightLaucherWheelMotorTwo;
 	};
 
 	class SensorList {
 	public:
-		SensorList() {}
-		virtual ~SensorList() {}
-
 		static void initialize();
 
-		static Potentiometer* potentiometer;
-		static LimitSwitch* limit;
 		static QuadratureEncoder* quad;
 	};
 
-
 	class AutonList {
 	public:
-		AutonList() {}
-		virtual ~AutonList() {}
-
 		static void initialize();
 
 		static AutonRoutine* routineOne;
 		static AutonRoutine* routineTwo;
+	};
+
+	class RobotControls {
+	public:
+		static void initialize();
+		static void setupControllers();
+
+		//These controls are game specific
+		static ControllerInput intakeBalls;
+		static ControllerInput shootBall;
+
+
+		//These variables should always exist
+		static ControllerStick* driveStick;
+		static ControllerStick* strafeStick;
+
+		static ControllerInput orientationForward;
+		static ControllerInput orientationBackward;
+
+
+
 	};
 
 	class RegistryHelper {

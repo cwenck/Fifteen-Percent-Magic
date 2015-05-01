@@ -10,10 +10,12 @@
 namespace TRL {
 
 void LCDMenuHandler::initScreens() {
+
 	//Initialize Screens
 	mainAutonScreen = new LCDMainAutonScreen();
 	mainBatteryScreen = new LCDMainBatteryScreen();
 	mainSensorScreen = new LCDMainSensorScreen();
+	mainMotorScreen = new LCDMainMotorScreen();
 
 	//Set the start screen
 	currentScreen = mainAutonScreen;
@@ -21,37 +23,61 @@ void LCDMenuHandler::initScreens() {
 	specificSensorScreens = LCDSpecificSensorScreen::getSpecificSensorScreens(
 			mainAutonScreen, false);
 	specificBatteryScreens =
-			LCDSpecificBatteryScreen::getSpecificBatteryScreens(
-					mainAutonScreen, true);
+			LCDSpecificBatteryScreen::getSpecificBatteryScreens(mainAutonScreen,
+					true);
+	specificMotorScreens = LCDSpecificMotorScreen::getSpecificMotorScreens(
+			mainAutonScreen, false);
 }
 
 LCDMenuHandler::~LCDMenuHandler() {
-	//Delete any screens you initialized
+//Delete any screens you initialized
 	delete mainAutonScreen;
 	delete mainBatteryScreen;
 	delete mainSensorScreen;
 
-	//delete the arrays of screens
+//delete the arrays of screens
 	delete[] specificSensorScreens;
 	delete[] specificBatteryScreens;
 }
 
-void LCDMenuHandler::initScreenRelationships(LCD *displayLCD) {
-	lcd = displayLCD;
+void LCDMenuHandler::initScreenRelationships(LCD* lcd) {
+	this->lcd = lcd;
 
-	//Set the relationships between menus
+//Init menu LCD
+	mainAutonScreen->setDisplayLCD(lcd);
+	mainBatteryScreen->setDisplayLCD(lcd);
+	mainSensorScreen->setDisplayLCD(lcd);
+	mainMotorScreen->setDisplayLCD(lcd);
+
+	LCDMenuScreen::setScreenArrayLCD(
+			SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates(),
+			(LCDMenuScreen**) specificSensorScreens, lcd);
+	LCDMenuScreen::setScreenArrayLCD(3,
+			(LCDMenuScreen**) specificBatteryScreens, lcd);
+
+	LCDMenuScreen::setScreenArrayLCD((Array<LCDMenuScreen*>*)specificMotorScreens, lcd);
+
+//Set the relationships between menus
 	mainAutonScreen->setReferencedScreens(mainAutonScreen, mainBatteryScreen,
 			mainAutonScreen, mainSensorScreen);
 
-	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainSensorScreen,
+	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainMotorScreen,
 			specificBatteryScreens[0], mainAutonScreen);
 
 	if (SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates() == 0) {
 		mainSensorScreen->setReferencedScreens(mainAutonScreen, mainAutonScreen,
-				mainSensorScreen, mainBatteryScreen);
+				mainSensorScreen, mainMotorScreen);
 	} else {
 		mainSensorScreen->setReferencedScreens(mainAutonScreen, mainAutonScreen,
-				specificSensorScreens[0], mainBatteryScreen);
+				specificSensorScreens[0], mainMotorScreen);
+	}
+
+	if (MotorRegistry::getNumberOfRegisteredMotors() == 0) {
+		mainMotorScreen->setReferencedScreens(mainAutonScreen, mainSensorScreen,
+				mainMotorScreen, mainBatteryScreen);
+	} else {
+		mainMotorScreen->setReferencedScreens(mainAutonScreen, mainSensorScreen,
+						specificMotorScreens->at(0), mainBatteryScreen);
 	}
 }
 
@@ -67,32 +93,32 @@ void LCDMenuHandler::run(void* lcdMenuHandlerInstance) {
 			handler->stop();
 			break;
 		} else {
-			handler->currentScreen->display(handler->lcd);
+			handler->currentScreen->display();
 		}
 
 		if (handler->wasShortLeftJustReleased) {
-			handler->currentScreen =
-					handler->currentScreen->onShortLeftButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onShortLeftButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasShortCenterJustReleased) {
-			handler->currentScreen =
-					handler->currentScreen->onShortCenterButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onShortCenterButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasShortRightJustReleased) {
-			handler->currentScreen =
-					handler->currentScreen->onShortRightButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onShortRightButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasLeftJustNowLongPressed) {
-			handler->currentScreen =
-					handler->currentScreen->onLongLeftButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onLongLeftButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasCenterJustNowLongPressed) {
-			handler->currentScreen =
-					handler->currentScreen->onLongCenterButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onLongCenterButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasRightJustNowLongPressed) {
-			handler->currentScreen =
-					handler->currentScreen->onLongRightButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onLongRightButtonPress();
 			handler->updateLCDButtonPresses();
 		}
 		delay(20);
@@ -142,7 +168,7 @@ void LCDMenuHandler::updateLCDButtonPresses() {
 	wasCenterJustNowLongPressed = false;
 	wasRightJustNowLongPressed = false;
 
-	//Start a timer if a button has just been pressed
+//Start a timer if a button has just been pressed
 	if (!wasLeftPressed && isLeftPressed) {
 		leftPressedAt = millis();
 	} else if (wasLeftPressed && !isLeftPressed) {
@@ -176,7 +202,7 @@ void LCDMenuHandler::updateLCDButtonPresses() {
 		}
 	}
 
-	//Dettermine if a long press has been initiated
+//Dettermine if a long press has been initiated
 	if (leftPressedAt != 0) {
 		if ((millis() - leftPressedAt) >= LCD_LONG_PRESS_TIME_MILLIS) {
 			isLeftLongPressed = true;
@@ -201,7 +227,7 @@ void LCDMenuHandler::updateLCDButtonPresses() {
 		isRightLongPressed = false;
 	}
 
-	//Long Presses Handling
+//Long Presses Handling
 	if (!wasLeftLongPressed && isLeftLongPressed) {
 		wasLeftJustNowLongPressed = true;
 	}

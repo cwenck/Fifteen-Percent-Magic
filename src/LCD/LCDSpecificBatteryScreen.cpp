@@ -20,7 +20,7 @@ void LCDSpecificBatteryScreen::setBattry(BatteryType type) {
 	this->battery = type;
 }
 
-void LCDSpecificBatteryScreen::display(LCD* lcd) {
+void LCDSpecificBatteryScreen::display() {
 	lcd->clear();
 	switch (battery) {
 	case PrimaryBatteryType:

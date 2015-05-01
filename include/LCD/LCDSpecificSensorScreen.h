@@ -8,9 +8,7 @@
 #ifndef LCDSPECIFICSENSORSCREEN_H_
 #define LCDSPECIFICSENSORSCREEN_H_
 
-#include "../TRL/TRL_BaseIncludes.h"
-#include "LCD.h"
-#include "LCDMenuScreen.h"
+#include "LCDChildMenuScreenIncludes.h"
 #include "../Sensors/Sensor_Includes.h"
 
 namespace TRL {
@@ -23,7 +21,7 @@ namespace TRL {
 		virtual ~LCDSpecificSensorScreen();
 
 		void setSensor(Sensor* sensor);
-		void display(LCD* lcd);
+		void display();
 
 		static LCDSpecificSensorScreen** getSpecificSensorScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 	};

@@ -4,9 +4,8 @@
 ROOT=.
 # Binary output directory
 BINDIR=$(ROOT)/bin
-
 # Subdirectories to include in the build
-SUBDIRS=src src/LCD src/Sensors src/Robot src/TRL src/Motor
+SUBDIRS=src src/LCD src/Motor src/Robot src/Sensors src/TRL
 
 # Nothing below here needs to be modified by typical users
 

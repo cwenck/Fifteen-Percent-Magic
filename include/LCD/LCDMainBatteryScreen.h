@@ -8,9 +8,7 @@
 #ifndef LCDMAINBATTERYSCREEN_H_
 #define LCDMAINBATTERYSCREEN_H_
 
-#include "../TRL/TRL_BaseIncludes.h"
-#include "LCD.h"
-#include "LCDMenuScreen.h"
+#include "LCDChildMenuScreenIncludes.h"
 
 namespace TRL {
 	class LCDMainBatteryScreen : public LCDMenuScreen {
@@ -18,7 +16,7 @@ namespace TRL {
 		LCDMainBatteryScreen();
 		virtual ~LCDMainBatteryScreen();
 
-		void display(LCD* lcd);
+		void display();
 	};
 }
 

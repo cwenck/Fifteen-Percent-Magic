@@ -58,20 +58,79 @@ extern "C" {
 
 using namespace TRL;
 
-void routineTest() {
+int calcDriveFromAngle(int angle, int maxPow) {
+	angle = abs(angle);
+	int power = maxPow * cos(angle * 2 * PI / 180);
+	return power;
+}
 
+void setMotorSpeed(int speed) {
+	MotorList::testMotor->setPower(speed);
 }
 
 void operatorControl() {
 	println(LOG, "Main", "operatorControl", "Driver control started.");
 //	RegistryHelper::printEntireRegistry();
-	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
-	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
+//	Robot::controller.setShiftKey(SLAVE_CONTROLLER, ShiftBtn_7U);
+//	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
-	AutonRegistry::printRoutines();
+//	AutonRegistry::printRoutines();
+
+//	IntegratedMotorEncoder* ime = new IntegratedMotorEncoder(
+//			IntegratedEncoder_1);
+//	delay(500);
+//	for (int i = 0; i <= 127; i++) {
+//		MotorList::motor_1->setPower(i);
+//		delay(750);
+//		println("%.2f", ime->getRPM(SpeedGearing));
+//	}
+//	MotorList::motor_1->stop();
 	while (true) {
-
-		delay(200);
+		delay(20);
+		MotorList::testMotor->setPower(Controller::instance->getValue(Ch3));
+		{
+//			float angle = ControllerStick::leftMaster->getStickAngle();
+//			int x = ControllerStick::leftMaster->getX();
+//			int y = ControllerStick::leftMaster->getY();
+//			int leftPow = 0;
+//			int rightPow = 0;
+//
+//			int largePower = 0;
+//			if (abs(x) > abs(y)) {
+//				largePower = abs(x);
+//			} else {
+//				largePower = abs(y);
+//			}
+//
+//			if (x == 0 && y == 0) {
+//				//Do Nothing
+//			} else if (x == 0) {
+//				leftPow = y;
+//				rightPow = y;
+//			} else if (x > 0) {
+//
+//				if (y > 0) {
+//					leftPow = largePower;
+//					rightPow = calcDriveFromAngle(angle, largePower);
+//				} else {
+//					leftPow = -calcDriveFromAngle(angle, largePower);
+//					;
+//					rightPow = -largePower;
+//				}
+//			} else if (x < 0) {
+//				if (y > 0) {
+//					leftPow = calcDriveFromAngle(angle, largePower);
+//					rightPow = largePower;
+//				} else {
+//					leftPow = -largePower;
+//					rightPow = -calcDriveFromAngle(angle, largePower);
+//				}
+//			}
+//
+//			println("Angle: %.2f :: LeftPow: %d :: RightPow: %d",
+//					ControllerStick::leftMaster->getStickAngle(), leftPow,
+//					rightPow);
+		}
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 
 	}

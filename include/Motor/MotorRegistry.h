@@ -39,9 +39,10 @@ namespace TRL {
 		static short getNumberOfRegisteredMotors();
 
 		//The full array of registered motors is returned
-		//This is a copy of the array so it is readOnly
-		//and should be deleted with delete[]
-		static Motor** getRegisteredMotorsArray();
+		//This is a copy of the array so it is readOnly(motors can't be added or removed from the registry)
+		//but the motors are correct pointers so their information will update
+		//and should be deleted with delete
+		static Array<Motor*>* getRegisteredMotorsArray();
 	};
 
 }

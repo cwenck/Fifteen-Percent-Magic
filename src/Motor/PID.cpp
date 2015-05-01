@@ -9,7 +9,7 @@
 
 namespace TRL {
 
-PID::PID(){
+PID::PID() {
 	this->kp = 0;
 	this->ki = 0;
 	this->kd = 0;
@@ -21,15 +21,15 @@ PID::PID(){
 	this->integral = 0;
 	this->derivative = 0;
 
+	this->integralSpeedThreshold = 127;
 	this->shouldIgnoreIntegralBounds = true;
 	this->integralMin = 0;
 	this->integralMax = 127;
-	this->rangeWhereIntegralComponentIsActive = -1;
 
 	this->sensor = NULL;
 	this->target = 0;
 	this->sensorValue = 0;
-	this->prevSensorValue = 0;
+	this->prevError = 0;
 
 	this->error = 0;
 	this->checksPassed = 0;
@@ -42,7 +42,7 @@ PID::PID(){
 }
 
 PID::PID(Sensor* sensor, void (*setMotorSpeedFunction)(int speed)) {
-	this->kp = 0;
+	this->kp = 1;
 	this->ki = 0;
 	this->kd = 0;
 
@@ -53,15 +53,15 @@ PID::PID(Sensor* sensor, void (*setMotorSpeedFunction)(int speed)) {
 	this->integral = 0;
 	this->derivative = 0;
 
+	this->integralSpeedThreshold = 127;
 	this->shouldIgnoreIntegralBounds = true;
 	this->integralMin = 0;
 	this->integralMax = 127;
-	this->rangeWhereIntegralComponentIsActive = -1;
 
 	this->sensor = sensor;
 	this->target = 0;
 	this->sensorValue = 0;
-	this->prevSensorValue = 0;
+	this->prevError = 0;
 
 	this->error = 0;
 	this->checksPassed = 0;
@@ -86,15 +86,15 @@ PID::PID(float kp, float ki, float kd, Sensor* sensor,
 	this->integral = 0;
 	this->derivative = 0;
 
+	this->integralSpeedThreshold = 127;
 	this->shouldIgnoreIntegralBounds = true;
 	this->integralMin = 0;
 	this->integralMax = 127;
-	this->rangeWhereIntegralComponentIsActive = -1;
 
 	this->sensor = sensor;
 	this->target = 0;
 	this->sensorValue = 0;
-	this->prevSensorValue = 0;
+	this->prevError = 0;
 
 	this->error = 0;
 	this->checksPassed = 0;
@@ -121,11 +121,30 @@ void PID::setKd(float derivativeConstant) {
 	this->kd = derivativeConstant;
 }
 
-void PID::setErrorTolerance(int errorTolerance){
+void PID::setIntegralBounds(int maxMagnitude) {
+	shouldIgnoreIntegralBounds = false;
+	maxMagnitude = abs(maxMagnitude);
+	integralMax = maxMagnitude;
+	integralMin = -maxMagnitude;
+}
+
+void PID::disableIntegralBounds() {
+	shouldIgnoreIntegralBounds = true;
+}
+
+void PID::setIntegralPositionSpeedThroshold(int threshold) {
+	threshold = abs(threshold);
+	if (threshold > 127) {
+		threshold = 127;
+	}
+	this->integralSpeedThreshold = threshold;
+}
+
+void PID::setErrorTolerance(int errorTolerance) {
 	this->errorTolerance = errorTolerance;
 }
 
-void PID::setChecksRequiredToBreakPID(int numberOfChecks){
+void PID::setChecksRequiredToBreakPID(int numberOfChecks) {
 	this->requiredPassedChecks = numberOfChecks;
 }
 
@@ -136,12 +155,19 @@ void PID::setTarget(int target) {
 void PID::goToSetTarget() {
 	targetReached = false;
 	while (!targetReached) {
-		prevSensorValue = error;
 		sensorValue = sensor->getValue();
+		prevError = error;
 		error = target - sensorValue;
+		integral += error;
+		derivative = (error - prevError);
 
-		if (abs(error) < abs(rangeWhereIntegralComponentIsActive)) {
-			integral += error;
+		if (abs(pSpeed) >= 127) {
+			integral = 0;
+			pSpeed = 127 * (pSpeed / pSpeed); //keep the magnitude of p at a max of 127
+		}
+
+		if (abs(dSpeed) >= 256) {
+			dSpeed = 256 * (dSpeed / dSpeed); //keep the magnitude of p at a max of 127
 		}
 
 		if (!shouldIgnoreIntegralBounds) {
@@ -176,6 +202,9 @@ void PID::goToSetTarget() {
 		dSpeed = derivative * kd;
 		motorSpeed = pSpeed + iSpeed + dSpeed;
 		setMotorSpeedFunction(motorSpeed);
+		println(DEBUG, "PID", "goToSetTarget",
+				"Err: %d :: Sensor: %d :: Speed: %d :: pSpeed: %d :: iSpeed : %d :: dSpeed: %d",
+				error, sensorValue, motorSpeed, pSpeed, iSpeed, dSpeed);
 		delay(20);
 
 	}

@@ -17,6 +17,7 @@
 #include "Potentiometer.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
+#include "IntegratedMotorEncoder.h"
 #include "Sonar.h"
 #include "Gyroscope.h"
 #include "DigitalSwitch.h"

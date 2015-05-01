@@ -77,6 +77,7 @@ namespace TRL {
 	///////////////////////////////
 
 	typedef enum _ControllerInput {
+		NoControllerInput = 0,
 		Btn5U = 1,
 		Btn6U = 2,
 		Btn7U = 3,
@@ -228,16 +229,15 @@ namespace TRL {
 	}DigitalPort;
 
 	typedef enum _IntegratedEncoderPort {
-		IntegratedEncoder_1 = 1,
-		IntegratedEncoder_2 = 2,
-		IntegratedEncoder_3 = 3,
-		IntegratedEncoder_4 = 4,
-		IntegratedEncoder_5 = 5,
-		IntegratedEncoder_6 = 6,
-		IntegratedEncoder_7 = 7,
-		IntegratedEncoder_8 = 8,
-		IntegratedEncoder_9 = 9,
-		IntegratedEncoder_10 = 10
+		NoIntegratedEncoderInput = -1,
+		IntegratedEncoder_1 = 0,
+		IntegratedEncoder_2 = 1,
+		IntegratedEncoder_3 = 2,
+		IntegratedEncoder_4 = 3,
+		IntegratedEncoder_5 = 4,
+		IntegratedEncoder_6 = 5,
+		IntegratedEncoder_7 = 6,
+		IntegratedEncoder_8 = 7,
 	}IntegratedEncoderPort;
 
 	typedef enum _EncoderType {
@@ -271,6 +271,7 @@ namespace TRL {
 	typedef enum _PortType {
 		AnalogPortType,
 		DigitalPortType,
+		IntegratedEncoderPortType,
 		OtherPortType
 	}PortType;
 
@@ -291,7 +292,8 @@ namespace TRL {
 		BumperSensorType,
 		LimitSwitchSensorType,
 		GyroscopeSensorType,
-		AccelerometerSensorType
+		AccelerometerSensorType,
+		IntegratedMotorEncoderSensorType
 
 	}SensorType;
 
@@ -312,6 +314,12 @@ namespace TRL {
 		MotorPort_9 = 9,
 		MotorPort_10 = 10
 	}MotorPort;
+
+	typedef enum _MotorGearing {
+		TorqueGearing,
+		SpeedGearing,
+		TurboGearing
+	}MotorGearing;
 
 	typedef enum _MotorLocation {
 		UnspecifiedMotorLocation = 0,

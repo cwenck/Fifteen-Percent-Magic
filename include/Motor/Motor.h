@@ -22,14 +22,13 @@ namespace TRL {
 	private:
 		GenericEncoder* encoder;
 		bool reversed;
-		int speed;
+		int rawPower;
+		int power;
+		float powerPercent;
 		short offset;
 		MotorPort port;
 		MotorLocation location;
 		string motorName;
-
-		//functions
-		int addOffsetToSpeed(int speed);
 
 	public:
 		Motor();
@@ -44,16 +43,24 @@ namespace TRL {
 		bool destroy();
 
 		void setPower(int speed);
+		void setAdjustedPower(int speed);
+		void setAdjustedPowerPercentage(float percent);
 		void stop();
 		void reverseDirection();
 
-		static void setAllPower(int speed);
+		//This should only ever be used for testing circumstances
+		static void setAllRawPower(int speed);
 		static void stopAll();
 
 		MotorPort getPort();
 		MotorLocation getLocation();
 		MotorLocationSide getLocationSide();
 		GenericEncoder* getEncoder();
+
+		int getPower(){return power;}
+		int getRawPower(){return rawPower;}
+		bool isReversed(){return reversed;}
+		short getPowerOffset(){return offset;}
 
 		string getName();
 
