@@ -77,8 +77,13 @@ void MotorList::initialize() {
 //////////////////////////
 
 QuadratureEncoder* SensorList::quad;
+PowerExpander* SensorList::powerExpander;
 
 void SensorList::initialize() {
+	//The Power Expander Should Always be here
+	//Set it to NoAnalogInput if your not using it
+	powerExpander = new PowerExpander(NoAnalogInput);
+
 	quad = new QuadratureEncoder(Digital_1, Digital_2);
 	println(LOG, "SensorSetup", "initialize", "All sensors initialized");
 }

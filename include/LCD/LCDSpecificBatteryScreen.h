@@ -8,6 +8,7 @@
 #ifndef LCDSPECIFICBATTERYSCREEN_H_
 #define LCDSPECIFICBATTERYSCREEN_H_
 
+#include "../Robot/MotorAndSensorSetup.h"
 #include "LCDChildMenuScreenIncludes.h"
 
 namespace TRL {
@@ -22,7 +23,7 @@ namespace TRL {
 		void setBattry(BatteryType type);
 		void display();
 
-		static LCDSpecificBatteryScreen** getSpecificBatteryScreens(LCDMenuScreen* homeScreen, bool loopScreens);
+		static Array<LCDSpecificBatteryScreen*>* getSpecificBatteryScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 	};
 
 }

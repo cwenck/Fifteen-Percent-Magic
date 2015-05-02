@@ -35,70 +35,63 @@ void LCDSpecificSensorScreen::display() {
 /*
  * Get the specific sensor screens for use in the LCDMenuHandler
  *
- * The array of LCDSpecificSensorScreens needs to be deteted with delete[] array
- * but so does the array of actual objects so you ALSO need to do delete[] array[0]
+ * The array of LCDSpecificSensorScreens needs to be deleted with delete array
  *
  * @param homeScreen the screen you want these specific screens to go to when you hold down the center button
  * @param loopScreens do you want the screens to loop or end once the end of the array is reached
  */
-LCDSpecificSensorScreen** LCDSpecificSensorScreen::getSpecificSensorScreens(
+Array<LCDSpecificSensorScreen*>* LCDSpecificSensorScreen::getSpecificSensorScreens(
 		LCDMenuScreen* homeScreen, bool loopScreens) {
-	int size = SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates();
-	Sensor** sensors =
+
+	Array<Sensor*>* sensors =
 			SensorRegistry::getRegisteredSensorsArrayWithoutDuplicates();
-	LCDSpecificSensorScreen** screenPointers =
-			new LCDSpecificSensorScreen*[size];
+	Array<LCDSpecificSensorScreen*>* screens = new Array<
+			LCDSpecificSensorScreen*>(sensors->size());
+
 	//Two for loops are needed so that the entire array can be initialized before
 	//refrences to those elements are assigned
-	for (int i = 0; i < size; i++) {
-		screenPointers[i] = new LCDSpecificSensorScreen(sensors[i]);
+	for (int i = 0; i < screens->size(); i++) {
+		screens->at(i) = new LCDSpecificSensorScreen(sensors->at(i));
 	}
-	for (int i = 0; i < size; i++) {
+
+	for (int i = 0; i < screens->size(); i++) {
 		if (loopScreens) {
-			//Sensor Specific screens loop
 			if (i == 0) {
-				if (size == 1) {
-					screenPointers[0]->setReferencedScreens(homeScreen,
-							screenPointers[0], screenPointers[0],
-							screenPointers[0]);
+				if (screens->size() == 1) {
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(0), screens->at(0), screens->at(0));
 				} else {
-					screenPointers[0]->setReferencedScreens(homeScreen,
-							screenPointers[size - 1], screenPointers[0],
-							screenPointers[1]);
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(screens->size() - 1), screens->at(0),
+							screens->at(1));
 				}
-			} else if (i == (size - 1)) {
-				screenPointers[i]->setReferencedScreens(homeScreen,
-						screenPointers[i - 1], screenPointers[i],
-						screenPointers[0]);
+			} else if (i == (screens->size() - 1)) {
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(0));
 			} else {
-				screenPointers[i]->setReferencedScreens(homeScreen,
-						screenPointers[i - 1], screenPointers[i],
-						screenPointers[i + 1]);
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(i + 1));
 			}
 		} else {
-			//Sensor Specific screens don't loop
 			if (i == 0) {
-				if (size == 1) {
-					screenPointers[0]->setReferencedScreens(homeScreen,
-							screenPointers[0], screenPointers[0],
-							screenPointers[0]);
+				if (screens->size() == 1) {
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(0), screens->at(0), screens->at(0));
 				} else {
-					screenPointers[0]->setReferencedScreens(homeScreen,
-							screenPointers[0], screenPointers[0],
-							screenPointers[1]);
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(0), screens->at(0), screens->at(1));
 				}
-			} else if (i == (size - 1)) {
-				screenPointers[i]->setReferencedScreens(homeScreen,
-						screenPointers[i - 1], screenPointers[i],
-						screenPointers[i]);
+			} else if (i == (screens->size() - 1)) {
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(i));
 			} else {
-				screenPointers[i]->setReferencedScreens(homeScreen,
-						screenPointers[i - 1], screenPointers[i],
-						screenPointers[i + 1]);
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(i + 1));
 			}
 		}
 	}
-	delete[] sensors;
-	return screenPointers;
+
+	delete sensors;
+	return screens;
 }
 } /* namespace TRL */

@@ -28,6 +28,10 @@ namespace TRL {
 		int leftDrivePower;
 		int rightDrivePower;
 
+		//TODO use these
+		int leftLiftPower;
+		int rightLiftPower;
+
 	public:
 		//Constructor + Destructor
 		Robot();
@@ -55,10 +59,14 @@ namespace TRL {
 		/////////
 
 //		void driveInputController(InputControlMode controlMode);
-		void powerDrive(int leftDriveSpeed, int rightDriveSpeed);
-		void powerDrive();
+		void powerDrive(int power);
+		void powerDrive(int leftDrivePower, int rightDrivePower);
+
+		void powerLeftDrive(int power, WheelSidePowerMode mode);
+		void powerRightDrive(int power, WheelSidePowerMode mode);
+
 		int calcDriveFromAngle(int angle, int maxPow);
-		void driveController(Controller &controller);
+		void driveController(Controller *controller);
 		void softTurnDriveController(Controller *controller);
 		void printDriveSpeed();
 
@@ -72,10 +80,8 @@ namespace TRL {
 //		void intakeController(Controller &controller);
 
 //Set Motor Pointers
-		bool setDriveMotors(char numMotors, Motor** driveMotors);
-		bool setDriveMotors(Array<Motor*>* driveMotors);
-		bool setLiftMotors(Array<Motor*>* liftMotors);
-		bool setLiftMotors(char numMotors, Motor** liftMotors);
+		void setDriveMotors(Array<Motor*>* driveMotors);
+		void setLiftMotors(Array<Motor*>* liftMotors);
 //		void setIntakeMotors(Motor* intake);
 
 //Drive Orientation
@@ -87,8 +93,12 @@ namespace TRL {
 		void stopDriveMotors();
 
 		//Lift
-//		void lift(int power, LiftDirection dir);
-//		void stopLift();
+		void powerLeftLift(int speed);
+		void powerRightLift(int speed);
+		void powerLift(int speed);
+		void powerLift(int leftLiftSpeed, int rightLiftSpeed);
+		void lift(int power, LiftDirection dir);
+		void stopLift();
 
 	};
 }

@@ -24,7 +24,7 @@ namespace TRL {
 		
 		bool destory();
 
-		int getValue();
+		virtual int getValue();
 		virtual SensorType getSensorType() = 0;
 		virtual string getSensorName() = 0;
 	};

@@ -11,7 +11,7 @@ namespace TRL {
 
 DigitalSwitch::DigitalSwitch() :
 		Sensor() {
-	this->port = NULL_UNIVERSAL_PORT;
+	this->port = UNIVERSAL_UNKNOWN_PORT;
 }
 
 DigitalSwitch::DigitalSwitch(AnalogPort port, Sensor* childSensor) :

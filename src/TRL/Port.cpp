@@ -17,84 +17,90 @@ Port::~Port() {
 
 UniversalPort Port::getUniversalPortNumber(AnalogPort port) {
 	switch (port) {
-	case Analog_1:
-		return 13;
-	case Analog_2:
-		return 14;
-	case Analog_3:
-		return 15;
-	case Analog_4:
-		return 16;
-	case Analog_5:
-		return 17;
-	case Analog_6:
-		return 18;
-	case Analog_7:
-		return 19;
-	case Analog_8:
-		return 20;
-	default:
-		println(ERROR, "Port", "getUniversalPortNumber",
-				"This statement should never get called.");
-		return -1;
+		case Analog_1:
+			return 13;
+		case Analog_2:
+			return 14;
+		case Analog_3:
+			return 15;
+		case Analog_4:
+			return 16;
+		case Analog_5:
+			return 17;
+		case Analog_6:
+			return 18;
+		case Analog_7:
+			return 19;
+		case Analog_8:
+			return 20;
+		case NoAnalogInput:
+			return UNIVERSAL_NO_ANALOG_PORT;
+		default:
+			println(ERROR, "Port", "getUniversalPortNumber",
+					"This statement should never get called.");
+			return UNIVERSAL_UNKNOWN_PORT;
 	}
 }
 
 UniversalPort Port::getUniversalPortNumber(DigitalPort port) {
 	switch (port) {
-	case Digital_1:
-		return 1;
-	case Digital_2:
-		return 2;
-	case Digital_3:
-		return 3;
-	case Digital_4:
-		return 4;
-	case Digital_5:
-		return 5;
-	case Digital_6:
-		return 6;
-	case Digital_7:
-		return 7;
-	case Digital_8:
-		return 8;
-	case Digital_9:
-		return 9;
-	case Digital_10:
-		return 10;
-	case Digital_11:
-		return 11;
-	case Digital_12:
-		return 12;
-	default:
-		println(ERROR, "Port", "getUniversalPortNumber",
-				"This statement should never get called.");
-		return -1;
+		case Digital_1:
+			return 1;
+		case Digital_2:
+			return 2;
+		case Digital_3:
+			return 3;
+		case Digital_4:
+			return 4;
+		case Digital_5:
+			return 5;
+		case Digital_6:
+			return 6;
+		case Digital_7:
+			return 7;
+		case Digital_8:
+			return 8;
+		case Digital_9:
+			return 9;
+		case Digital_10:
+			return 10;
+		case Digital_11:
+			return 11;
+		case Digital_12:
+			return 12;
+		case NoDigitalInput:
+			return UNIVERSAL_NO_DIGITAL_PORT;
+		default:
+			println(ERROR, "Port", "getUniversalPortNumber",
+					"This statement should never get called.");
+			return UNIVERSAL_UNKNOWN_PORT;
 	}
 }
 
 UniversalPort Port::getUniversalPortNumber(IntegratedEncoderPort port) {
 	switch (port) {
-	case IntegratedEncoder_1:
-		return -1;
-	case IntegratedEncoder_2:
-		return -2;
-	case IntegratedEncoder_3:
-		return -3;
-	case IntegratedEncoder_4:
-		return -4;
-	case IntegratedEncoder_5:
-		return -5;
-	case IntegratedEncoder_6:
-		return -6;
-	case IntegratedEncoder_7:
-		return -7;
-	case IntegratedEncoder_8:
-		return -8;
-	default:
-		println(ERROR, "Port", "getUniversalPortNumber",
-				"This statement should never get called.");
-		return -1;
+		case IntegratedEncoder_1:
+			return -1;
+		case IntegratedEncoder_2:
+			return -2;
+		case IntegratedEncoder_3:
+			return -3;
+		case IntegratedEncoder_4:
+			return -4;
+		case IntegratedEncoder_5:
+			return -5;
+		case IntegratedEncoder_6:
+			return -6;
+		case IntegratedEncoder_7:
+			return -7;
+		case IntegratedEncoder_8:
+			return -8;
+		case NoIntegratedEncoderInput:
+			return UNIVERSAL_NO_IME_PORT;
+		default:
+			println(ERROR, "Port", "getUniversalPortNumber",
+					"This statement should never get called.");
+			return UNIVERSAL_UNKNOWN_PORT;
 	}
 }
 
@@ -121,65 +127,61 @@ bool Port::isPortIntegratedEncoderType(UniversalPort port) {
 
 short Port::getAnalogPortNumber(AnalogPort port) {
 	switch (port) {
-	case Analog_1:
-		return 1;
-	case Analog_2:
-		return 2;
-	case Analog_3:
-		return 3;
-	case Analog_4:
-		return 4;
-	case Analog_5:
-		return 5;
-	case Analog_6:
-		return 6;
-	case Analog_7:
-		return 7;
-	case Analog_8:
-		return 8;
-	default:
-		println(ERROR, "Port", "getUniversalPortNumber",
-				"This statement should never get called.");
-		return -1;
+		case Analog_1:
+			return 1;
+		case Analog_2:
+			return 2;
+		case Analog_3:
+			return 3;
+		case Analog_4:
+			return 4;
+		case Analog_5:
+			return 5;
+		case Analog_6:
+			return 6;
+		case Analog_7:
+			return 7;
+		case Analog_8:
+			return 8;
+		default:
+			return UNIVERSAL_NO_ANALOG_PORT;
 	}
 }
 short Port::getAnalogPortNumber(UniversalPort port) {
 	if (isPortAnalogType(port)) {
 		return port - 12;
 	}
-	return NULL_UNIVERSAL_PORT;
+	return UNIVERSAL_NO_ANALOG_PORT;
 }
 
 short Port::getDigitalPortNumber(DigitalPort port) {
 	switch (port) {
-	case Digital_1:
-		return 1;
-	case Digital_2:
-		return 2;
-	case Digital_3:
-		return 3;
-	case Digital_4:
-		return 4;
-	case Digital_5:
-		return 5;
-	case Digital_6:
-		return 6;
-	case Digital_7:
-		return 7;
-	case Digital_8:
-		return 8;
-	case Digital_9:
-		return 9;
-	case Digital_10:
-		return 10;
-	case Digital_11:
-		return 11;
-	case Digital_12:
-		return 12;
-	default:
-		println(ERROR, "Port", "getUniversalPortNumber",
-				"This statement should never get called.");
-		return -1;
+		case Digital_1:
+			return 1;
+		case Digital_2:
+			return 2;
+		case Digital_3:
+			return 3;
+		case Digital_4:
+			return 4;
+		case Digital_5:
+			return 5;
+		case Digital_6:
+			return 6;
+		case Digital_7:
+			return 7;
+		case Digital_8:
+			return 8;
+		case Digital_9:
+			return 9;
+		case Digital_10:
+			return 10;
+		case Digital_11:
+			return 11;
+		case Digital_12:
+			return 12;
+		default:
+			return UNIVERSAL_NO_DIGITAL_PORT;
 	}
 }
 
@@ -187,31 +189,29 @@ short Port::getDigitalPortNumber(UniversalPort port) {
 	if (isPortDigitalType(port)) {
 		return port;
 	}
-	return NULL_UNIVERSAL_PORT;
+	return UNIVERSAL_NO_DIGITAL_PORT;
 }
 
 short Port::getIntegratedEncoderPortNumber(IntegratedEncoderPort port) {
 	switch (port) {
-	case IntegratedEncoder_1:
-		return 0;
-	case IntegratedEncoder_2:
-		return 1;
-	case IntegratedEncoder_3:
-		return 2;
-	case IntegratedEncoder_4:
-		return 3;
-	case IntegratedEncoder_5:
-		return 4;
-	case IntegratedEncoder_6:
-		return 5;
-	case IntegratedEncoder_7:
-		return 6;
-	case IntegratedEncoder_8:
-		return 7;
-	default:
-		println(ERROR, "Port", "getUniversalPortNumber",
-				"This statement should never get called.");
-		return -1;
+		case IntegratedEncoder_1:
+			return 0;
+		case IntegratedEncoder_2:
+			return 1;
+		case IntegratedEncoder_3:
+			return 2;
+		case IntegratedEncoder_4:
+			return 3;
+		case IntegratedEncoder_5:
+			return 4;
+		case IntegratedEncoder_6:
+			return 5;
+		case IntegratedEncoder_7:
+			return 6;
+		case IntegratedEncoder_8:
+			return 7;
+		default:
+			return UNIVERSAL_NO_IME_PORT;
 	}
 }
 
@@ -220,7 +220,7 @@ short Port::getIntegratedEncoderPortNumber(IntegratedEncoderPort port) {
  */
 short Port::getIntegratedEncoderPortNumber(UniversalPort port) {
 	if (!isPortIntegratedEncoderType(port)) {
-		return -1;
+		return UNIVERSAL_NO_IME_PORT;
 	}
 	return (-port) - 1;
 }
@@ -254,13 +254,13 @@ bool Port::isPortInactive(UniversalPort port) {
 	PortType type = getPortType(port);
 	bool value;
 	switch (type) {
-	case AnalogPortType:
-		value = isPortInactive(getAnalogPortFromUniversalPort(port));
-		return value;
-	case DigitalPortType:
-		return digitalRead(port);
-	default:
-		return -1;
+		case AnalogPortType:
+			value = isPortInactive(getAnalogPortFromUniversalPort(port));
+			return value;
+		case DigitalPortType:
+			return digitalRead(port);
+		default:
+			return -1;
 	}
 }
 
@@ -277,7 +277,13 @@ bool Port::isPortActive(UniversalPort port) {
 }
 
 int Port::getAnalogValue(AnalogPort port) {
-	return analogRead(getAnalogPortNumber(port));
+	int portNum = getAnalogPortNumber(port);
+	if (portNum != UNIVERSAL_NO_ANALOG_PORT) {
+		return analogRead(portNum);
+	} else {
+		println(ERROR, "Port", "getAnalogValue", "Attempting to read from an unidentified port.");
+		return -1;
+	}
 }
 
 //returns -1 if the port isn't analog
@@ -285,22 +291,23 @@ int Port::getAnalogValue(UniversalPort port) {
 	if (isPortAnalogType(port)) {
 		return analogRead(getAnalogPortNumber(port));
 	}
+	println(ERROR, "Port", "getAnalogValue", "Attempting to read from an unidentified port.");
 	return -1;
 }
 
 void Port::configurePort(PortConfig config, UniversalPort port) {
 	switch (config) {
-	case DigitalInputPort:
-		pinMode(port, INPUT);
-		return;
-	case AnalogInputPort:
-		if (isPortAnalogType(port)) {
-			pinMode(port, INPUT_ANALOG);
-		}
-		return;
-	case OutputPort:
-		pinMode(port, OUTPUT);
-		return;
+		case DigitalInputPort:
+			pinMode(port, INPUT);
+			return;
+		case AnalogInputPort:
+			if (isPortAnalogType(port)) {
+				pinMode(port, INPUT_ANALOG);
+			}
+			return;
+		case OutputPort:
+			pinMode(port, OUTPUT);
+			return;
 	}
 }
 

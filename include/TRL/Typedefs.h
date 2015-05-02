@@ -15,7 +15,6 @@ typedef const char* string;
 
 typedef void (*VoidFunctionPtr)(void);
 
-#define UNIVERSAL_PORT_NULL -1
 typedef short UniversalPort;
 
 //types that are wrappers for default pros types are prefixed with "PROS_"

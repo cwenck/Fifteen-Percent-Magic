@@ -33,20 +33,20 @@ namespace TRL {
 			arrayStart = arr;
 		}
 
-//		Array(int size, ...) {
-//			this->arrSize = size;
-//			arrayStart = new T[size];
-//
-//			va_list arg;
-//			va_start(arg, size);
-//			{
-//				for(int i = 0; i < size; i++) {
-//					arrayStart[i] = (va_arg(arg,T));
-//				}
-//
-//			}
-//			va_end(arg);
-//		}
+		/*Array(int size, ...) {
+			this->arrSize = size;
+			arrayStart = new T[size];
+
+			va_list arg;
+			va_start(arg, size);
+			{
+				for(int i = 0; i < size; i++) {
+					arrayStart[i] = (va_arg(arg,T));
+				}
+
+			}
+			va_end(arg);
+		}*/
 
 		virtual ~Array() {
 			delete[] arrayStart;

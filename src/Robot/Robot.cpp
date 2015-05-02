@@ -161,7 +161,7 @@ void Robot::driveOrientationMirrorController(Controller &controller) {
 //	}
 //}
 
-void Robot::driveController(Controller &controller) {
+void Robot::driveController(Controller *controller) {
 	short y = RobotControls::driveStick->getY();
 	short x = RobotControls::driveStick->getX();
 
@@ -176,10 +176,6 @@ int Robot::calcDriveFromAngle(int angle, int maxPow) {
 	angle = abs(angle);
 	int power = maxPow * cos(angle * 2 * PI / 180);
 	return power;
-}
-
-void Robot::powerDrive(int leftDrivePower, int rightDrivePower) {
-
 }
 
 void Robot::softTurnDriveController(Controller *controller) {
@@ -222,6 +218,7 @@ void Robot::softTurnDriveController(Controller *controller) {
 
 	leftDrivePower = leftPow;
 	rightDrivePower = rightPow;
+	powerDrive(leftPow, rightPow);
 }
 
 //
@@ -229,52 +226,54 @@ void Robot::softTurnDriveController(Controller *controller) {
 //SET MOTOR POINTER FUNCTIONS//
 ///////////////////////////////
 
-//bool Robot::setDriveMotors(Motor** driveMotors, char numDriveMotors) {
-//	if (numDriveMotors > 6) {
-//		println(ERROR, "Robot", "setDriveMotos",
-//				"Too many drive motors in array.");
-//		return false;
-//	}
-//
-//	for (int i = 0; i < numDriveMotors; i++) {
-//		this->driveMotors[i] = driveMotors[i];
-//	}
-//	this->numDriveMotors = numDriveMotors;
-//	return true;
-//}
-//
-//bool Robot::setLiftMotors(Motor** liftMotors, char numLiftMotors) {
-//	if (numLiftMotors > 10) {
-//		printf("[Error] Too many lift motors in array\n\r");
-//		return false;
-//	}
-//
-//	for (int i = 0; i < numLiftMotors; i++) {
-//		this->liftMotors[i] = liftMotors[i];
-//	}
-//	this->numLiftMotors = numLiftMotors;
-//	return true;
-//}
+void Robot::setDriveMotors(Array<Motor*>* driveMotors) {
+	this->driveMotors = driveMotors;
+}
+
+void Robot::setLiftMotors(Array<Motor*>* liftMotors) {
+	this->liftMotors = liftMotors;
+}
 
 ///////////////////////////////
 //DRIVE ORIENTATION FUNCTIONS//
 ///////////////////////////////
-//
-//void Robot::setDriveOrientation(DriveOrientation orientation) {
-//	this->orientation = orientation;
-//}
-//
-//void Robot::reverseDriveOrientation() {
-//	if (orientation == ForwardOrientation) {
-//		orientation = BackwardOrientation;
-//	} else if (orientation == BackwardOrientation) {
-//		orientation = ForwardOrientation;
-//	}
-//}
-//
+
+void Robot::setDriveOrientation(DriveOrientation orientation) {
+	this->orientation = orientation;
+}
+
+void Robot::reverseDriveOrientation() {
+	if (orientation == ForwardOrientation) {
+		orientation = BackwardOrientation;
+	} else if (orientation == BackwardOrientation) {
+		orientation = ForwardOrientation;
+	}
+}
+
 /////////////////////
 ////DRIVE FUNCTIONS//
 /////////////////////
+
+void Robot::powerLeftDrive(int power, WheelSidePowerMode mode) {
+
+}
+
+void Robot::powerRightDrive(int power, WheelSidePowerMode mode) {
+
+}
+
+void Robot::powerDrive(int leftDrivePower, int rightDrivePower) {
+	powerLeftDrive(leftDrivePower, TogetherWheelPowerMode);
+	powerRightDrive(rightDrivePower, TogetherWheelPowerMode);
+	this->leftDrivePower = leftDrivePower;
+	this->rightDrivePower = rightDrivePower;
+}
+
+void Robot::powerDrive(int power) {
+	for (int i = 0; i < driveMotors->size(); i++) {
+		driveMotors->at(i)->setPower(power);
+	}
+}
 
 void Robot::drive(int power, DriveDirection dir) {
 	if (orientation == BackwardOrientation) {
@@ -469,30 +468,70 @@ void Robot::stopDriveMotors() {
 //LIFT FUNCTIONS//
 //////////////////
 
-//void Robot::lift(int power, LiftDirection dir) {
-//	switch (dir) {
-//		case ManualLift:
-//			for (int i = 0; i < numLiftMotors; i++) {
-//				liftMotors[i]->setPower(power);
-//			}
-//			break;
-//		case LiftUp:
-//			power = abs(power);
-//			for (int i = 0; i < numLiftMotors; i++) {
-//				liftMotors[i]->setPower(power);
-//			}
-//			break;
-//		case LiftDown:
-//			power = abs(power);
-//			for (int i = 0; i < numLiftMotors; i++) {
-//				liftMotors[i]->setPower(-power);
-//			}
-//			break;
-//	}
-//}
-//
-//void Robot::stopLift() {
-//	lift(0, ManualLift);
+void Robot::powerLeftLift(int power) {
+	this->leftLiftPower = power;
+	for (int i = 0; i < liftMotors->size(); i++) {
+		Motor* currentMotor = liftMotors->at(i);
+		MotorLocationSide side = currentMotor->getLocationSide();
+		if (side == NoSide) {
+			println(ERROR, "Robot", "powerLeftLift",
+					"A motor on the drive does not have it's location properly set for setting the left lift power.");
+			continue;
+		}
+		if (side == LeftSide) {
+			currentMotor->setPower(power);
+		}
+	}
+}
+
+void Robot::powerRightLift(int power) {
+	this->rightLiftPower = power;
+	for (int i = 0; i < liftMotors->size(); i++) {
+		Motor* currentMotor = liftMotors->at(i);
+		MotorLocationSide side = currentMotor->getLocationSide();
+		if (side == NoSide) {
+			println(ERROR, "Robot", "powerLeftRight",
+					"A motor on the drive does not have it's location properly set for setting the right lift power.");
+			continue;
+		}
+		if (side == LeftSide) {
+			currentMotor->setPower(power);
+		}
+	}
+}
+
+void Robot::powerLift(int leftLiftPower, int rightLiftPower) {
+	powerLeftLift(leftLiftPower);
+	powerRightLift(rightLiftPower);
+	this->leftLiftPower = leftLiftPower;
+	this->rightLiftPower = rightLiftPower;
+}
+
+void Robot::powerLift(int power) {
+	for (int i = 0; i < liftMotors->size(); i++) {
+		liftMotors->at(i)->setPower(power);
+	}
+}
+
+void Robot::lift(int power, LiftDirection dir) {
+	switch (dir) {
+		case ManualLift:
+			powerLift(power);
+			break;
+		case LiftUp:
+			power = abs(power);
+			powerLift(power);
+			break;
+		case LiftDown:
+			power = abs(power);
+			powerLift(-power);
+			break;
+	}
+}
+
+void Robot::stopLift() {
+	lift(0, ManualLift);
+}
 }
 
 /* namespace TRL */

@@ -9,15 +9,18 @@
 
 namespace TRL {
 
-AnalogSensor::AnalogSensor() : Sensor(){
+AnalogSensor::AnalogSensor() :
+		Sensor() {
 	this->port = NoAnalogInput;
 }
 
 AnalogSensor::AnalogSensor(AnalogPort port, Sensor* childSensor) :
 		Sensor(port) {
 	this->port = port;
-	Port::configurePort(AnalogInputPort, port);
-	SensorRegistry::registerSensor(childSensor);
+	if (port != NoAnalogInput) {
+		Port::configurePort(AnalogInputPort, port);
+		SensorRegistry::registerSensor(childSensor);
+	}
 }
 
 AnalogSensor::~AnalogSensor() {
@@ -29,7 +32,13 @@ bool AnalogSensor::destory() {
 }
 
 int AnalogSensor::getValue() {
-	return Port::getAnalogValue(port);
+	if (port != NoAnalogInput) {
+		return Port::getAnalogValue(port);
+	} else {
+		println(WARNING, "AnalogSensor", "getValue",
+				"No Analog Input set to get the value from.");
+		return -1;
+	}
 }
 
 } /* namespace TRL */

@@ -10,26 +10,26 @@
 namespace TRL {
 
 Sensor::Sensor() {
-	this->port_one = UNIVERSAL_PORT_NULL;
-	this->port_two = UNIVERSAL_PORT_NULL;
+	this->port_one = UNIVERSAL_UNKNOWN_PORT;
+	this->port_two = UNIVERSAL_UNKNOWN_PORT;
 	this->usesTwoPorts = false;
 }
 
 Sensor::Sensor(AnalogPort port) {
 	this->port_one = Port::getUniversalPortNumber(port);
-	this->port_two = UNIVERSAL_PORT_NULL;
+	this->port_two = UNIVERSAL_UNKNOWN_PORT;
 	this->usesTwoPorts = false;
 }
 
 Sensor::Sensor(DigitalPort port) {
 	this->port_one = Port::getUniversalPortNumber(port);
-	this->port_two = UNIVERSAL_PORT_NULL;
+	this->port_two = UNIVERSAL_UNKNOWN_PORT;
 	this->usesTwoPorts = false;
 }
 
 Sensor::Sensor(UniversalPort port) {
 	this->port_one = port;
-	this->port_two = UNIVERSAL_PORT_NULL;
+	this->port_two = UNIVERSAL_UNKNOWN_PORT;
 	this->usesTwoPorts = false;
 }
 

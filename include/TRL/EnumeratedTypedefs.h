@@ -37,6 +37,12 @@ namespace TRL {
 		SlaveHigherPriority
 	}InputControlMode;
 
+	typedef enum _WheelSidePowerMode{
+		TogetherWheelPowerMode,
+		AwayWheelPowerMode,
+		TowardsWheelPowerMode
+	} WheelSidePowerMode;
+
 	typedef enum _DriveDirection {
 		ManualDrive,
 		ManualTurn,
@@ -293,8 +299,8 @@ namespace TRL {
 		LimitSwitchSensorType,
 		GyroscopeSensorType,
 		AccelerometerSensorType,
-		IntegratedMotorEncoderSensorType
-
+		IntegratedMotorEncoderSensorType,
+		PowerExpanderSensorType
 	}SensorType;
 
 	//////////////////////////

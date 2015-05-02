@@ -15,6 +15,7 @@
 #include "LightSensor.h"
 #include "LineSensor.h"
 #include "Potentiometer.h"
+#include "PowerExpander.h"
 #include "GenericEncoder.h"
 #include "QuadratureEncoder.h"
 #include "IntegratedMotorEncoder.h"

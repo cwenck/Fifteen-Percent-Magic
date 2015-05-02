@@ -34,6 +34,7 @@ namespace TRL {
 	public:
 		static void initialize();
 
+		static PowerExpander* powerExpander;
 		static QuadratureEncoder* quad;
 	};
 

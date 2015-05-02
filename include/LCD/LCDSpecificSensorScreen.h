@@ -23,7 +23,7 @@ namespace TRL {
 		void setSensor(Sensor* sensor);
 		void display();
 
-		static LCDSpecificSensorScreen** getSpecificSensorScreens(LCDMenuScreen* homeScreen, bool loopScreens);
+		static Array<LCDSpecificSensorScreen*>* getSpecificSensorScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 	};
 }
 

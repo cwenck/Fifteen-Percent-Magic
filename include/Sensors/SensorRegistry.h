@@ -41,9 +41,9 @@ namespace TRL {
 
 		//The full array of registered motors is returned
 		//This is a copy of the array so it is readOnly
-		//and should be deleted with delete[]
-		static Sensor** getRegisteredSensorsArray();
-		static Sensor** getRegisteredSensorsArrayWithoutDuplicates();
+		//and should be deleted with delete
+		static Array<Sensor*>* getRegisteredSensorsArray();
+		static Array<Sensor*>* getRegisteredSensorsArrayWithoutDuplicates();
 
 	};
 }

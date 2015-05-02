@@ -53,14 +53,6 @@ bool SensorRegistry::registerSensor(Sensor* sensor) {
 	return false;
 }
 
-//bool SensorRegistry::registerSensor(AnalogPort port, Sensor* sensor) {
-//	return registerSensor(Port::getUniversalPortNumber(port), sensor);
-//}
-//
-//bool SensorRegistry::registerSensor(DigitalPort port, Sensor* sensor) {
-//	return registerSensor(Port::getUniversalPortNumber(port), sensor);
-//}
-
 bool SensorRegistry::deleteRegistryEntry(UniversalPort port) {
 	if (port <= 20) {
 		if (sensors[port] == NULL) {
@@ -138,12 +130,12 @@ short SensorRegistry::getNumberOfRegisteredSensors() {
 	return count;
 }
 
-Sensor** SensorRegistry::getRegisteredSensorsArray() {
-	Sensor** registeredSensors = new Sensor*[getNumberOfRegisteredSensors()];
+Array<Sensor*>* SensorRegistry::getRegisteredSensorsArray() {
+	Array<Sensor*>* registeredSensors = new Array<Sensor*>(getNumberOfRegisteredSensors());
 	int currentFillingIndex = 0;
 	for (int i = 0; i < 21; i++) {
 		if (sensors[i] != NULL) {
-			registeredSensors[currentFillingIndex] = sensors[i];
+			registeredSensors->at(currentFillingIndex) = sensors[i];
 			currentFillingIndex++;
 		}
 	}
@@ -152,10 +144,10 @@ Sensor** SensorRegistry::getRegisteredSensorsArray() {
 
 short SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates() {
 	int numSensors = getNumberOfRegisteredSensors();
-	Sensor** registeredSensors = getRegisteredSensorsArray();
+	Array<Sensor*>* registeredSensors = getRegisteredSensorsArray();
 	int numDuplicates = 0;
 	for (int i = 0; i < numSensors; i++) {
-		if (registeredSensors[i]->isTwoPortSensor()) {
+		if (registeredSensors->at(i)->isTwoPortSensor()) {
 			numDuplicates++;
 		}
 	}
@@ -163,28 +155,28 @@ short SensorRegistry::getNumberOfRegisteredSensorsWithoutDuplicates() {
 	return numSensors - numDuplicates;
 }
 
-Sensor** SensorRegistry::getRegisteredSensorsArrayWithoutDuplicates() {
+Array<Sensor*>* SensorRegistry::getRegisteredSensorsArrayWithoutDuplicates() {
 	int size = getNumberOfRegisteredSensorsWithoutDuplicates();
 
-	Sensor** sensorsWithoutDuplicates = new Sensor*[size];
-	Sensor** allSensors = getRegisteredSensorsArray();
+	Array<Sensor*>* sensorsWithoutDuplicates = new Array<Sensor*>(size);
+	Array<Sensor*>* allSensors = getRegisteredSensorsArray();
 
 	int currentFillingIndex = 0;
 	for (int i = 0; i < getNumberOfRegisteredSensors(); i++) {
-		Sensor* sensorToCheckFor = allSensors[i];
+		Sensor* sensorToCheckFor = allSensors->at(i);
 		bool foundInArrayAlready = false;
 		for (int j = 0; j < size; j++) {
-			if(sensorsWithoutDuplicates[j] == sensorToCheckFor){
+			if(sensorsWithoutDuplicates->at(i) == sensorToCheckFor){
 				foundInArrayAlready = true;
 				break;
 			}
 		}
 		if(!foundInArrayAlready){
-			sensorsWithoutDuplicates[currentFillingIndex] = sensorToCheckFor;
+			sensorsWithoutDuplicates->at(currentFillingIndex) = sensorToCheckFor;
 			currentFillingIndex++;
 		}
 	}
-	delete[] allSensors;
+	delete allSensors;
 	return sensorsWithoutDuplicates;
 }
 

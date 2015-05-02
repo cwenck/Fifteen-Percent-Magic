@@ -38,8 +38,7 @@ Array<LCDSpecificMotorScreen*>* LCDSpecificMotorScreen::getSpecificMotorScreens(
 			new Array<LCDSpecificMotorScreen*>(registeredMotors->size());
 
 	for (int i = 0; i < registeredMotors->size(); i++) {
-		Motor* currentMotor = registeredMotors->at(i);
-		screens->at(i) = new LCDSpecificMotorScreen(currentMotor);
+		screens->at(i) = new LCDSpecificMotorScreen(registeredMotors->at(i));
 	}
 
 	for (int i = 0; i < screens->size(); i++) {
