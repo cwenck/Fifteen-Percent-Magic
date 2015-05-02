@@ -1,12 +1,11 @@
 /*
- * EnumeratedTypes.h
  *
  *  Created on: Feb 7, 2015
  *      Author: guywenck
  */
 
-#ifndef ENUMERATEDTYPES_H_
-#define ENUMERATEDTYPES_H_
+#ifndef TYPEDEFS_H_
+#define TYPEDEFS_H_
 
 #include <API.h>
 
@@ -23,4 +22,4 @@ typedef FILE* PROS_File;
 typedef Ultrasonic PROS_Sonar;
 typedef Gyro PROS_Gyro;
 
-#endif /* ENUMERATEDTYPES_H_ */
+#endif /* TYPEDEFS_H_ */

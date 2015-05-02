@@ -115,6 +115,10 @@ namespace TRL {
 			return arrayStart[index];
 		}
 
+		T& at(int index) {
+			return arrayStart[index];
+		}
+
 		void set(int index, T object) {
 			if (index >= arrayCapacity) {
 				this->expandToIndex(index);

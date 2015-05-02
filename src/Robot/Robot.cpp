@@ -12,12 +12,10 @@ namespace TRL {
 //CONTSTRUCTORS + DESTRUCTORS//
 ///////////////////////////////
 
-Robot Robot::instance;
-
-Controller Robot::controller;
+Robot* Robot::instance;
 
 void Robot::initStatics() {
-	instance = Robot();
+	instance = new Robot();
 }
 
 Robot::Robot() {
@@ -26,6 +24,15 @@ Robot::Robot() {
 
 	driveMotors = NULL;
 	liftMotors = NULL;
+
+	leftLiftPower = 0;
+	rightLiftPower = 0;
+
+	leftDrivePower = 0;
+	rightDrivePower = 0;
+
+	allianceColor = RED;
+	startLocation = OUTER_TILE;
 }
 
 Robot::~Robot() {
@@ -89,7 +96,7 @@ void Robot::handleInput(InputControlMode controlMode) {
 //	}
 //}
 
-void Robot::driveOrientationMirrorController(Controller &controller) {
+void Robot::driveOrientationController(Controller &controller) {
 	if (controller.isInputActive(RobotControls::orientationForward)) {
 		setDriveOrientation(ForwardOrientation);
 	} else if (controller.getValue(RobotControls::orientationBackward) == 1) {
@@ -97,78 +104,106 @@ void Robot::driveOrientationMirrorController(Controller &controller) {
 	}
 }
 
-//void Robot::driveInputController(InputControlMode controlMode) {
-//	bool yMasterActiveDrive = master_controller.isInputActive(y_drive_stick);
-//	bool xMasterActiveDrive = master_controller.isInputActive(x_drive_stick);
-//
-//	bool yMasterActiveStrafe = master_controller.isInputActive(y_strafe_stick);
-//	bool xMasterActiveStrafe = master_controller.isInputActive(x_strafe_stick);
-//
-//	bool ySlaveActiveDrive = slave_controller.isInputActive(y_drive_stick);
-//	bool xSlaveActiveDrive = slave_controller.isInputActive(x_drive_stick);
-//
-//	bool ySlaveActiveStrafe = slave_controller.isInputActive(y_strafe_stick);
-//	bool xSlaveActiveStrafe = slave_controller.isInputActive(x_strafe_stick);
-//
-//	bool masterDriveActive = xMasterActiveDrive || yMasterActiveDrive;
-//	bool masterStrafeActive = xMasterActiveStrafe || yMasterActiveStrafe;
-//	bool masterActive = masterDriveActive || masterStrafeActive;
-//
-//	bool slaveDriveActive = xSlaveActiveDrive || ySlaveActiveDrive;
-//	bool slaveStrafeActive = xSlaveActiveStrafe || ySlaveActiveStrafe;
-//	bool slaveActive = slaveDriveActive || slaveStrafeActive;
-//
-//	switch (controlMode) {
-//	case MasterOnly:
-//		driveController(master_controller);
-//		return;
-//	case SlaveOnly:
-//		driveController(slave_controller);
-//		return;
-//	case MasterAndSlaveEqualPriority:
-//		if (masterActive && !slaveActive) {
-//			driveController(master_controller);
-//		} else if (!masterActive && slaveActive) {
-//			driveController(slave_controller);
-//		} else if (masterActive && slaveActive) {
-//			//Dont send any input if both are trying to control it
-//		} else if (!masterActive && !slaveActive) {
-//			stopDriveMotors();
-//		}
-//		return;
-//	case MasterHigherPriority:
-//		if (masterActive && !slaveActive) {
-//			driveController(master_controller);
-//		} else if (!masterActive && slaveActive) {
-//			driveController(slave_controller);
-//		} else if (masterActive && slaveActive) {
-//			driveController(master_controller);
-//		} else if (!masterActive && !slaveActive) {
-//			stopDriveMotors();
-//		}
-//		return;
-//	case SlaveHigherPriority:
-//		if (masterActive && !slaveActive) {
-//			driveController(master_controller);
-//		} else if (!masterActive && slaveActive) {
-//			driveController(slave_controller);
-//		} else if (masterActive && slaveActive) {
-//			driveController(slave_controller);
-//		} else if (!masterActive && !slaveActive) {
-//			stopDriveMotors();
-//		}
-//		return;
-//	}
-//}
+void Robot::driveControllerHandler(InputControlMode controlMode) {
+	RobotControllerFunctionPtr masterOperated = &Robot::softTurnDriveController;
+	RobotControllerFunctionPtr slaveOperated = &Robot::hardTurnDriveController;
 
-void Robot::driveController(Controller *controller) {
-	short y = RobotControls::driveStick->getY();
-	short x = RobotControls::driveStick->getX();
+	RobotControllerHasInputFunctionPtr masterOperatedHasInput =
+			&Robot::softTurnDriveControllerHasInput;
+	RobotControllerHasInputFunctionPtr slaveOperatedHasInput =
+			&Robot::hardTurnDriveControllerHasInput;
+
+	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
+	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
+
+	println(DEBUG, "Robot", "driveControllerHandler",
+			"MasterActive: %d, SlaveActive: %d", masterActive, slaveActive);
+
+	switch (controlMode) {
+	case MasterOnly:
+		(this->*masterOperated)(MASTER_CONTROLLER);
+		return;
+	case SlaveOnly:
+		(this->*slaveOperated)(SLAVE_CONTROLLER);
+		return;
+	case MasterAndSlaveEqualPriority:
+		if (masterActive && !slaveActive) {
+			(this->*masterOperated)(MASTER_CONTROLLER);
+		} else if (!masterActive && slaveActive) {
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+		} else if (masterActive && slaveActive) {
+			stopDriveMotors();
+		} else if (!masterActive && !slaveActive) {
+			stopDriveMotors();
+		}
+		return;
+	case MasterHigherPriority:
+		if (masterActive && !slaveActive) {
+			(this->*masterOperated)(MASTER_CONTROLLER);
+		} else if (!masterActive && slaveActive) {
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+		} else if (masterActive && slaveActive) {
+			(this->*masterOperated)(MASTER_CONTROLLER);
+		} else if (!masterActive && !slaveActive) {
+			stopDriveMotors();
+		}
+		return;
+	case SlaveHigherPriority:
+		if (masterActive && !slaveActive) {
+			(this->*masterOperated)(MASTER_CONTROLLER);
+		} else if (!masterActive && slaveActive) {
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+		} else if (masterActive && slaveActive) {
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+		} else if (!masterActive && !slaveActive) {
+			stopDriveMotors();
+		}
+		return;
+	}
+}
+
+bool Robot::softTurnDriveControllerHasInput(ControllerType type) {
+	ControllerStick* stick =
+			RobotControls::driveStick->getCorrespondingStickForControllerType(
+					type);
+
+	short y = stick->getY();
+	short x = stick->getX();
+
+	if (y == 0 && x == 0) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+bool Robot::hardTurnDriveControllerHasInput(ControllerType type) {
+	ControllerStick* stick =
+			RobotControls::driveStick->getCorrespondingStickForControllerType(
+					type);
+
+	short y = stick->getY();
+	short x = stick->getX();
+
+	if (y == 0 && x == 0) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+void Robot::hardTurnDriveController(ControllerType type) {
+	ControllerStick* stick =
+			RobotControls::driveStick->getCorrespondingStickForControllerType(
+					type);
+
+	short y = stick->getY();
+	short x = stick->getX();
 
 	if (abs(y) > abs(x)) {
-		drive(y, ManualDrive);
+		manualDrive(y);
 	} else if (abs(x) >= abs(y)) {
-		drive(x, ManualTurn);
+		manualTurn(x);
 	}
 }
 
@@ -178,14 +213,19 @@ int Robot::calcDriveFromAngle(int angle, int maxPow) {
 	return power;
 }
 
-void Robot::softTurnDriveController(Controller *controller) {
-	float angle = RobotControls::driveStick->getStickAngle();
-	int x = RobotControls::driveStick->getX();
-	int y = RobotControls::driveStick->getY();
-	int leftPow = 0;
-	int rightPow = 0;
+void Robot::softTurnDriveController(ControllerType type) {
+	ControllerStick* stick =
+			RobotControls::driveStick->getCorrespondingStickForControllerType(
+					type);
 
-	int largePower = 0;
+	float angle = stick->getStickAngle();
+	short y = stick->getY();
+	short x = stick->getX();
+
+	short leftPow = 0;
+	short rightPow = 0;
+
+	short largePower = 0;
 	if (abs(x) > abs(y)) {
 		largePower = abs(x);
 	} else {
@@ -218,7 +258,7 @@ void Robot::softTurnDriveController(Controller *controller) {
 
 	leftDrivePower = leftPow;
 	rightDrivePower = rightPow;
-	powerDrive(leftPow, rightPow);
+	manualTurn(leftPow, rightPow);
 }
 
 //
@@ -255,11 +295,109 @@ void Robot::reverseDriveOrientation() {
 /////////////////////
 
 void Robot::powerLeftDrive(int power, WheelSidePowerMode mode) {
+	this->leftDrivePower = power;
 
+	for (int i = 0; i < driveMotors->size(); i++) {
+
+		Motor* currentMotor = driveMotors->at(i);
+
+		if (currentMotor->getLocation() == UnspecifiedMotorLocation) {
+			println(ERROR, "Robot", "powerLeftDrive",
+					"Motor (%s) in port %d doesn't have its location set. Please set it before trying to power it.");
+			continue;
+		}
+
+		switch (mode) {
+		case TogetherWheelPowerMode:
+			if (currentMotor->getLocationSide() == LeftMotorLocationSide) {
+				currentMotor->setPower(power);
+			}
+			break;
+
+		case AwayWheelPowerMode:
+			power = abs(power);
+			switch (currentMotor->getLocation()) {
+			case FrontLeftMotorLocation:
+				currentMotor->setPower(power);
+				break;
+			case BackLeftMotorLocation:
+				currentMotor->setPower(-power);
+				break;
+			default:
+				//Do nothing
+				break;
+			}
+			break;
+
+		case TowardsWheelPowerMode:
+			power = abs(power);
+			switch (currentMotor->getLocation()) {
+			case FrontLeftMotorLocation:
+				currentMotor->setPower(-power);
+				break;
+			case BackLeftMotorLocation:
+				currentMotor->setPower(power);
+				break;
+			default:
+				//Do nothing
+				break;
+			}
+			break;
+		}
+	}
 }
 
 void Robot::powerRightDrive(int power, WheelSidePowerMode mode) {
+	this->rightDrivePower = power;
 
+	for (int i = 0; i < driveMotors->size(); i++) {
+
+		Motor* currentMotor = driveMotors->at(i);
+
+		if (currentMotor->getLocation() == UnspecifiedMotorLocation) {
+			println(ERROR, "Robot", "powerLeftDrive",
+					"Motor (%s) in port %d doesn't have its location set. Please set it before trying to power it.");
+			continue;
+		}
+
+		switch (mode) {
+		case TogetherWheelPowerMode:
+			if (currentMotor->getLocationSide() == RightMotorLocationSide) {
+				currentMotor->setPower(power);
+			}
+			break;
+
+		case AwayWheelPowerMode:
+			power = abs(power);
+			switch (currentMotor->getLocation()) {
+			case FrontRightMotorLocation:
+				currentMotor->setPower(power);
+				break;
+			case BackRightMotorLocation:
+				currentMotor->setPower(-power);
+				break;
+			default:
+				//Do nothing
+				break;
+			}
+			break;
+
+		case TowardsWheelPowerMode:
+			power = abs(power);
+			switch (currentMotor->getLocation()) {
+			case FrontRightMotorLocation:
+				currentMotor->setPower(-power);
+				break;
+			case BackRightMotorLocation:
+				currentMotor->setPower(power);
+				break;
+			default:
+				//Do nothing
+				break;
+			}
+			break;
+		}
+	}
 }
 
 void Robot::powerDrive(int leftDrivePower, int rightDrivePower) {
@@ -275,193 +413,104 @@ void Robot::powerDrive(int power) {
 	}
 }
 
+void Robot::manualDrive(int power) {
+	if (orientation == BackwardOrientation) {
+		power = -power;
+	}
+	powerDrive(power);
+}
+
+void Robot::manualTurn(int powerLeft, int powerRight) {
+	if (orientation == BackwardOrientation) {
+		int tempLeftPower = powerLeft;
+		powerLeft = -powerRight;
+		powerRight = -tempLeftPower;
+	}
+
+	powerDrive(powerLeft, powerRight);
+}
+
+void Robot::manualTurn(int power) {
+	//Nothing needs to be done for the reversed orientation
+	powerDrive(power, -power);
+
+}
+
+void Robot::manualStrafe(int power) {
+	if (orientation == BackwardOrientation) {
+		power = -power;
+	}
+
+	if (power > 0) {
+		powerLeftDrive(power, TowardsWheelPowerMode);
+		powerRightDrive(power, AwayWheelPowerMode);
+	} else if (power < 0) {
+		powerLeftDrive(power, AwayWheelPowerMode);
+		powerRightDrive(power, TowardsWheelPowerMode);
+	}
+
+}
+
 void Robot::drive(int power, DriveDirection dir) {
 	if (orientation == BackwardOrientation) {
 		switch (dir) {
-			case ManualDrive:
-				power = -power;
-				break;
-			case ManualTurn:
-				//Nothing needs to be done
-				break;
-			case ManualStrafe:
-				power = -power;
-				break;
-			case DriveForward:
-				dir = DriveBackward;
-				break;
-			case DriveBackward:
-				dir = DriveForward;
-				break;
-			case TurnLeft:
-				//Nothing needs to be done
-				break;
-			case TurnRight:
-				//Nothing needs to be done
-				break;
-			case StrafeLeft:
-				dir = StrafeRight;
-				break;
-			case StrafeRight:
-				dir = StrafeLeft;
-				break;
+		case DriveForward:
+			dir = DriveBackward;
+			break;
+		case DriveBackward:
+			dir = DriveForward;
+			break;
+		case TurnLeft:
+			//Nothing needs to be done
+			break;
+		case TurnRight:
+			//Nothing needs to be done
+			break;
+		case StrafeLeft:
+			dir = StrafeRight;
+			break;
+		case StrafeRight:
+			dir = StrafeLeft;
+			break;
 		}
 	}
 
+	if (power == 0) {
+		stopDriveMotors();
+		return;
+	}
 	switch (dir) {
-		case ManualDrive:
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				motor->setPower(power);
-			}
-			break;
-		case ManualTurn:
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				MotorLocationSide side = motor->getLocationSide();
-				switch (side) {
-					case LeftSide:
-						motor->setPower(power);
-						break;
-					case RightSide:
-						motor->setPower(-power);
-						break;
-					default:
-						println(ERROR, "Robot", "drive",
-								"A motor on the drive does not have it's location properly set for strafing.");
-						break;
-				}
-			}
-			break;
-		case ManualStrafe:
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				MotorLocation location = motor->getLocation();
-				switch (location) {
-					case FrontRightMotorLocation:
-						motor->setPower(-power);
-						break;
-					case FrontLeftMotorLocation:
-						motor->setPower(power);
-						break;
-					case BackRightMotorLocation:
-						motor->setPower(power);
-						break;
-					case BackLeftMotorLocation:
-						motor->setPower(-power);
-					default:
-						println(ERROR, "Robot", "drive",
-								"A motor on the drive does not have it's location properly set for strafing.");
-						break;
-				}
-			}
-			break;
-		case DriveForward:
-			power = abs(power);
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				motor->setPower(power);
-			}
-			break;
-		case DriveBackward:
-			power = -abs(power);
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				motor->setPower(power);
-			}
-			break;
-		case TurnLeft:
-			power = abs(power);
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				MotorLocationSide side = motor->getLocationSide();
-				switch (side) {
-					case LeftSide:
-						motor->setPower(-power);
-						break;
-					case RightSide:
-						motor->setPower(power);
-						break;
-					default:
-						println(ERROR, "Robot", "drive",
-								"A motor on the drive does not have it's location properly set for strafing.");
-				}
-			}
-			break;
-		case TurnRight:
-			power = abs(power);
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				MotorLocationSide side = motor->getLocationSide();
-				switch (side) {
-					case LeftSide:
-						motor->setPower(power);
-						break;
-					case RightSide:
-						motor->setPower(-power);
-						break;
-					default:
-						println(ERROR, "Robot", "drive",
-								"A motor on the drive does not have it's location properly set for strafing.");
-						break;
-				}
-			}
-			break;
-		case StrafeLeft:
-			power = abs(power);
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				MotorLocation location = motor->getLocation();
-				switch (location) {
-					case FrontRightMotorLocation:
-						motor->setPower(power);
-						break;
-					case FrontLeftMotorLocation:
-						motor->setPower(-power);
-						break;
-					case BackRightMotorLocation:
-						motor->setPower(-power);
-						break;
-					case BackLeftMotorLocation:
-						motor->setPower(power);
-					default:
-						println(ERROR, "Robot", "drive",
-								"A motor on the drive does not have it's location properly set for strafing.");
-						break;
-				}
-			}
-			break;
-		case StrafeRight:
-			power = abs(power);
-			for (int i = 0; i < driveMotors->size(); i++) {
-				Motor* motor = driveMotors->at(i);
-				MotorLocation location = motor->getLocation();
-				switch (location) {
-					case FrontRightMotorLocation:
-						motor->setPower(-power);
-						break;
-					case FrontLeftMotorLocation:
-						motor->setPower(power);
-						break;
-					case BackRightMotorLocation:
-						motor->setPower(power);
-						break;
-					case BackLeftMotorLocation:
-						motor->setPower(-power);
-					default:
-						println(ERROR, "Robot", "drive",
-								"A motor on the drive does not have it's location properly set for strafing.");
-						break;
-				}
-			}
-			break;
+	case DriveForward:
+		power = abs(power);
+		powerDrive(power);
+		break;
+	case DriveBackward:
+		power = abs(power);
+		powerDrive(-power);
+		break;
+	case TurnLeft:
+		power = abs(power);
+		powerDrive(-power, power);
+		break;
+	case TurnRight:
+		power = abs(power);
+		powerDrive(power, -power);
+		break;
+	case StrafeLeft:
+		power = abs(power);
+		powerLeftDrive(power, TowardsWheelPowerMode);
+		powerRightDrive(power, AwayWheelPowerMode);
+		break;
+	case StrafeRight:
+		power = abs(power);
+		powerLeftDrive(power, AwayWheelPowerMode);
+		powerRightDrive(power, TowardsWheelPowerMode);
+		break;
 	}
 }
 
 void Robot::stopDriveMotors() {
-	for (int i = 0; i < driveMotors->size(); i++) {
-		driveMotors->at(i)->stop();
-	}
+	powerDrive(0);
 }
 
 //////////////////
@@ -478,7 +527,7 @@ void Robot::powerLeftLift(int power) {
 					"A motor on the drive does not have it's location properly set for setting the left lift power.");
 			continue;
 		}
-		if (side == LeftSide) {
+		if (side == LeftMotorLocationSide) {
 			currentMotor->setPower(power);
 		}
 	}
@@ -494,7 +543,7 @@ void Robot::powerRightLift(int power) {
 					"A motor on the drive does not have it's location properly set for setting the right lift power.");
 			continue;
 		}
-		if (side == LeftSide) {
+		if (side == LeftMotorLocationSide) {
 			currentMotor->setPower(power);
 		}
 	}
@@ -515,17 +564,17 @@ void Robot::powerLift(int power) {
 
 void Robot::lift(int power, LiftDirection dir) {
 	switch (dir) {
-		case ManualLift:
-			powerLift(power);
-			break;
-		case LiftUp:
-			power = abs(power);
-			powerLift(power);
-			break;
-		case LiftDown:
-			power = abs(power);
-			powerLift(-power);
-			break;
+	case ManualLift:
+		powerLift(power);
+		break;
+	case LiftUp:
+		power = abs(power);
+		powerLift(power);
+		break;
+	case LiftDown:
+		power = abs(power);
+		powerLift(-power);
+		break;
 	}
 }
 

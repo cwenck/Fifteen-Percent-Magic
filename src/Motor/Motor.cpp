@@ -115,7 +115,7 @@ bool Motor::destroy() {
 void Motor::setPower(int speed) {
 	if (port == MotorPort_NULL) {
 		println(ERROR, "Motor", "setPower",
-				"Can't power a motor without an assigned port.");
+				"Can't power a motor [%s] without an assigned port.", this->motorName);
 		return;
 	}
 
@@ -190,21 +190,21 @@ MotorLocation Motor::getLocation() {
 MotorLocationSide Motor::getLocationSide() {
 	switch (location) {
 	case LeftMotorLocation:
-		return LeftSide;
+		return LeftMotorLocationSide;
 	case RightMotorLocation:
-		return RightSide;
+		return RightMotorLocationSide;
 	case FrontRightMotorLocation:
-		return RightSide;
+		return RightMotorLocationSide;
 	case FrontLeftMotorLocation:
-		return LeftSide;
+		return LeftMotorLocationSide;
 	case BackRightMotorLocation:
-		return RightSide;
+		return RightMotorLocationSide;
 	case BackLeftMotorLocation:
-		return LeftSide;
+		return LeftMotorLocationSide;
 	case CenterRightMotorLocation:
-		return RightSide;
+		return RightMotorLocationSide;
 	case CenterLeftMotorLocation:
-		return LeftSide;
+		return LeftMotorLocationSide;
 	default:
 		return NoSide;
 	}

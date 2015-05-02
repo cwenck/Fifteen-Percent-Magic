@@ -58,11 +58,11 @@ extern "C" {
 
 using namespace TRL;
 
-int calcDriveFromAngle(int angle, int maxPow) {
-	angle = abs(angle);
-	int power = maxPow * cos(angle * 2 * PI / 180);
-	return power;
-}
+//int calcDriveFromAngle(int angle, int maxPow) {
+//	angle = abs(angle);
+//	int power = maxPow * cos(angle * 2 * PI / 180);
+//	return power;
+//}
 
 void setMotorSpeed(int speed) {
 	MotorList::testMotor->setPower(speed);
@@ -87,8 +87,13 @@ void operatorControl() {
 //	MotorList::motor_1->stop();
 	while (true) {
 		delay(20);
-		MotorList::testMotor->setPower(Controller::instance->getValue(Ch3));
-		{
+		Robot::instance->driveControllerHandler(MasterHigherPriority);
+//		Robot::instance->driveControllerHandler(SlaveOnly);
+
+
+		//		MotorList::testMotor->setPower(Controller::instance->getValue(Ch3));
+
+//		{
 //			float angle = ControllerStick::leftMaster->getStickAngle();
 //			int x = ControllerStick::leftMaster->getX();
 //			int y = ControllerStick::leftMaster->getY();
@@ -130,7 +135,7 @@ void operatorControl() {
 //			println("Angle: %.2f :: LeftPow: %d :: RightPow: %d",
 //					ControllerStick::leftMaster->getStickAngle(), leftPow,
 //					rightPow);
-		}
+//		}
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 
 	}

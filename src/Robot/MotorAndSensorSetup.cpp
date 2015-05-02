@@ -38,11 +38,13 @@ void RobotControls::initialize() {
 
 	orientationForward = ShiftedInput_Btn8U;
 	orientationBackward = ShiftedInput_Btn8D;
+
+	setupControllers();
 }
 
 void RobotControls::setupControllers() {
 	Controller::instance->setJoystickDeadzone(MASTER_CONTROLLER, 10);
-	Controller::instance->setJoystickDeadzone(SLAVE_CONTROLLER, 10);
+	Controller::instance->setJoystickDeadzone(SLAVE_CONTROLLER, 20);
 }
 
 ///////////////////
@@ -54,18 +56,48 @@ void RobotControls::setupControllers() {
 /////////////////////////
 
 Motor* MotorList::testMotor;
+
 Motor* MotorList::leftLaucherWheelMotorOne;
 Motor* MotorList::leftLaucherWheelMotorTwo;
 Motor* MotorList::rightLaucherWheelMotorOne;
 Motor* MotorList::rightLaucherWheelMotorTwo;
 
+Motor* MotorList::frontLeftDrive;
+Motor* MotorList::backLeftDrive;
+Motor* MotorList::frontRightDrive;
+Motor* MotorList::backRightDrive;
+
 void MotorList::initialize() {
-	testMotor = new Motor(MotorPort_9, UnspecifiedMotorLocation, "Test Motor");
-	leftLaucherWheelMotorOne = new Motor(MotorPort_2, OtherMotorLocation, "Left Wheel");
-	leftLaucherWheelMotorTwo = new Motor(MotorPort_3, OtherMotorLocation, "Left Wheel");
-	rightLaucherWheelMotorOne = new Motor(MotorPort_4, OtherMotorLocation, "Right Wheel");
-	rightLaucherWheelMotorTwo = new Motor(MotorPort_5, OtherMotorLocation, "Right Wheel");
+	testMotor = new Motor(MotorPort_10, OtherMotorLocation, "Test Motor");
+
+	leftLaucherWheelMotorOne = new Motor(MotorPort_2, OtherMotorLocation,
+			"L Launch Whl M1");
+	leftLaucherWheelMotorTwo = new Motor(MotorPort_3, OtherMotorLocation,
+			"L Launch Whl M2");
+	rightLaucherWheelMotorOne = new Motor(MotorPort_4, OtherMotorLocation,
+			"R Launch Whl M1");
+	rightLaucherWheelMotorTwo = new Motor(MotorPort_5, OtherMotorLocation,
+			"R Launch Whl M2");
+
+	frontLeftDrive = new Motor(MotorPort_6, FrontLeftMotorLocation, "FL Drive");
+	backLeftDrive = new Motor(MotorPort_7, BackLeftMotorLocation, "BL Drive");
+	frontRightDrive = new Motor(MotorPort_8, FrontRightMotorLocation,
+			"FR Drive");
+	backRightDrive = new Motor(MotorPort_9, BackRightMotorLocation, "BR Drive");
+
+	setupRobotMotors();
+
 	println(LOG, "MotorSetup", "initialize", "All motors initialized");
+}
+
+void MotorList::setupRobotMotors() {
+	/*
+	 * Don't call delete on any of these Arrays
+	 * to avoid pointers whose objects have been deleted
+	 */
+	Array<Motor*>* tempDriveMotors = new Array<Motor*>(4, 4, frontLeftDrive,
+			backLeftDrive, frontRightDrive, backRightDrive);
+	Robot::instance->setDriveMotors(tempDriveMotors);
 }
 
 ///////////////////////
@@ -100,9 +132,9 @@ AutonRoutine* AutonList::routineOne;
 AutonRoutine* AutonList::routineTwo;
 
 void AutonList::initialize() {
-	routineOne = new AutonRoutine(RED, POLE, RedPolePositionNumberOne, "test 1",
+	routineOne = new AutonRoutine(RED, INNTER_TILE, RedPolePositionNumberOne, "test 1",
 			AutonFunctions::redAuton);
-	routineTwo = new AutonRoutine(BLUE, POLE, RedPolePositionNumberOne,
+	routineTwo = new AutonRoutine(BLUE, OUTER_TILE, RedPolePositionNumberOne,
 			"test 2", AutonFunctions::blueAuton);
 }
 

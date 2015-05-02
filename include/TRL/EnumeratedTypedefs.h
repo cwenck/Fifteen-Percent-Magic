@@ -15,8 +15,8 @@ namespace TRL {
 	///////////////////////////////
 
 	typedef enum _RobotStartLocation {
-		AUTO_LOADER = 1,
-		POLE = 2
+		INNTER_TILE = 1,
+		OUTER_TILE = 2
 	}RobotStartLocation;
 
 	typedef enum _AllianceColor {
@@ -44,9 +44,6 @@ namespace TRL {
 	} WheelSidePowerMode;
 
 	typedef enum _DriveDirection {
-		ManualDrive,
-		ManualTurn,
-		ManualStrafe,
 		DriveForward,
 		DriveBackward,
 		TurnLeft,
@@ -343,8 +340,8 @@ namespace TRL {
 
 	typedef enum _MotorLocationSide {
 		NoSide,
-		LeftSide,
-		RightSide
+		LeftMotorLocationSide,
+		RightMotorLocationSide
 	}MotorLocationSide;
 
 	////////////////////

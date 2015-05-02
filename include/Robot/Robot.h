@@ -33,13 +33,17 @@ namespace TRL {
 		int rightLiftPower;
 
 	public:
+		//Robot Specific Typedef
+		typedef void (Robot::*RobotControllerFunctionPtr)(ControllerType);
+		typedef bool (Robot::*RobotControllerHasInputFunctionPtr)(ControllerType);
+
 		//Constructor + Destructor
 		Robot();
 		static void initStatics();
 		virtual ~Robot();
 
 		//Instance
-		static Robot instance;
+		static Robot* instance;
 
 		//Autonomous Information
 		AllianceColor allianceColor;
@@ -52,26 +56,22 @@ namespace TRL {
 		void handleInput(InputControlMode controlMode);
 
 //		void driveOrientationInputController(InputControlMode controlMode);
-		void driveOrientationMirrorController(Controller &controller);
+		void driveOrientationController(Controller &controller);
 
-		/////////
-		//DRIVE//
-		/////////
+/////////
+//DRIVE//
+/////////
 
 //		void driveInputController(InputControlMode controlMode);
-		void powerDrive(int power);
-		void powerDrive(int leftDrivePower, int rightDrivePower);
 
-		void powerLeftDrive(int power, WheelSidePowerMode mode);
-		void powerRightDrive(int power, WheelSidePowerMode mode);
-
+	private:
 		int calcDriveFromAngle(int angle, int maxPow);
-		void driveController(Controller *controller);
-		void softTurnDriveController(Controller *controller);
-		void printDriveSpeed();
-
-
-
+		bool softTurnDriveControllerHasInput(ControllerType type);
+		bool hardTurnDriveControllerHasInput(ControllerType type);
+	public:
+		void softTurnDriveController(ControllerType controller);
+		void hardTurnDriveController(ControllerType controller);
+		void driveControllerHandler(InputControlMode mode);
 
 //		void liftInputController(InputControlMode controlMode);
 //		void liftController(Controller &controller);
@@ -88,11 +88,26 @@ namespace TRL {
 		void setDriveOrientation(DriveOrientation orientation);
 		void reverseDriveOrientation();
 
-		//Drive
+//Drive
+	private:
+		void powerDrive(int power);
+		void powerDrive(int leftDrivePower, int rightDrivePower);
+
+		void powerLeftDrive(int power, WheelSidePowerMode mode);
+		void powerRightDrive(int power, WheelSidePowerMode mode);
+
+	public:
+		void printDriveSpeed();
+
+		void manualDrive(int power);
+		void manualTurn(int powerLeft, int powerRight);
+		void manualTurn(int power);
+		void manualStrafe(int power);
+
 		void drive(int power, DriveDirection dir);
 		void stopDriveMotors();
 
-		//Lift
+//Lift
 		void powerLeftLift(int speed);
 		void powerRightLift(int speed);
 		void powerLift(int speed);

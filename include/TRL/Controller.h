@@ -45,6 +45,12 @@ namespace TRL {
 		float getStickAngle();
 		int getX();
 		int getY();
+
+		ControllerType getControllerType();
+		ControllerStick* getCorrespondingStickForControllerType(ControllerType type);
+
+		static ControllerType getControllerType(ControllerStick* stick);
+		static ControllerStick* getCorrespondingStickForControllerType(ControllerType type, ControllerStick* stick);
 	};
 
 	class Controller {

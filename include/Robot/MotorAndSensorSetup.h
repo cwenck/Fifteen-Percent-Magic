@@ -19,15 +19,22 @@ namespace TRL {
 	class MotorList {
 	public:
 		static void initialize();
+		static void setupRobotMotors();
 
 		//These are just generic names for the template
 		//You are encouraged to rename them using eclipse's
 		//refactor->rename feature in the right click menu
 		static Motor* testMotor;
+
 		static Motor* leftLaucherWheelMotorOne;
 		static Motor* leftLaucherWheelMotorTwo;
 		static Motor* rightLaucherWheelMotorOne;
 		static Motor* rightLaucherWheelMotorTwo;
+
+		static Motor* frontLeftDrive;
+		static Motor* backLeftDrive;
+		static Motor* frontRightDrive;
+		static Motor* backRightDrive;
 	};
 
 	class SensorList {

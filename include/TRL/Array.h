@@ -30,23 +30,31 @@ namespace TRL {
 
 		Array(int size, T* arr) {
 			this->arrSize = size;
-			arrayStart = arr;
+			arrayStart = new T[size];
+			for(int i = 0; i < size; i++) {
+				arrayStart[i] = arr[i];
+			}
 		}
 
-		/*Array(int size, ...) {
-			this->arrSize = size;
-			arrayStart = new T[size];
+		/*
+		 * Initializes the array with some starting values
+		 * @param numberInitialValuesPassed must match the number of starting values passed afterward
+		 * @param ... any values you want to be initialized. They will be initialized from 0 to (numberInitialValuesPassed - 1)
+		 */
+		Array(int arrSize, int numberInitialValuesPassed,...) {
+			this->arrSize = arrSize;
+			arrayStart = new T[arrSize];
 
 			va_list arg;
-			va_start(arg, size);
+			va_start(arg, numberInitialValuesPassed);
 			{
-				for(int i = 0; i < size; i++) {
+				for(int i = 0; i < numberInitialValuesPassed; i++) {
 					arrayStart[i] = (va_arg(arg,T));
 				}
 
 			}
 			va_end(arg);
-		}*/
+		}
 
 		virtual ~Array() {
 			delete[] arrayStart;
