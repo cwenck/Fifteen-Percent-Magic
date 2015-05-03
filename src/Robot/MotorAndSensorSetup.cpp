@@ -29,6 +29,9 @@ ControllerStick* RobotControls::strafeStick;
 ControllerInput RobotControls::orientationForward;
 ControllerInput RobotControls::orientationBackward;
 
+ControllerInput RobotControls::liftUp;
+ControllerInput RobotControls::liftDown;
+
 void RobotControls::initialize() {
 	intakeBalls = Ch2;
 	shootBall = Btn6U;
@@ -38,6 +41,9 @@ void RobotControls::initialize() {
 
 	orientationForward = ShiftedInput_Btn8U;
 	orientationBackward = ShiftedInput_Btn8D;
+
+	liftUp = ShiftedInput_Btn6U;
+	liftDown = ShiftedInput_Btn6D;
 
 	setupControllers();
 }

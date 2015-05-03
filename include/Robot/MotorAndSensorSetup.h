@@ -62,6 +62,8 @@ namespace TRL {
 		static ControllerInput intakeBalls;
 		static ControllerInput shootBall;
 
+		static ControllerInput liftUp;
+		static ControllerInput liftDown;
 
 		//These variables should always exist
 		static ControllerStick* driveStick;

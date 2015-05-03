@@ -24,18 +24,27 @@ namespace TRL {
 
 		Array<Motor*>* driveMotors;
 		Array<Motor*>* liftMotors;
+		Array<Motor*>* intakeMotors;
 
+		//Variables to hold the current speed of various groups of motors
 		int leftDrivePower;
 		int rightDrivePower;
 
-		//TODO use these
 		int leftLiftPower;
 		int rightLiftPower;
+
+		int intakePower;
+
+		//Predefined speeds for certain groups of motors when powered
+		int intakePowerLevel;
+
+		int liftPowerLevel;
 
 	public:
 		//Robot Specific Typedef
 		typedef void (Robot::*RobotControllerFunctionPtr)(ControllerType);
 		typedef bool (Robot::*RobotControllerHasInputFunctionPtr)(ControllerType);
+		typedef void (Robot::*RobotStopMotorsFunctionPtr)(void);
 
 		//Constructor + Destructor
 		Robot();
@@ -49,21 +58,28 @@ namespace TRL {
 		AllianceColor allianceColor;
 		RobotStartLocation startLocation;
 
-		//Controllers
-		static Controller controller;
-
 		// Controller Input
 		void handleInput(InputControlMode controlMode);
 
-//		void driveOrientationInputController(InputControlMode controlMode);
-		void driveOrientationController(Controller &controller);
+		//////////////////////
+		//Set Motor Pointers//
+		//////////////////////
+		void setDriveMotors(Array<Motor*>* driveMotors);
+		void setLiftMotors(Array<Motor*>* liftMotors);
+		void setIntakeMotors(Array<Motor*>* intakeMotors);
 
-/////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Input Controllers, Controller Handlers, and Functions to Test if an Input Controller has Active Inputs Below Here//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//DRIVE ORIENTATION//
+	private:
+		bool driveOrientationControllerHasInput(ControllerType type);
+	public:
+		void driveOrientationControllerHandler(InputControlMode controlMode);
+		void driveOrientationController(ControllerType type);
+
 //DRIVE//
-/////////
-
-//		void driveInputController(InputControlMode controlMode);
-
 	private:
 		int calcDriveFromAngle(int angle, int maxPow);
 		bool softTurnDriveControllerHasInput(ControllerType type);
@@ -71,24 +87,32 @@ namespace TRL {
 	public:
 		void softTurnDriveController(ControllerType controller);
 		void hardTurnDriveController(ControllerType controller);
-		void driveControllerHandler(InputControlMode mode);
+		void driveControllerHandler(InputControlMode controlMode);
 
-//		void liftInputController(InputControlMode controlMode);
-//		void liftController(Controller &controller);
+//LIFT//
+	private:
+		bool liftControllerHasInput(ControllerType type);
+	public:
+		void liftController(ControllerType controller);
+		void liftControllerHandler(InputControlMode controlMode);
 
-//		void intakeInputController(InputControlMode controlMode);
-//		void intakeController(Controller &controller);
+//INTAKE//
+	private:
+		bool intakeControllerHasInput(ControllerType type);
+	public:
+		void intakeController(ControllerType type);
+		void intakeControllerHandler(InputControlMode controlMode);
 
-//Set Motor Pointers
-		void setDriveMotors(Array<Motor*>* driveMotors);
-		void setLiftMotors(Array<Motor*>* liftMotors);
-//		void setIntakeMotors(Motor* intake);
+/////////////////////////////////////////////////////////
+//Motor Power Functions For The Above Input Controllers//
+/////////////////////////////////////////////////////////
 
-//Drive Orientation
+		//DRIVE ORIENTATION//
+	public:
 		void setDriveOrientation(DriveOrientation orientation);
 		void reverseDriveOrientation();
 
-//Drive
+		//DRIVE//
 	private:
 		void powerDrive(int power);
 		void powerDrive(int leftDrivePower, int rightDrivePower);
@@ -107,13 +131,19 @@ namespace TRL {
 		void drive(int power, DriveDirection dir);
 		void stopDriveMotors();
 
-//Lift
+//LIFT//
+	public:
 		void powerLeftLift(int speed);
 		void powerRightLift(int speed);
 		void powerLift(int speed);
 		void powerLift(int leftLiftSpeed, int rightLiftSpeed);
 		void lift(int power, LiftDirection dir);
 		void stopLift();
+
+//INTAKE//
+	public:
+		void powerIntakeMotors(int power);
+		void stopIntakeMotors();
 
 	};
 }

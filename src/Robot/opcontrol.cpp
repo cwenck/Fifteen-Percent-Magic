@@ -76,66 +76,9 @@ void operatorControl() {
 
 //	AutonRegistry::printRoutines();
 
-//	IntegratedMotorEncoder* ime = new IntegratedMotorEncoder(
-//			IntegratedEncoder_1);
-//	delay(500);
-//	for (int i = 0; i <= 127; i++) {
-//		MotorList::motor_1->setPower(i);
-//		delay(750);
-//		println("%.2f", ime->getRPM(SpeedGearing));
-//	}
-//	MotorList::motor_1->stop();
 	while (true) {
 		delay(20);
 		Robot::instance->driveControllerHandler(MasterHigherPriority);
-//		Robot::instance->driveControllerHandler(SlaveOnly);
-
-
-		//		MotorList::testMotor->setPower(Controller::instance->getValue(Ch3));
-
-//		{
-//			float angle = ControllerStick::leftMaster->getStickAngle();
-//			int x = ControllerStick::leftMaster->getX();
-//			int y = ControllerStick::leftMaster->getY();
-//			int leftPow = 0;
-//			int rightPow = 0;
-//
-//			int largePower = 0;
-//			if (abs(x) > abs(y)) {
-//				largePower = abs(x);
-//			} else {
-//				largePower = abs(y);
-//			}
-//
-//			if (x == 0 && y == 0) {
-//				//Do Nothing
-//			} else if (x == 0) {
-//				leftPow = y;
-//				rightPow = y;
-//			} else if (x > 0) {
-//
-//				if (y > 0) {
-//					leftPow = largePower;
-//					rightPow = calcDriveFromAngle(angle, largePower);
-//				} else {
-//					leftPow = -calcDriveFromAngle(angle, largePower);
-//					;
-//					rightPow = -largePower;
-//				}
-//			} else if (x < 0) {
-//				if (y > 0) {
-//					leftPow = calcDriveFromAngle(angle, largePower);
-//					rightPow = largePower;
-//				} else {
-//					leftPow = -largePower;
-//					rightPow = -calcDriveFromAngle(angle, largePower);
-//				}
-//			}
-//
-//			println("Angle: %.2f :: LeftPow: %d :: RightPow: %d",
-//					ControllerStick::leftMaster->getStickAngle(), leftPow,
-//					rightPow);
-//		}
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 
 	}

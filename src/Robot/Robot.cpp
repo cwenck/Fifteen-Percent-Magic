@@ -31,6 +31,11 @@ Robot::Robot() {
 	leftDrivePower = 0;
 	rightDrivePower = 0;
 
+	intakePower = 0;
+
+	intakePowerLevel = 127;
+	liftPowerLevel = 127;
+
 	allianceColor = RED;
 	startLocation = OUTER_TILE;
 }
@@ -46,126 +51,153 @@ void Robot::handleInput(InputControlMode controlMode) {
 //	driveInputController(controlMode);
 }
 
-//void Robot::driveOrientationInputController(InputControlMode controlMode) {
-//	bool masterForwardActive = controller.isInputActive(
-//			orientation_forward);
-//	bool masterBackwawrdActive = controller.isInputActive(
-//			orientation_backward);
-//	bool slaveForwardActive = controller.isInputActive(
-//			orientation_forward);
-//	bool slaveBackwardActive = controller.isInputActive(
-//			orientation_backward);
-//
-//	bool masterActive = masterForwardActive || masterBackwawrdActive;
-//	bool slaveActive = slaveForwardActive || slaveBackwardActive;
-//
-//	switch (controlMode) {
-//	case MasterOnly:
-//		driveOrientationController(master_controller);
-//		return;
-//	case SlaveOnly:
-//		driveOrientationController(slave_controller);
-//		return;
-//	case MasterAndSlaveEqualPriority:
-//		if (masterActive && !slaveActive) {
-//			driveOrientationController(master_controller);
-//		} else if (!masterActive && slaveActive) {
-//			driveOrientationController(slave_controller);
-//		} else if (masterActive && slaveActive) {
-//			//Dont send any input if both are trying to control it
-//		}
-//		return;
-//	case MasterHigherPriority:
-//		if (masterActive && !slaveActive) {
-//			driveOrientationController(master_controller);
-//		} else if (!masterActive && slaveActive) {
-//			driveOrientationController(slave_controller);
-//		} else if (masterActive && slaveActive) {
-//			driveOrientationController(master_controller);
-//		}
-//		return;
-//	case SlaveHigherPriority:
-//		if (masterActive && !slaveActive) {
-//			driveOrientationController(master_controller);
-//		} else if (!masterActive && slaveActive) {
-//			driveOrientationController(slave_controller);
-//		} else if (masterActive && slaveActive) {
-//			driveOrientationController(slave_controller);
-//		}
-//		return;
-//	}
-//}
+void Robot::driveOrientationControllerHandler(InputControlMode controlMode) {
+//ONLY fill out the variables directly below this
+	RobotControllerFunctionPtr masterOperated =
+			&Robot::driveOrientationController;
+	RobotControllerFunctionPtr slaveOperated =
+			&Robot::driveOrientationController;
 
-void Robot::driveOrientationController(Controller &controller) {
-	if (controller.isInputActive(RobotControls::orientationForward)) {
+	RobotControllerHasInputFunctionPtr masterOperatedHasInput =
+			&Robot::driveOrientationControllerHasInput;
+	RobotControllerHasInputFunctionPtr slaveOperatedHasInput =
+			&Robot::driveOrientationControllerHasInput;
+
+//DON'T TOUCH ANY OF THE CODE BELOW HERE IN THIS FUNCTION//
+//ONLY CHANGE WHAT VRIABLES ARE EQUAL TO ABOVE HERE//
+	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
+	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
+
+	switch (controlMode) {
+		case MasterOnly:
+			(this->*masterOperated)(MASTER_CONTROLLER);
+			return;
+		case SlaveOnly:
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+			return;
+		case MasterAndSlaveEqualPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				//Do Nothing
+			} else if (!masterActive && !slaveActive) {
+				//Do Nothing
+			}
+			return;
+		case MasterHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				//Do Nothing
+			}
+			return;
+		case SlaveHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				//Do Nothing
+			}
+			return;
+	}
+}
+
+bool Robot::driveOrientationControllerHasInput(ControllerType type) {
+	ControllerInput fwd = Controller::instance->convertControllerInputToType(
+			type, RobotControls::orientationForward);
+	ControllerInput bkwd = Controller::instance->convertControllerInputToType(
+			type, RobotControls::orientationBackward);
+	if (Controller::instance->isInputActive(fwd)
+			|| Controller::instance->isInputActive(bkwd)) {
+		return true;
+	}
+	return false;
+}
+
+void Robot::driveOrientationController(ControllerType type) {
+	ControllerInput fwd = Controller::instance->convertControllerInputToType(
+			type, RobotControls::orientationForward);
+	ControllerInput bkwd = Controller::instance->convertControllerInputToType(
+			type, RobotControls::orientationBackward);
+	if (Controller::instance->isInputActive(fwd)) {
 		setDriveOrientation(ForwardOrientation);
-	} else if (controller.getValue(RobotControls::orientationBackward) == 1) {
+	} else if (Controller::instance->isInputActive(bkwd)) {
 		setDriveOrientation(BackwardOrientation);
 	}
 }
 
 void Robot::driveControllerHandler(InputControlMode controlMode) {
+	//ONLY fill out the variables directly below this
 	RobotControllerFunctionPtr masterOperated = &Robot::softTurnDriveController;
 	RobotControllerFunctionPtr slaveOperated = &Robot::hardTurnDriveController;
+
+	RobotStopMotorsFunctionPtr stopMotors = &Robot::stopDriveMotors;
 
 	RobotControllerHasInputFunctionPtr masterOperatedHasInput =
 			&Robot::softTurnDriveControllerHasInput;
 	RobotControllerHasInputFunctionPtr slaveOperatedHasInput =
 			&Robot::hardTurnDriveControllerHasInput;
 
+	//DON'T TOUCH ANY OF THE CODE BELOW HERE IN THIS FUNCTION//
+	//ONLY CHANGE WHAT VRIABLES ARE EQUAL TO ABOVE HERE//
 	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
 	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
 
-	println(DEBUG, "Robot", "driveControllerHandler",
-			"MasterActive: %d, SlaveActive: %d", masterActive, slaveActive);
-
 	switch (controlMode) {
-	case MasterOnly:
-		(this->*masterOperated)(MASTER_CONTROLLER);
-		return;
-	case SlaveOnly:
-		(this->*slaveOperated)(SLAVE_CONTROLLER);
-		return;
-	case MasterAndSlaveEqualPriority:
-		if (masterActive && !slaveActive) {
+		case MasterOnly:
 			(this->*masterOperated)(MASTER_CONTROLLER);
-		} else if (!masterActive && slaveActive) {
+			return;
+		case SlaveOnly:
 			(this->*slaveOperated)(SLAVE_CONTROLLER);
-		} else if (masterActive && slaveActive) {
-			stopDriveMotors();
-		} else if (!masterActive && !slaveActive) {
-			stopDriveMotors();
-		}
-		return;
-	case MasterHigherPriority:
-		if (masterActive && !slaveActive) {
-			(this->*masterOperated)(MASTER_CONTROLLER);
-		} else if (!masterActive && slaveActive) {
-			(this->*slaveOperated)(SLAVE_CONTROLLER);
-		} else if (masterActive && slaveActive) {
-			(this->*masterOperated)(MASTER_CONTROLLER);
-		} else if (!masterActive && !slaveActive) {
-			stopDriveMotors();
-		}
-		return;
-	case SlaveHigherPriority:
-		if (masterActive && !slaveActive) {
-			(this->*masterOperated)(MASTER_CONTROLLER);
-		} else if (!masterActive && slaveActive) {
-			(this->*slaveOperated)(SLAVE_CONTROLLER);
-		} else if (masterActive && slaveActive) {
-			(this->*slaveOperated)(SLAVE_CONTROLLER);
-		} else if (!masterActive && !slaveActive) {
-			stopDriveMotors();
-		}
-		return;
+			return;
+		case MasterAndSlaveEqualPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*stopMotors)();
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case MasterHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case SlaveHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
 	}
 }
 
 bool Robot::softTurnDriveControllerHasInput(ControllerType type) {
-	ControllerStick* stick =
-			RobotControls::driveStick->getCorrespondingStickForControllerType(
-					type);
+	ControllerStick* stick = RobotControls::driveStick
+			->getCorrespondingStickForControllerType(type);
 
 	short y = stick->getY();
 	short x = stick->getX();
@@ -178,9 +210,8 @@ bool Robot::softTurnDriveControllerHasInput(ControllerType type) {
 }
 
 bool Robot::hardTurnDriveControllerHasInput(ControllerType type) {
-	ControllerStick* stick =
-			RobotControls::driveStick->getCorrespondingStickForControllerType(
-					type);
+	ControllerStick* stick = RobotControls::driveStick
+			->getCorrespondingStickForControllerType(type);
 
 	short y = stick->getY();
 	short x = stick->getX();
@@ -193,9 +224,8 @@ bool Robot::hardTurnDriveControllerHasInput(ControllerType type) {
 }
 
 void Robot::hardTurnDriveController(ControllerType type) {
-	ControllerStick* stick =
-			RobotControls::driveStick->getCorrespondingStickForControllerType(
-					type);
+	ControllerStick* stick = RobotControls::driveStick
+			->getCorrespondingStickForControllerType(type);
 
 	short y = stick->getY();
 	short x = stick->getX();
@@ -214,9 +244,8 @@ int Robot::calcDriveFromAngle(int angle, int maxPow) {
 }
 
 void Robot::softTurnDriveController(ControllerType type) {
-	ControllerStick* stick =
-			RobotControls::driveStick->getCorrespondingStickForControllerType(
-					type);
+	ControllerStick* stick = RobotControls::driveStick
+			->getCorrespondingStickForControllerType(type);
 
 	float angle = stick->getStickAngle();
 	short y = stick->getY();
@@ -261,7 +290,6 @@ void Robot::softTurnDriveController(ControllerType type) {
 	manualTurn(leftPow, rightPow);
 }
 
-//
 ///////////////////////////////
 //SET MOTOR POINTER FUNCTIONS//
 ///////////////////////////////
@@ -272,6 +300,10 @@ void Robot::setDriveMotors(Array<Motor*>* driveMotors) {
 
 void Robot::setLiftMotors(Array<Motor*>* liftMotors) {
 	this->liftMotors = liftMotors;
+}
+
+void Robot::setIntakeMotors(Array<Motor*>* intakeMotors) {
+	this->intakeMotors = intakeMotors;
 }
 
 ///////////////////////////////
@@ -308,41 +340,41 @@ void Robot::powerLeftDrive(int power, WheelSidePowerMode mode) {
 		}
 
 		switch (mode) {
-		case TogetherWheelPowerMode:
-			if (currentMotor->getLocationSide() == LeftMotorLocationSide) {
-				currentMotor->setPower(power);
-			}
-			break;
+			case TogetherWheelPowerMode:
+				if (currentMotor->getLocationSide() == LeftMotorLocationSide) {
+					currentMotor->setPower(power);
+				}
+				break;
 
-		case AwayWheelPowerMode:
-			power = abs(power);
-			switch (currentMotor->getLocation()) {
-			case FrontLeftMotorLocation:
-				currentMotor->setPower(power);
+			case AwayWheelPowerMode:
+				power = abs(power);
+				switch (currentMotor->getLocation()) {
+					case FrontLeftMotorLocation:
+						currentMotor->setPower(power);
+						break;
+					case BackLeftMotorLocation:
+						currentMotor->setPower(-power);
+						break;
+					default:
+						//Do nothing
+						break;
+				}
 				break;
-			case BackLeftMotorLocation:
-				currentMotor->setPower(-power);
-				break;
-			default:
-				//Do nothing
-				break;
-			}
-			break;
 
-		case TowardsWheelPowerMode:
-			power = abs(power);
-			switch (currentMotor->getLocation()) {
-			case FrontLeftMotorLocation:
-				currentMotor->setPower(-power);
+			case TowardsWheelPowerMode:
+				power = abs(power);
+				switch (currentMotor->getLocation()) {
+					case FrontLeftMotorLocation:
+						currentMotor->setPower(-power);
+						break;
+					case BackLeftMotorLocation:
+						currentMotor->setPower(power);
+						break;
+					default:
+						//Do nothing
+						break;
+				}
 				break;
-			case BackLeftMotorLocation:
-				currentMotor->setPower(power);
-				break;
-			default:
-				//Do nothing
-				break;
-			}
-			break;
 		}
 	}
 }
@@ -361,41 +393,41 @@ void Robot::powerRightDrive(int power, WheelSidePowerMode mode) {
 		}
 
 		switch (mode) {
-		case TogetherWheelPowerMode:
-			if (currentMotor->getLocationSide() == RightMotorLocationSide) {
-				currentMotor->setPower(power);
-			}
-			break;
+			case TogetherWheelPowerMode:
+				if (currentMotor->getLocationSide() == RightMotorLocationSide) {
+					currentMotor->setPower(power);
+				}
+				break;
 
-		case AwayWheelPowerMode:
-			power = abs(power);
-			switch (currentMotor->getLocation()) {
-			case FrontRightMotorLocation:
-				currentMotor->setPower(power);
+			case AwayWheelPowerMode:
+				power = abs(power);
+				switch (currentMotor->getLocation()) {
+					case FrontRightMotorLocation:
+						currentMotor->setPower(power);
+						break;
+					case BackRightMotorLocation:
+						currentMotor->setPower(-power);
+						break;
+					default:
+						//Do nothing
+						break;
+				}
 				break;
-			case BackRightMotorLocation:
-				currentMotor->setPower(-power);
-				break;
-			default:
-				//Do nothing
-				break;
-			}
-			break;
 
-		case TowardsWheelPowerMode:
-			power = abs(power);
-			switch (currentMotor->getLocation()) {
-			case FrontRightMotorLocation:
-				currentMotor->setPower(-power);
+			case TowardsWheelPowerMode:
+				power = abs(power);
+				switch (currentMotor->getLocation()) {
+					case FrontRightMotorLocation:
+						currentMotor->setPower(-power);
+						break;
+					case BackRightMotorLocation:
+						currentMotor->setPower(power);
+						break;
+					default:
+						//Do nothing
+						break;
+				}
 				break;
-			case BackRightMotorLocation:
-				currentMotor->setPower(power);
-				break;
-			default:
-				//Do nothing
-				break;
-			}
-			break;
 		}
 	}
 }
@@ -454,24 +486,24 @@ void Robot::manualStrafe(int power) {
 void Robot::drive(int power, DriveDirection dir) {
 	if (orientation == BackwardOrientation) {
 		switch (dir) {
-		case DriveForward:
-			dir = DriveBackward;
-			break;
-		case DriveBackward:
-			dir = DriveForward;
-			break;
-		case TurnLeft:
-			//Nothing needs to be done
-			break;
-		case TurnRight:
-			//Nothing needs to be done
-			break;
-		case StrafeLeft:
-			dir = StrafeRight;
-			break;
-		case StrafeRight:
-			dir = StrafeLeft;
-			break;
+			case DriveForward:
+				dir = DriveBackward;
+				break;
+			case DriveBackward:
+				dir = DriveForward;
+				break;
+			case TurnLeft:
+				//Nothing needs to be done
+				break;
+			case TurnRight:
+				//Nothing needs to be done
+				break;
+			case StrafeLeft:
+				dir = StrafeRight;
+				break;
+			case StrafeRight:
+				dir = StrafeLeft;
+				break;
 		}
 	}
 
@@ -480,32 +512,32 @@ void Robot::drive(int power, DriveDirection dir) {
 		return;
 	}
 	switch (dir) {
-	case DriveForward:
-		power = abs(power);
-		powerDrive(power);
-		break;
-	case DriveBackward:
-		power = abs(power);
-		powerDrive(-power);
-		break;
-	case TurnLeft:
-		power = abs(power);
-		powerDrive(-power, power);
-		break;
-	case TurnRight:
-		power = abs(power);
-		powerDrive(power, -power);
-		break;
-	case StrafeLeft:
-		power = abs(power);
-		powerLeftDrive(power, TowardsWheelPowerMode);
-		powerRightDrive(power, AwayWheelPowerMode);
-		break;
-	case StrafeRight:
-		power = abs(power);
-		powerLeftDrive(power, AwayWheelPowerMode);
-		powerRightDrive(power, TowardsWheelPowerMode);
-		break;
+		case DriveForward:
+			power = abs(power);
+			powerDrive(power);
+			break;
+		case DriveBackward:
+			power = abs(power);
+			powerDrive(-power);
+			break;
+		case TurnLeft:
+			power = abs(power);
+			powerDrive(-power, power);
+			break;
+		case TurnRight:
+			power = abs(power);
+			powerDrive(power, -power);
+			break;
+		case StrafeLeft:
+			power = abs(power);
+			powerLeftDrive(power, TowardsWheelPowerMode);
+			powerRightDrive(power, AwayWheelPowerMode);
+			break;
+		case StrafeRight:
+			power = abs(power);
+			powerLeftDrive(power, AwayWheelPowerMode);
+			powerRightDrive(power, TowardsWheelPowerMode);
+			break;
 	}
 }
 
@@ -516,6 +548,98 @@ void Robot::stopDriveMotors() {
 //////////////////
 //LIFT FUNCTIONS//
 //////////////////
+
+bool Robot::liftControllerHasInput(ControllerType type) {
+	ControllerInput liftUp = Controller::instance->convertControllerInputToType(
+			type, RobotControls::liftUp);
+	ControllerInput liftDown = Controller::instance
+			->convertControllerInputToType(type, RobotControls::liftDown);
+	if (Controller::instance->isInputActive(liftUp)
+			|| Controller::instance->isInputActive(liftDown)) {
+		return true;
+	}
+	return false;
+}
+
+void Robot::liftController(ControllerType type) {
+	ControllerInput liftUp = Controller::instance->convertControllerInputToType(
+			type, RobotControls::liftUp);
+	ControllerInput liftDown = Controller::instance
+			->convertControllerInputToType(type, RobotControls::liftDown);
+
+	bool upPressed = Controller::instance->isInputActive(liftUp);
+	bool downPressed = Controller::instance->isInputActive(liftDown);
+
+	if (upPressed && downPressed) {
+		stopLift();
+		return;
+	} else if (upPressed) {
+		powerLift(liftPowerLevel);
+	} else if (downPressed) {
+		powerLift(-liftPowerLevel);
+	}
+
+}
+
+void Robot::liftControllerHandler(InputControlMode controlMode) {
+	//ONLY fill out the variables directly below this
+	RobotControllerFunctionPtr masterOperated = &Robot::liftController;
+	RobotControllerFunctionPtr slaveOperated = &Robot::liftController;
+
+	RobotStopMotorsFunctionPtr stopMotors = &Robot::stopLift;
+
+	RobotControllerHasInputFunctionPtr masterOperatedHasInput =
+			&Robot::liftControllerHasInput;
+	RobotControllerHasInputFunctionPtr slaveOperatedHasInput =
+			&Robot::liftControllerHasInput;
+
+	//DON'T TOUCH ANY OF THE CODE BELOW HERE IN THIS FUNCTION//
+	//ONLY CHANGE WHAT VRIABLES ARE EQUAL TO ABOVE HERE//
+	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
+	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
+
+	switch (controlMode) {
+		case MasterOnly:
+			(this->*masterOperated)(MASTER_CONTROLLER);
+			return;
+		case SlaveOnly:
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+			return;
+		case MasterAndSlaveEqualPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*stopMotors)();
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case MasterHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case SlaveHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+	}
+}
 
 void Robot::powerLeftLift(int power) {
 	this->leftLiftPower = power;
@@ -557,6 +681,8 @@ void Robot::powerLift(int leftLiftPower, int rightLiftPower) {
 }
 
 void Robot::powerLift(int power) {
+	this->leftLiftPower = leftLiftPower;
+	this->rightLiftPower = rightLiftPower;
 	for (int i = 0; i < liftMotors->size(); i++) {
 		liftMotors->at(i)->setPower(power);
 	}
@@ -564,23 +690,116 @@ void Robot::powerLift(int power) {
 
 void Robot::lift(int power, LiftDirection dir) {
 	switch (dir) {
-	case ManualLift:
-		powerLift(power);
-		break;
-	case LiftUp:
-		power = abs(power);
-		powerLift(power);
-		break;
-	case LiftDown:
-		power = abs(power);
-		powerLift(-power);
-		break;
+		case ManualLift:
+			powerLift(power);
+			break;
+		case LiftUp:
+			power = abs(power);
+			powerLift(power);
+			break;
+		case LiftDown:
+			power = abs(power);
+			powerLift(-power);
+			break;
 	}
 }
 
 void Robot::stopLift() {
 	lift(0, ManualLift);
 }
+
+//////////
+//INTAKE//
+//////////
+
+void Robot::powerIntakeMotors(int power) {
+	//TODO write logic to handle powering the intake motors
+}
+
+void Robot::stopIntakeMotors() {
+	powerIntakeMotors(0);
+}
+
+bool Robot::intakeControllerHasInput(ControllerType type) {
+	ControllerInput in = Controller::instance->convertControllerInputToType(
+			type, RobotControls::intakeBalls);
+	if (Controller::instance->isInputActive(in)) {
+		return true;
+	}
+	return false;
+}
+
+void Robot::intakeController(ControllerType type) {
+	ControllerInput in = Controller::instance->convertControllerInputToType(
+			type, RobotControls::intakeBalls);
+	if (Controller::instance->isInputActive(in)) {
+		powerIntakeMotors(intakePowerLevel);
+	} else {
+		stopIntakeMotors();
+	}
+
+}
+
+void Robot::intakeControllerHandler(InputControlMode controlMode) {
+	//ONLY fill out the variables directly below this
+	RobotControllerFunctionPtr masterOperated = &Robot::intakeController;
+	RobotControllerFunctionPtr slaveOperated = &Robot::intakeController;
+
+	RobotStopMotorsFunctionPtr stopMotors = &Robot::stopIntakeMotors;
+
+	RobotControllerHasInputFunctionPtr masterOperatedHasInput =
+			&Robot::intakeControllerHasInput;
+	RobotControllerHasInputFunctionPtr slaveOperatedHasInput =
+			&Robot::intakeControllerHasInput;
+
+	//DON'T TOUCH ANY OF THE CODE BELOW HERE IN THIS FUNCTION//
+	//ONLY CHANGE WHAT VRIABLES ARE EQUAL TO ABOVE HERE//
+	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
+	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
+
+	switch (controlMode) {
+		case MasterOnly:
+			(this->*masterOperated)(MASTER_CONTROLLER);
+			return;
+		case SlaveOnly:
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+			return;
+		case MasterAndSlaveEqualPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*stopMotors)();
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case MasterHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case SlaveHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+	}
+}
+
 }
 
 /* namespace TRL */
