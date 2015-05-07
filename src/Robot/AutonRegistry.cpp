@@ -101,4 +101,71 @@ Array<AutonRoutine*>* AutonRegistry::getRoutines() {
 	return tempArray;
 }
 
+Array<AutonRoutine*>* AutonRegistry::getRoutines(AllianceColor color) {
+	int maxSize = getNumberOfRoutines();
+	int count = 0;
+	for (int i = 0; i < maxSize; i++) {
+		if (routines->at(i)->getAllianceColor() == color) {
+			count++;
+		}
+	}
+
+	int fillingIndex = 0;
+	Array<AutonRoutine*>* tempArray = new Array<AutonRoutine*>(count);
+	for (int i = 0; i < maxSize; i++) {
+		if (routines->at(i)->getAllianceColor() == color) {
+			tempArray->at(fillingIndex) = routines->at(i);
+			fillingIndex++;
+		}
+	}
+
+	return tempArray;
+}
+
+Array<AutonRoutine*>* AutonRegistry::getRoutines(RobotStartLocation location) {
+	int maxSize = getNumberOfRoutines();
+	int count = 0;
+	for (int i = 0; i < maxSize; i++) {
+		if (routines->at(i)->getStartLocation() == location) {
+			count++;
+		}
+
+	}
+
+	int fillingIndex = 0;
+	Array<AutonRoutine*>* tempArray = new Array<AutonRoutine*>(count);
+	for (int i = 0; i < maxSize; i++) {
+		if (routines->at(i)->getStartLocation() == location) {
+			tempArray->at(fillingIndex) = routines->at(i);
+			fillingIndex++;
+		}
+	}
+
+	return tempArray;
+}
+
+Array<AutonRoutine*>* AutonRegistry::getRoutines(AllianceColor color,
+		RobotStartLocation location) {
+	int maxSize = getNumberOfRoutines();
+	int count = 0;
+	for (int i = 0; i < maxSize; i++) {
+		if ((routines->at(i)->getAllianceColor() == color)
+				&& (routines->at(i)->getStartLocation() == location)) {
+			count++;
+		}
+	}
+
+	Array<AutonRoutine*>* tempArray = new Array<AutonRoutine*>(count);
+	int fillingIndex = 0;
+	for (int i = 0; i < maxSize; i++) {
+		if ((routines->at(i)->getAllianceColor() == color)
+				&& (routines->at(i)->getStartLocation() == location)) {
+			tempArray->at(fillingIndex) = routines->at(i);
+			fillingIndex++;
+		}
+	}
+
+	return tempArray;
+}
+
 } /* namespace TRL */

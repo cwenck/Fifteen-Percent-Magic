@@ -138,7 +138,7 @@ AutonRoutine* AutonList::routineOne;
 AutonRoutine* AutonList::routineTwo;
 
 void AutonList::initialize() {
-	routineOne = new AutonRoutine(RED, INNTER_TILE, RedPolePositionNumberOne, "test 1",
+	routineOne = new AutonRoutine(RED, INNER_TILE, RedPolePositionNumberOne, "test 1",
 			AutonFunctions::redAuton);
 	routineTwo = new AutonRoutine(BLUE, OUTER_TILE, RedPolePositionNumberOne,
 			"test 2", AutonFunctions::blueAuton);

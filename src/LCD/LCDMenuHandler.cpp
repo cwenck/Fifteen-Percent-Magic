@@ -27,6 +27,9 @@ void LCDMenuHandler::initScreens() {
 					true);
 	specificMotorScreens = LCDSpecificMotorScreen::getSpecificMotorScreens(
 			mainAutonScreen, true);
+
+	specificAutonScreens = LCDSpecificAutonScreen::getSpecificAutonScreens(
+			mainAutonScreen, true);
 }
 
 LCDMenuHandler::~LCDMenuHandler() {
@@ -40,6 +43,7 @@ LCDMenuHandler::~LCDMenuHandler() {
 	delete specificSensorScreens;
 	delete specificBatteryScreens;
 	delete specificMotorScreens;
+	delete specificAutonScreens;
 }
 
 void LCDMenuHandler::initScreenRelationships(LCD* lcd) {
@@ -60,9 +64,17 @@ void LCDMenuHandler::initScreenRelationships(LCD* lcd) {
 	LCDMenuScreen::setScreenArrayLCD(
 			(Array<LCDMenuScreen*>*) specificMotorScreens, lcd);
 
+	LCDMenuScreen::setScreenArrayLCD(
+			(Array<LCDMenuScreen*>*) specificAutonScreens, lcd);
+
 //Set the relationships between menus
-	mainAutonScreen->setReferencedScreens(mainAutonScreen, mainBatteryScreen,
-			mainAutonScreen, mainSensorScreen);
+	if (specificAutonScreens->size() == 0) {
+		mainAutonScreen->setReferencedScreens(mainAutonScreen,
+				mainBatteryScreen, mainAutonScreen, mainSensorScreen);
+	} else {
+		mainAutonScreen->setReferencedScreens(mainAutonScreen,
+				mainBatteryScreen, specificAutonScreens->at(0), mainSensorScreen);
+	}
 
 	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainMotorScreen,
 			specificBatteryScreens->at(0), mainAutonScreen);
@@ -100,28 +112,28 @@ void LCDMenuHandler::run(void* lcdMenuHandlerInstance) {
 		}
 
 		if (handler->wasShortLeftJustReleased) {
-			handler->currentScreen =
-					handler->currentScreen->onShortLeftButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onShortLeftButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasShortCenterJustReleased) {
-			handler->currentScreen =
-					handler->currentScreen->onShortCenterButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onShortCenterButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasShortRightJustReleased) {
-			handler->currentScreen =
-					handler->currentScreen->onShortRightButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onShortRightButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasLeftJustNowLongPressed) {
-			handler->currentScreen =
-					handler->currentScreen->onLongLeftButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onLongLeftButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasCenterJustNowLongPressed) {
-			handler->currentScreen =
-					handler->currentScreen->onLongCenterButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onLongCenterButtonPress();
 			handler->updateLCDButtonPresses();
 		} else if (handler->wasRightJustNowLongPressed) {
-			handler->currentScreen =
-					handler->currentScreen->onLongRightButtonPress();
+			handler->currentScreen = handler->currentScreen
+					->onLongRightButtonPress();
 			handler->updateLCDButtonPresses();
 		}
 		delay(20);

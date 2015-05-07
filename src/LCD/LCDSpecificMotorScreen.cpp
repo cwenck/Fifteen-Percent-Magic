@@ -18,7 +18,6 @@ LCDSpecificMotorScreen::LCDSpecificMotorScreen(Motor* motor) {
 }
 
 LCDSpecificMotorScreen::~LCDSpecificMotorScreen() {
-	// TODO Auto-generated destructor stub
 }
 
 void LCDSpecificMotorScreen::display() {

@@ -15,7 +15,7 @@ namespace TRL {
 	///////////////////////////////
 
 	typedef enum _RobotStartLocation {
-		INNTER_TILE = 1,
+		INNER_TILE = 1,
 		OUTER_TILE = 2
 	}RobotStartLocation;
 

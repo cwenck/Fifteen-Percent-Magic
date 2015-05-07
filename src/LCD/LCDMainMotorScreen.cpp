@@ -10,12 +10,10 @@
 namespace TRL {
 
 LCDMainMotorScreen::LCDMainMotorScreen() {
-	// TODO Auto-generated constructor stub
 
 }
 
 LCDMainMotorScreen::~LCDMainMotorScreen() {
-	// TODO Auto-generated destructor stub
 }
 
 void LCDMainMotorScreen::display(){

@@ -32,25 +32,19 @@ void LCDSpecificAutonScreen::setRoutine(AutonRoutine* routine) {
 
 void LCDSpecificAutonScreen::display() {
 	lcd->displayCenteredString(1, routine->getRoutineName());
-	lcd->displayHorizontalNavigation(2, "Prev", "Next");
+	lcd->displayDownNavigation(2, "Options");
 }
 
 Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
-		LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color,
-		RobotStartLocation location) {
-	//TODO finish getSpecificAutonScreens function
-
-
-	/*
-
-//	Array<AutonRoutin*>* allRoutines = AutonRegistry::g
-	Array<LCDSpecificAutonScreen*>* screens = new Array<
-			LCDSpecificAutonScreen*>();
+		LCDMenuScreen* homeScreen, bool loopScreens) {
+	Array<AutonRoutine*>* allRoutines = AutonRegistry::getRoutines();
+	Array<LCDSpecificAutonScreen*>* screens =
+			new Array<LCDSpecificAutonScreen*>(allRoutines->size());
 
 	//Two for loops are needed so that the entire array can be initialized before
 	//refrences to those elements are assigned
 	for (int i = 0; i < screens->size(); i++) {
-		screens->at(i) = new LCDSpecificSensorScreen(sensors->at(i));
+		screens->at(i) = new LCDSpecificAutonScreen(allRoutines->at(i));
 	}
 
 	for (int i = 0; i < screens->size(); i++) {
@@ -91,8 +85,61 @@ Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
 	}
 
 	return screens;
-	*/
-	return NULL;
+}
+
+Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
+		LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color,
+		RobotStartLocation location) {
+
+	Array<AutonRoutine*>* allRoutines = AutonRegistry::getRoutines(color,
+			location);
+	Array<LCDSpecificAutonScreen*>* screens =
+			new Array<LCDSpecificAutonScreen*>(allRoutines->size());
+
+	//Two for loops are needed so that the entire array can be initialized before
+	//refrences to those elements are assigned
+	for (int i = 0; i < screens->size(); i++) {
+		screens->at(i) = new LCDSpecificAutonScreen(allRoutines->at(i));
+	}
+
+	for (int i = 0; i < screens->size(); i++) {
+		if (loopScreens) {
+			if (i == 0) {
+				if (screens->size() == 1) {
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(0), screens->at(0), screens->at(0));
+				} else {
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(screens->size() - 1), screens->at(0),
+							screens->at(1));
+				}
+			} else if (i == (screens->size() - 1)) {
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(0));
+			} else {
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(i + 1));
+			}
+		} else {
+			if (i == 0) {
+				if (screens->size() == 1) {
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(0), screens->at(0), screens->at(0));
+				} else {
+					screens->at(0)->setReferencedScreens(homeScreen,
+							screens->at(0), screens->at(0), screens->at(1));
+				}
+			} else if (i == (screens->size() - 1)) {
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(i));
+			} else {
+				screens->at(i)->setReferencedScreens(homeScreen,
+						screens->at(i - 1), screens->at(i), screens->at(i + 1));
+			}
+		}
+	}
+
+	return screens;
 }
 
 } /* namespace TRL */

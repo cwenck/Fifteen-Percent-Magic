@@ -27,6 +27,7 @@ namespace TRL {
 		void display();
 		void setRoutine(AutonRoutine* routine);
 
+		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color, RobotStartLocation location);
 	};
 

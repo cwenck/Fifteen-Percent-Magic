@@ -38,6 +38,10 @@ namespace TRL {
 		static void clearActiveRoutine();
 
 		static Array<AutonRoutine*>* getRoutines();
+		static Array<AutonRoutine*>* getRoutines(AllianceColor color);
+		static Array<AutonRoutine*>* getRoutines(RobotStartLocation location);
+		static Array<AutonRoutine*>* getRoutines(AllianceColor color, RobotStartLocation location);
+
 
 	};
 }
