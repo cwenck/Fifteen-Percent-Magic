@@ -12,11 +12,11 @@ namespace TRL {
 VariableArray<AutonRoutine*>* AutonRegistry::routines;
 AutonRoutine* AutonRegistry::activeRoutine;
 
-void AutonRegistry::initStatics(){
+void AutonRegistry::initStatics() {
 	routines = new VariableArray<AutonRoutine*>;
 }
 
-void AutonRegistry::destroy(){
+void AutonRegistry::destroy() {
 	delete routines;
 }
 
@@ -37,7 +37,7 @@ void AutonRegistry::printRoutines() {
 	println("|------------------------------|");
 	for (int i = 0; i < getNumberOfRoutines(); i++) {
 		delay(5);
-		println("Routine %d: %s", i+1, routines->get(i)->getRoutineName());
+		println("Routine %d: %s", i + 1, routines->get(i)->getRoutineName());
 		delay(5);
 	}
 	println("================================");
@@ -54,24 +54,51 @@ AutonRoutine* AutonRegistry::getRoutine(AllianceColor color,
 	return NULL;
 }
 
-void AutonRegistry::runRoutine(AllianceColor color, RobotStartLocation location,
-		AutonIdentifier identifier) {
-	getRoutine(color, location, identifier)->run();
+void AutonRegistry::runRoutine(AutonRoutine* routine) {
+	if (runningRoutine != NULL) {
+		println(WARNING, "AutonRegistry", "runRoutine",
+				"Not running routine because another routine is already running.");
+		return;
+	}
+	runningRoutine = routine;
+	routine->run();
+	runningRoutine = NULL;
 }
 
-void AutonRegistry::setActiveRoutine(AutonRoutine* routine){
+void AutonRegistry::runRoutine(AllianceColor color, RobotStartLocation location,
+		AutonIdentifier identifier) {
+	AutonRoutine* routine = getRoutine(color, location, identifier);
+	runRoutine(routine);
+}
+
+AutonRoutine* AutonRegistry::getRunningRoutine() {
+	return runningRoutine;
+}
+
+void AutonRegistry::setActiveRoutine(AutonRoutine* routine) {
 	activeRoutine = routine;
 }
 
-void AutonRegistry::runActiveRoutine(){
-	if(activeRoutine == NULL){
+void AutonRegistry::runActiveRoutine() {
+	if (activeRoutine == NULL) {
 		return;
 	}
-	activeRoutine->run();
+	runRoutine(activeRoutine);
 }
 
-void AutonRegistry::clearActiveRoutine(){
+void AutonRegistry::clearActiveRoutine() {
 	activeRoutine = NULL;
+}
+
+Array<AutonRoutine*>* AutonRegistry::getRoutines() {
+	int size = getNumberOfRoutines();
+	Array<AutonRoutine*>* tempArray = new Array<AutonRoutine*>(size);
+
+	for (int i = 0; i < size; i++) {
+		tempArray->at(i) = routines->at(i);
+	}
+
+	return tempArray;
 }
 
 } /* namespace TRL */

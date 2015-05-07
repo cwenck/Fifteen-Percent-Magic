@@ -13,21 +13,21 @@
 #include "../Robot/AutonRegistry.h"
 #include "../Robot/AutonRoutine.h"
 
-
 namespace TRL {
 
-	class LCDSpecificAutonScreen : LCDMenuScreen{
+	class LCDSpecificAutonScreen : public LCDMenuScreen {
 	private:
 		AutonRoutine* routine;
 		LCDAutonActionScreen* actionScreen;
 	public:
 		LCDSpecificAutonScreen();
+		LCDSpecificAutonScreen(AutonRoutine* routine);
 		virtual ~LCDSpecificAutonScreen();
 
 		void display();
 		void setRoutine(AutonRoutine* routine);
 
-		static LCDSpecificAutonScreen** getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens);
+		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color, RobotStartLocation location);
 	};
 
 }

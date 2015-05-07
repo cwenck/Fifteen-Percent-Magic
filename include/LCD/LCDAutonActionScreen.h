@@ -12,11 +12,12 @@
 #include "../Robot/AutonRoutine.h"
 
 namespace TRL {
-	class LCDAutonActionScreen : LCDMenuScreen{
+	class LCDAutonActionScreen : public LCDMenuScreen {
 	private:
 		AutonRoutine* routine;
 	public:
-		LCDAutonActionScreen() {routine = NULL;}
+		LCDAutonActionScreen();
+		LCDAutonActionScreen(AutonRoutine* routine);
 		virtual ~LCDAutonActionScreen() {}
 
 		void setRoutine(AutonRoutine* rountine);

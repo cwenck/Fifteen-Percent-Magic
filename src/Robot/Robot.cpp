@@ -24,6 +24,7 @@ Robot::Robot() {
 
 	driveMotors = NULL;
 	liftMotors = NULL;
+	intakeMotors = NULL;
 
 	leftLiftPower = 0;
 	rightLiftPower = 0;
@@ -49,6 +50,116 @@ Robot::~Robot() {
 
 void Robot::handleInput(InputControlMode controlMode) {
 //	driveInputController(controlMode);
+}
+
+void Robot::motorControllerHandler(InputControlMode controlMode,
+		RobotControllerFunctionPtr masterOperated,
+		RobotControllerFunctionPtr slaveOperated,
+		RobotStopMotorsFunctionPtr stopMotors,
+		RobotControllerHasInputFunctionPtr masterOperatedHasInput,
+		RobotControllerHasInputFunctionPtr slaveOperatedHasInput) {
+
+	//DON'T TOUCH ANY OF THE CODE BELOW HERE IN THIS FUNCTION//
+	//ONLY CHANGE WHAT VRIABLES ARE EQUAL TO ABOVE HERE//
+	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
+	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
+
+	switch (controlMode) {
+		case MasterOnly:
+			(this->*masterOperated)(MASTER_CONTROLLER);
+			return;
+		case SlaveOnly:
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+			return;
+		case MasterAndSlaveEqualPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*stopMotors)();
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case MasterHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+		case SlaveHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				(this->*stopMotors)();
+			}
+			return;
+	}
+}
+
+void Robot::nonMotorControllerHandler(InputControlMode controlMode,
+		RobotControllerFunctionPtr masterOperated,
+		RobotControllerFunctionPtr slaveOperated,
+		RobotStopMotorsFunctionPtr stopMotors,
+		RobotControllerHasInputFunctionPtr masterOperatedHasInput,
+		RobotControllerHasInputFunctionPtr slaveOperatedHasInput) {
+
+	//DON'T TOUCH ANY OF THE CODE BELOW HERE IN THIS FUNCTION//
+	//ONLY CHANGE WHAT VRIABLES ARE EQUAL TO ABOVE HERE//
+	bool masterActive = (this->*masterOperatedHasInput)(MASTER_CONTROLLER);
+	bool slaveActive = (this->*slaveOperatedHasInput)(SLAVE_CONTROLLER);
+
+	switch (controlMode) {
+		case MasterOnly:
+			(this->*masterOperated)(MASTER_CONTROLLER);
+			return;
+		case SlaveOnly:
+			(this->*slaveOperated)(SLAVE_CONTROLLER);
+			return;
+		case MasterAndSlaveEqualPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				//Do Nothing
+			} else if (!masterActive && !slaveActive) {
+				//Do Nothing
+			}
+			return;
+		case MasterHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				//Do Nothing
+			}
+			return;
+		case SlaveHigherPriority:
+			if (masterActive && !slaveActive) {
+				(this->*masterOperated)(MASTER_CONTROLLER);
+			} else if (!masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (masterActive && slaveActive) {
+				(this->*slaveOperated)(SLAVE_CONTROLLER);
+			} else if (!masterActive && !slaveActive) {
+				//Do Nothing
+			}
+			return;
+	}
 }
 
 void Robot::driveOrientationControllerHandler(InputControlMode controlMode) {
@@ -129,9 +240,9 @@ void Robot::driveOrientationController(ControllerType type) {
 	ControllerInput bkwd = Controller::instance->convertControllerInputToType(
 			type, RobotControls::orientationBackward);
 	if (Controller::instance->isInputActive(fwd)) {
-		setDriveOrientation(ForwardOrientation);
+		setDriveOrientation (ForwardOrientation);
 	} else if (Controller::instance->isInputActive(bkwd)) {
-		setDriveOrientation(BackwardOrientation);
+		setDriveOrientation (BackwardOrientation);
 	}
 }
 
@@ -574,7 +685,7 @@ void Robot::liftController(ControllerType type) {
 		stopLift();
 		return;
 	} else if (upPressed) {
-		powerLift(liftPowerLevel);
+		powerLift (liftPowerLevel);
 	} else if (downPressed) {
 		powerLift(-liftPowerLevel);
 	}
@@ -733,7 +844,7 @@ void Robot::intakeController(ControllerType type) {
 	ControllerInput in = Controller::instance->convertControllerInputToType(
 			type, RobotControls::intakeBalls);
 	if (Controller::instance->isInputActive(in)) {
-		powerIntakeMotors(intakePowerLevel);
+		powerIntakeMotors (intakePowerLevel);
 	} else {
 		stopIntakeMotors();
 	}

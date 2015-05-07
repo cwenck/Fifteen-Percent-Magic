@@ -58,12 +58,6 @@ extern "C" {
 
 using namespace TRL;
 
-//int calcDriveFromAngle(int angle, int maxPow) {
-//	angle = abs(angle);
-//	int power = maxPow * cos(angle * 2 * PI / 180);
-//	return power;
-//}
-
 void setMotorSpeed(int speed) {
 	MotorList::testMotor->setPower(speed);
 }

@@ -9,6 +9,14 @@
 
 namespace TRL {
 
+LCDAutonActionScreen::LCDAutonActionScreen(){
+	this->routine = NULL;
+}
+
+LCDAutonActionScreen::LCDAutonActionScreen(AutonRoutine* routine){
+	this->routine = routine;
+}
+
 void LCDAutonActionScreen::setRoutine(AutonRoutine* routine){
 	this->routine = routine;
 }
@@ -19,7 +27,7 @@ void LCDAutonActionScreen::display() {
 }
 
 LCDMenuScreen* LCDAutonActionScreen::onShortCenterButtonPress(){
-
+	display();
 	return this;
 }
 

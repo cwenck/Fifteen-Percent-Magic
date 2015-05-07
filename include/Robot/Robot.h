@@ -68,6 +68,17 @@ namespace TRL {
 		void setLiftMotors(Array<Motor*>* liftMotors);
 		void setIntakeMotors(Array<Motor*>* intakeMotors);
 
+		//Controller Handler Base Functions
+	private:
+		void motorControllerHandler(InputControlMode controlMode, RobotControllerFunctionPtr masterOperated,
+				RobotControllerFunctionPtr slaveOperated, RobotStopMotorsFunctionPtr stopMotors,
+				RobotControllerHasInputFunctionPtr masterOperatedHasInput,
+				RobotControllerHasInputFunctionPtr slaveOperatedHasInput);
+		void nonMotorControllerHandler(InputControlMode controlMode, RobotControllerFunctionPtr masterOperated,
+				RobotControllerFunctionPtr slaveOperated, RobotStopMotorsFunctionPtr stopMotors,
+				RobotControllerHasInputFunctionPtr masterOperatedHasInput,
+				RobotControllerHasInputFunctionPtr slaveOperatedHasInput);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Input Controllers, Controller Handlers, and Functions to Test if an Input Controller has Active Inputs Below Here//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
