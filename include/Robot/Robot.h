@@ -70,12 +70,16 @@ namespace TRL {
 
 		//Controller Handler Base Functions
 	private:
-		void motorControllerHandler(InputControlMode controlMode, RobotControllerFunctionPtr masterOperated,
-				RobotControllerFunctionPtr slaveOperated, RobotStopMotorsFunctionPtr stopMotors,
+		void motorControllerHandler(InputControlMode controlMode,
+				RobotControllerFunctionPtr masterOperated,
+				RobotControllerFunctionPtr slaveOperated,
+				RobotStopMotorsFunctionPtr stopMotors,
 				RobotControllerHasInputFunctionPtr masterOperatedHasInput,
 				RobotControllerHasInputFunctionPtr slaveOperatedHasInput);
-		void nonMotorControllerHandler(InputControlMode controlMode, RobotControllerFunctionPtr masterOperated,
-				RobotControllerFunctionPtr slaveOperated, RobotStopMotorsFunctionPtr stopMotors,
+
+		void nonMotorControllerHandler(InputControlMode controlMode,
+				RobotControllerFunctionPtr masterOperated,
+				RobotControllerFunctionPtr slaveOperated,
 				RobotControllerHasInputFunctionPtr masterOperatedHasInput,
 				RobotControllerHasInputFunctionPtr slaveOperatedHasInput);
 
