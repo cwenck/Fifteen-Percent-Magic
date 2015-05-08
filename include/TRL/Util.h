@@ -11,10 +11,13 @@
 #include <API.h>
 #include <string.h>
 #include "Typedefs.h"
+#include "EnumeratedTypedefs.h"
 
 namespace TRL {
 	float getPrimaryBatteryPower();
 	float getBackupBatteryPower();
+
+	string getStringForAllianceColor(AllianceColor color);
 
 	string allocateStringForNumberOfChars(int numChars);
 	string strsub(string* storeStr, string str, int startChar);

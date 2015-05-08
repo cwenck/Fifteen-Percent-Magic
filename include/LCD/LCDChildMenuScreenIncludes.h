@@ -11,5 +11,6 @@
 #include "../TRL/TRL_BaseIncludes.h"
 #include "LCD.h"
 #include "LCDMenuScreen.h"
+#include "LCDSelectionScreen.h"
 
 #endif /* LCDMENUSCREENINCLUDES_H_ */

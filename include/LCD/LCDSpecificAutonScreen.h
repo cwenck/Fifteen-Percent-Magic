@@ -17,8 +17,13 @@ namespace TRL {
 
 	class LCDSpecificAutonScreen : public LCDMenuScreen {
 	private:
+		static AllianceColor currentlySelectedColor;
+		static RobotStartLocation currentlySelectedStartLocation;
+
 		AutonRoutine* routine;
 		LCDAutonActionScreen* actionScreen;
+
+		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color, RobotStartLocation location);
 	public:
 		LCDSpecificAutonScreen();
 		LCDSpecificAutonScreen(AutonRoutine* routine);
@@ -27,8 +32,11 @@ namespace TRL {
 		void display();
 		void setRoutine(AutonRoutine* routine);
 
+		static void setAllianceColor(AllianceColor color);
+		static void setRobotStartLocation(RobotStartLocation location);
+
+		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, bool returnAllScreens);
 		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens);
-		static Array<LCDSpecificAutonScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color, RobotStartLocation location);
 	};
 
 }

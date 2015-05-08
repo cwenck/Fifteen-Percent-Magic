@@ -56,6 +56,7 @@ extern "C" {
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 
+
 using namespace TRL;
 
 void setMotorSpeed(int speed) {

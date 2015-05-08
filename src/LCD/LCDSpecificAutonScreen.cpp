@@ -9,14 +9,17 @@
 
 namespace TRL {
 
+AllianceColor LCDSpecificAutonScreen::currentlySelectedColor;
+RobotStartLocation LCDSpecificAutonScreen::currentlySelectedStartLocation;
+
 LCDSpecificAutonScreen::LCDSpecificAutonScreen() {
 	this->routine = NULL;
-	actionScreen = NULL;
+	this->actionScreen = NULL;
 }
 
 LCDSpecificAutonScreen::LCDSpecificAutonScreen(AutonRoutine* routine) {
 	this->routine = routine;
-	actionScreen = new LCDAutonActionScreen();
+	this->actionScreen = new LCDAutonActionScreen();
 }
 
 LCDSpecificAutonScreen::~LCDSpecificAutonScreen() {
@@ -35,56 +38,70 @@ void LCDSpecificAutonScreen::display() {
 	lcd->displayDownNavigation(2, "Options");
 }
 
+void LCDSpecificAutonScreen::setAllianceColor(AllianceColor color){
+	this->currentlySelectedColor = color;
+}
+
+void LCDSpecificAutonScreen::setRobotStartLocation(RobotStartLocation location){
+	this->currentlySelectedStartLocation = location;
+}
+
 Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
-		LCDMenuScreen* homeScreen, bool loopScreens) {
-	Array<AutonRoutine*>* allRoutines = AutonRegistry::getRoutines();
-	Array<LCDSpecificAutonScreen*>* screens =
-			new Array<LCDSpecificAutonScreen*>(allRoutines->size());
+		LCDMenuScreen* homeScreen, bool loopScreens, bool returnAllScreens) {
 
-	//Two for loops are needed so that the entire array can be initialized before
-	//refrences to those elements are assigned
-	for (int i = 0; i < screens->size(); i++) {
-		screens->at(i) = new LCDSpecificAutonScreen(allRoutines->at(i));
-	}
+	if (returnAllScreens) {
+		Array<AutonRoutine*>* allRoutines = AutonRegistry::getRoutines();
+		Array<LCDSpecificAutonScreen*>* screens = new Array<
+				LCDSpecificAutonScreen*>(allRoutines->size());
 
-	for (int i = 0; i < screens->size(); i++) {
-		if (loopScreens) {
-			if (i == 0) {
-				if (screens->size() == 1) {
-					screens->at(0)->setReferencedScreens(homeScreen,
-							screens->at(0), screens->at(0), screens->at(0));
+		//Two for loops are needed so that the entire array can be initialized before
+		//refrences to those elements are assigned
+		for (int i = 0; i < screens->size(); i++) {
+			screens->at(i) = new LCDSpecificAutonScreen(allRoutines->at(i));
+		}
+
+		for (int i = 0; i < screens->size(); i++) {
+			if (loopScreens) {
+				if (i == 0) {
+					if (screens->size() == 1) {
+						screens->at(0)->setReferencedScreens(homeScreen,
+								screens->at(0), screens->at(0), screens->at(0));
+					} else {
+						screens->at(0)->setReferencedScreens(homeScreen,
+								screens->at(screens->size() - 1),
+								screens->at(0), screens->at(1));
+					}
+				} else if (i == (screens->size() - 1)) {
+					screens->at(i)->setReferencedScreens(homeScreen,
+							screens->at(i - 1), screens->at(i), screens->at(0));
 				} else {
-					screens->at(0)->setReferencedScreens(homeScreen,
-							screens->at(screens->size() - 1), screens->at(0),
-							screens->at(1));
+					screens->at(i)->setReferencedScreens(homeScreen,
+							screens->at(i - 1), screens->at(i),
+							screens->at(i + 1));
 				}
-			} else if (i == (screens->size() - 1)) {
-				screens->at(i)->setReferencedScreens(homeScreen,
-						screens->at(i - 1), screens->at(i), screens->at(0));
 			} else {
-				screens->at(i)->setReferencedScreens(homeScreen,
-						screens->at(i - 1), screens->at(i), screens->at(i + 1));
-			}
-		} else {
-			if (i == 0) {
-				if (screens->size() == 1) {
-					screens->at(0)->setReferencedScreens(homeScreen,
-							screens->at(0), screens->at(0), screens->at(0));
+				if (i == 0) {
+					if (screens->size() == 1) {
+						screens->at(0)->setReferencedScreens(homeScreen,
+								screens->at(0), screens->at(0), screens->at(0));
+					} else {
+						screens->at(0)->setReferencedScreens(homeScreen,
+								screens->at(0), screens->at(0), screens->at(1));
+					}
+				} else if (i == (screens->size() - 1)) {
+					screens->at(i)->setReferencedScreens(homeScreen,
+							screens->at(i - 1), screens->at(i), screens->at(i));
 				} else {
-					screens->at(0)->setReferencedScreens(homeScreen,
-							screens->at(0), screens->at(0), screens->at(1));
+					screens->at(i)->setReferencedScreens(homeScreen,
+							screens->at(i - 1), screens->at(i),
+							screens->at(i + 1));
 				}
-			} else if (i == (screens->size() - 1)) {
-				screens->at(i)->setReferencedScreens(homeScreen,
-						screens->at(i - 1), screens->at(i), screens->at(i));
-			} else {
-				screens->at(i)->setReferencedScreens(homeScreen,
-						screens->at(i - 1), screens->at(i), screens->at(i + 1));
 			}
 		}
-	}
 
-	return screens;
+		return screens;
+	}
+	return getSpecificAutonScreens(homeScreen, loopScreens);
 }
 
 Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
@@ -140,6 +157,12 @@ Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
 	}
 
 	return screens;
+}
+
+Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(
+		LCDMenuScreen* homeScreen, bool loopScreens) {
+	return getSpecificAutonScreens(homeScreen, loopScreens,
+			currentlySelectedColor, currentlySelectedStartLocation);
 }
 
 } /* namespace TRL */

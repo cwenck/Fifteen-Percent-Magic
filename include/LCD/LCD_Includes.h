@@ -12,14 +12,20 @@
 
 #include "LCD.h"
 #include "LCDMenuScreen.h"
+#include "LCDSelectionScreen.h"
+
 #include "LCDMainAutonScreen.h"
 #include "LCDMainBatteryScreen.h"
 #include "LCDMainSensorScreen.h"
 #include "LCDMainMotorScreen.h"
+
+#include "LCDAutonColorSelctionScreen.h"
+
 #include "LCDSpecificSensorScreen.h"
 #include "LCDSpecificBatteryScreen.h"
 #include "LCDSpecificMotorScreen.h"
 #include "LCDSpecificAutonScreen.h"
+
 #include "LCDMenuHandler.h"
 
 #endif /* LCD_INCLUDES_H_ */

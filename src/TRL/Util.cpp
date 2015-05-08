@@ -23,6 +23,23 @@ float getBackupBatteryPower() {
 	return ((float) powerLevelBackup()) / 1000.0f;
 }
 
+
+/*
+ * Gets the string variant of an Alliance Color
+ *
+ * @param color the AllianceColor to get the string for
+ * @return the string variant of the AllianceColor
+ */
+string getStringForAllianceColor(AllianceColor color) {
+	switch (color) {
+		case RED:
+			return "Red";
+		case BLUE:
+			return "Blue";
+	}
+	return "Unknown Color";
+}
+
 /*
  * Get a string with allocated memory for a specific number of chars
  *
