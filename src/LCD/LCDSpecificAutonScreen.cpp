@@ -39,11 +39,11 @@ void LCDSpecificAutonScreen::display() {
 }
 
 void LCDSpecificAutonScreen::setAllianceColor(AllianceColor color){
-	this->currentlySelectedColor = color;
+	currentlySelectedColor = color;
 }
 
 void LCDSpecificAutonScreen::setRobotStartLocation(RobotStartLocation location){
-	this->currentlySelectedStartLocation = location;
+	currentlySelectedStartLocation = location;
 }
 
 Array<LCDSpecificAutonScreen*>* LCDSpecificAutonScreen::getSpecificAutonScreens(

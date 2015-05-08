@@ -9,6 +9,7 @@
 #define LCDAUTONCOLORSELCTIONSCREEN_H_
 
 #include "LCDChildMenuScreenIncludes.h"
+#include "LCDSpecificAutonScreen.h"
 
 namespace TRL {
 	class LCDAutonColorSelctionScreen : public LCDSelectionScreen<AllianceColor> {
