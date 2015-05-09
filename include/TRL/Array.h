@@ -14,7 +14,7 @@
 
 namespace TRL {
 	template <typename T> class Array {
-	private:
+	protected:
 		T* arrayStart;
 		int arrSize;
 	public:
@@ -70,23 +70,39 @@ namespace TRL {
 		/* The value returned can be read from and written to because
 		 * it has the same address as the particular location in the array.
 		 */
+		T& at(int index) {
+			return arrayStart[index];
+		}
+
+		/* The value returned can be read from and written to because
+		 * it has the same address as the particular location in the array.
+		 */
 		T& get(int index) {
 			return arrayStart[index];
+		}
+
+		T& start() {
+			return arrayStart(0);
+		}
+
+		T& last() {
+			return arrayStart[size - 1];
 		}
 
 		void set(int index, T& value) {
 			arrayStart[index] = value;
 		}
 
-		/* The value returned can be read from and written to because
-		 * it has the same address as the particular location in the array.
-		 */
-		T& at(int index) {
-			return arrayStart[index];
-		}
-
 		int size() {
 			return arrSize;
+		}
+
+		void reinitWithNewSize(int newSize) {
+			if(size() != 0){
+				delete[] arrayStart;
+			}
+			this->arrSize = newSize;
+			arrayStart = new T[newSize];
 		}
 
 		/*

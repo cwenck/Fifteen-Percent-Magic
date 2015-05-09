@@ -33,18 +33,6 @@ void LCDMenuScreen::setDisplayLCD(LCD* lcd){
 	this->lcd = lcd;
 }
 
-void LCDMenuScreen::setScreenArrayLCD(int size, LCDMenuScreen** screens, LCD* lcd){
-	for(int i = 0; i < size; i++){
-		screens[i]->setDisplayLCD(lcd);
-	}
-}
-
-void LCDMenuScreen::setScreenArrayLCD(Array<LCDMenuScreen*>* screens, LCD* lcd){
-	for(int i = 0; i < screens->size(); i++){
-		screens->at(i)->setDisplayLCD(lcd);
-	}
-}
-
 void LCDMenuScreen::setReferencedScreens(LCDMenuScreen* homeScreen,
 		LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen,
 		LCDMenuScreen* rightScreen) {
@@ -52,6 +40,10 @@ void LCDMenuScreen::setReferencedScreens(LCDMenuScreen* homeScreen,
 	this->leftScreen = leftScreen;
 	this->enterScreen = enterScreen;
 	this->rightScreen = rightScreen;
+}
+
+void LCDMenuScreen::setHomeScreen(LCDMenuScreen* homeScreen){
+	this->homeScreen = homeScreen;
 }
 
 bool LCDMenuScreen::hasLeftScreen() {
@@ -87,6 +79,10 @@ LCDMenuScreen* LCDMenuScreen::getEnterScreen() {
 
 LCDMenuScreen* LCDMenuScreen::getRightScreen() {
 	return rightScreen;
+}
+
+LCDMenuScreen* LCDMenuScreen::getHomeScreen(){
+	return homeScreen;
 }
 
 LCDMenuScreen* LCDMenuScreen::onShortLeftButtonPress() {

@@ -19,6 +19,10 @@ void __cxa_pure_virtual() {
 	print(
 			"\tCheck to make sure all virtual functions are defined in child classes.\n\r");
 	print(
+			"\tCheck to make sure no pure virtual functions are called\n\r");
+	print(
+			"\tin the constructor of the class that declares the pure virtual function.\n\r");
+	print(
 			"----------------------------------------------------------------------\n\r");
 	while (1) {
 		delay(500);

@@ -9,6 +9,12 @@
 
 namespace TRL {
 
+void setScreenArrayLCD(Array<LCDMenuScreen*>* screens, LCD* lcd) {
+	for (int i = 0; i < screens->size(); i++) {
+		screens->at(i)->setDisplayLCD(lcd);
+	}
+}
+
 void LCDMenuHandler::initScreens() {
 
 	//Initialize Screens
@@ -28,8 +34,7 @@ void LCDMenuHandler::initScreens() {
 	specificMotorScreens = LCDSpecificMotorScreen::getSpecificMotorScreens(
 			mainAutonScreen, true);
 
-	specificAutonScreens = LCDSpecificAutonScreen::getSpecificAutonScreens(
-			mainAutonScreen, true);
+	autonScreenArray = new LCDAutonScreenArray(mainAutonScreen, true);
 }
 
 LCDMenuHandler::~LCDMenuHandler() {
@@ -43,7 +48,7 @@ LCDMenuHandler::~LCDMenuHandler() {
 	delete specificSensorScreens;
 	delete specificBatteryScreens;
 	delete specificMotorScreens;
-	delete specificAutonScreens;
+	delete autonScreenArray;
 }
 
 void LCDMenuHandler::initScreenRelationships(LCD* lcd) {
@@ -55,25 +60,21 @@ void LCDMenuHandler::initScreenRelationships(LCD* lcd) {
 	mainSensorScreen->setDisplayLCD(lcd);
 	mainMotorScreen->setDisplayLCD(lcd);
 
-	LCDMenuScreen::setScreenArrayLCD(
-			(Array<LCDMenuScreen*>*) specificSensorScreens, lcd);
+	setScreenArrayLCD((Array<LCDMenuScreen*>*) specificSensorScreens, lcd);
 
-	LCDMenuScreen::setScreenArrayLCD(
-			(Array<LCDMenuScreen*>*) specificBatteryScreens, lcd);
+	setScreenArrayLCD((Array<LCDMenuScreen*>*) specificBatteryScreens, lcd);
 
-	LCDMenuScreen::setScreenArrayLCD(
-			(Array<LCDMenuScreen*>*) specificMotorScreens, lcd);
+	setScreenArrayLCD((Array<LCDMenuScreen*>*) specificMotorScreens, lcd);
 
-	LCDMenuScreen::setScreenArrayLCD(
-			(Array<LCDMenuScreen*>*) specificAutonScreens, lcd);
+	autonScreenArray->setArrayDisplayLCD(lcd);
 
 //Set the relationships between menus
-	if (specificAutonScreens->size() == 0) {
+	if (autonScreenArray->size() == 0) {
 		mainAutonScreen->setReferencedScreens(mainAutonScreen,
 				mainBatteryScreen, mainAutonScreen, mainSensorScreen);
 	} else {
 		mainAutonScreen->setReferencedScreens(mainAutonScreen,
-				mainBatteryScreen, specificAutonScreens->at(0), mainSensorScreen);
+				mainBatteryScreen, autonScreenArray->at(0), mainSensorScreen);
 	}
 
 	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainMotorScreen,

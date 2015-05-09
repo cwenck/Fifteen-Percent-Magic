@@ -23,7 +23,7 @@ LCDAutonColorSelctionScreen::~LCDAutonColorSelctionScreen() {
 
 LCDMenuScreen* LCDAutonColorSelctionScreen::onShortCenterButtonPress() {
 	(*returnLocation) = selectionReturnValue;
-	LCDSpecificAutonScreen::setAllianceColor(selectionReturnValue);
+//	LCDAutonArrayIndexScreen::setAllianceColor(selectionReturnValue);
 	return enterScreen;
 }
 } /* namespace TRL */

@@ -12,5 +12,6 @@
 #include "LCD.h"
 #include "LCDMenuScreen.h"
 #include "LCDSelectionScreen.h"
+#include "LCDScreenArray.h"
 
 #endif /* LCDMENUSCREENINCLUDES_H_ */

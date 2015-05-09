@@ -13,6 +13,7 @@
 #include "LCD.h"
 #include "LCDMenuScreen.h"
 #include "LCDSelectionScreen.h"
+#include "LCDScreenArray.h"
 
 #include "LCDMainAutonScreen.h"
 #include "LCDMainBatteryScreen.h"
@@ -24,7 +25,7 @@
 #include "LCDSpecificSensorScreen.h"
 #include "LCDSpecificBatteryScreen.h"
 #include "LCDSpecificMotorScreen.h"
-#include "LCDSpecificAutonScreen.h"
+#include "LCDAutonScreenArray.h"
 
 #include "LCDMenuHandler.h"
 

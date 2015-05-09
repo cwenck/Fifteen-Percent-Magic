@@ -28,10 +28,8 @@ namespace TRL {
 		virtual ~LCDMenuScreen();
 
 		void setReferencedScreens(LCDMenuScreen* homeScreen, LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
+		void setHomeScreen(LCDMenuScreen* homeScreen);
 		void setDisplayLCD(LCD* lcd);
-
-		static void setScreenArrayLCD(int size, LCDMenuScreen** screens, LCD* lcd);
-		static void setScreenArrayLCD(Array<LCDMenuScreen*>* screens, LCD* lcd);
 
 		bool hasLeftScreen();
 		bool hasEnterScreen();
@@ -40,6 +38,7 @@ namespace TRL {
 		LCDMenuScreen* getLeftScreen();
 		LCDMenuScreen* getEnterScreen();
 		LCDMenuScreen* getRightScreen();
+		LCDMenuScreen* getHomeScreen();
 
 
 		virtual void display() = 0;
