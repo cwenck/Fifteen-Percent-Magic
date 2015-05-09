@@ -18,6 +18,7 @@ namespace TRL {
 	float getBackupBatteryPower();
 
 	string getStringForAllianceColor(AllianceColor color);
+	string getStringForRobotStartLocation(RobotStartLocation location);
 
 	string allocateStringForNumberOfChars(int numChars);
 	string strsub(string* storeStr, string str, int startChar);

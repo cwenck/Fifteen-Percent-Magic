@@ -10,15 +10,17 @@
 
 #include "LCDChildMenuScreenIncludes.h"
 #include "LCDAutonScreenArray.h"
+#include "LCDAutonLocationSelctionScreenArray.h"
 
 namespace TRL {
 	class LCDAutonColorSelectionScreenArray : public LCDScreenArray {
 	private:
-		LCDAutonScreenArray* screenArr;
+		LCDAutonScreenArray* autonScreenArr;
+		LCDAutonLocationSelctionScreenArray* autonLocArr;
 		void initArrayScreens();
 	public:
 		LCDAutonColorSelectionScreenArray();
-		LCDAutonColorSelectionScreenArray(LCDMenuScreen* homeScreen, LCDAutonScreenArray* screenArr);
+		LCDAutonColorSelectionScreenArray(LCDMenuScreen* homeScreen, LCDAutonScreenArray* autonScreenArr, LCDAutonLocationSelctionScreenArray* autonLocArr);
 		~LCDAutonColorSelectionScreenArray() {}
 
 		LCDMenuScreen* getArrayStartScreen();
@@ -26,11 +28,12 @@ namespace TRL {
 
 	class LCDAutonColorSelctionScreen : public LCDSelectionScreen<AllianceColor> {
 	private:
-		LCDAutonScreenArray* screenArr;
+		LCDAutonScreenArray* autonScreenArr;
+		LCDAutonLocationSelctionScreenArray* autonLocArr;
 	public:
 		LCDAutonColorSelctionScreen();
-		LCDAutonColorSelctionScreen(AllianceColor color, LCDAutonScreenArray* screenArr);
-		virtual ~LCDAutonColorSelctionScreen();
+		LCDAutonColorSelctionScreen(AllianceColor color, LCDAutonScreenArray* autonScreenArr, LCDAutonLocationSelctionScreenArray* autonLocArr);
+		virtual ~LCDAutonColorSelctionScreen() {}
 
 		LCDMenuScreen* onShortCenterButtonPress();
 

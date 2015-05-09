@@ -27,9 +27,10 @@ namespace TRL {
 		Array<LCDSpecificSensorScreen*>* specificSensorScreens;
 		Array<LCDSpecificBatteryScreen*>* specificBatteryScreens;
 		Array<LCDSpecificMotorScreen*>* specificMotorScreens;
-		LCDAutonScreenArray* autonScreenArray;
 
+		LCDAutonScreenArray* autonScreenArray;
 		LCDAutonColorSelectionScreenArray* autonColorSelection;
+		LCDAutonLocationSelctionScreenArray* autonLocationSeleciton;
 
 		//////////////////////////////////
 		//Don't touch anthing below here//

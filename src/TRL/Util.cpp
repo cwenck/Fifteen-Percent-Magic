@@ -41,6 +41,22 @@ string getStringForAllianceColor(AllianceColor color) {
 }
 
 /*
+ * Gets the string variant of an Alliance Color
+ *
+ * @param color the AllianceColor to get the string for
+ * @return the string variant of the AllianceColor
+ */
+string getStringForRobotStartLocation(RobotStartLocation location) {
+	switch (location) {
+		case INNER_TILE:
+			return "Inner Tile";
+		case OUTER_TILE:
+			return "Outer Tile";
+	}
+	return "Unknown Location";
+}
+
+/*
  * Get a string with allocated memory for a specific number of chars
  *
  * Assuming exampleStrPtr is a string* its memory of *exampleStrPtr should be freed

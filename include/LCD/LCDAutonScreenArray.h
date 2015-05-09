@@ -49,6 +49,8 @@ namespace TRL {
 
 		void display();
 		void setRoutine(AutonRoutine* routine);
+
+		LCDMenuScreen* onShortCenterButtonPress();
 	};
 
 }

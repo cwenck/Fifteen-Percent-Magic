@@ -20,6 +20,7 @@
 #include "LCDMainSensorScreen.h"
 #include "LCDMainMotorScreen.h"
 
+#include "LCDAutonLocationSelctionScreenArray.h"
 #include "LCDAutonColorSelctionScreenArray.h"
 
 #include "LCDSpecificSensorScreen.h"

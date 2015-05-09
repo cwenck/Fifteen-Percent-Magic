@@ -14,24 +14,23 @@ namespace TRL {
 ///////////////////////////////////////////
 LCDAutonColorSelectionScreenArray::LCDAutonColorSelectionScreenArray() :
 		LCDScreenArray() {
-	screenArr = NULL;
+	this->autonScreenArr = NULL;
+	this->autonLocArr = NULL;
 }
 
 LCDAutonColorSelectionScreenArray::LCDAutonColorSelectionScreenArray(
-		LCDMenuScreen* homeScreen, LCDAutonScreenArray* screenArr) :
+		LCDMenuScreen* homeScreen, LCDAutonScreenArray* autonScreenArr,
+		LCDAutonLocationSelctionScreenArray* autonLocArr) :
 		LCDScreenArray() {
-	this->screenArr = screenArr;
+	this->autonScreenArr = autonScreenArr;
+	this->autonLocArr = autonLocArr;
 	generateArray(homeScreen, true);
 }
 
 void LCDAutonColorSelectionScreenArray::initArrayScreens() {
 	this->reinitWithNewSize(2);
-	this->at(0) = new LCDAutonColorSelctionScreen(RED, screenArr);
-	this->at(1) = new LCDAutonColorSelctionScreen(BLUE, screenArr);
-}
-
-LCDAutonColorSelctionScreen::LCDAutonColorSelctionScreen() {
-	screenArr = NULL;
+	this->at(0) = new LCDAutonColorSelctionScreen(RED, autonScreenArr, autonLocArr);
+	this->at(1) = new LCDAutonColorSelctionScreen(BLUE, autonScreenArr, autonLocArr);
 }
 
 LCDMenuScreen* LCDAutonColorSelectionScreenArray::getArrayStartScreen() {
@@ -42,20 +41,25 @@ LCDMenuScreen* LCDAutonColorSelectionScreenArray::getArrayStartScreen() {
 //END LCDAutonColorSelectionScreenArray//
 /////////////////////////////////////////
 
-LCDAutonColorSelctionScreen::LCDAutonColorSelctionScreen(AllianceColor color,
-		LCDAutonScreenArray* screenArr) :
-		LCDSelectionScreen<AllianceColor>(color) {
-	setSelectionDisplayName(getStringForAllianceColor(color));
-	this->screenArr = screenArr;
+LCDAutonColorSelctionScreen::LCDAutonColorSelctionScreen() {
+	this->autonScreenArr = NULL;
+	this->autonLocArr = NULL;
 }
 
-LCDAutonColorSelctionScreen::~LCDAutonColorSelctionScreen() {
+LCDAutonColorSelctionScreen::LCDAutonColorSelctionScreen(AllianceColor color,
+		LCDAutonScreenArray* autonScreenArr,
+		LCDAutonLocationSelctionScreenArray* autonLocArr) :
+		LCDSelectionScreen<AllianceColor>(color) {
+	setSelectionDisplayName(getStringForAllianceColor(color));
+	this->autonScreenArr = autonScreenArr;
+	this->autonLocArr = autonLocArr;
 }
 
 LCDMenuScreen* LCDAutonColorSelctionScreen::onShortCenterButtonPress() {
-	screenArr->setAllianceColor(selectionReturnValue);
-	if (screenArr != NULL && screenArr->size() != 0) {
-		return screenArr->getArrayStartScreen();
+	autonScreenArr->setAllianceColor(selectionReturnValue);
+
+	if (autonLocArr->size() != 0) {
+		return autonLocArr->getArrayStartScreen();
 	} else {
 		return enterScreen;
 	}
