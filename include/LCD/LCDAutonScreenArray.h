@@ -22,6 +22,7 @@ namespace TRL {
 
 		bool returnAllScreens;
 
+		void initArrayScreens();
 	public:
 		LCDAutonScreenArray();
 		LCDAutonScreenArray(LCDMenuScreen* homeScreen, bool loopScreens);
@@ -32,7 +33,7 @@ namespace TRL {
 		void setRobotStartLocation(RobotStartLocation location);
 
 		void shouldArrayGenerateAllScreens(bool shouldGenerateAllScreens);
-		void populateArrayWithScreens();
+		LCDMenuScreen* getArrayStartScreen();
 	};
 
 	class LCDAutonArrayIndexScreen : public LCDMenuScreen {
@@ -41,7 +42,6 @@ namespace TRL {
 		AutonRoutine* routine;
 		LCDAutonActionScreen* actionScreen;
 
-//		static Array<LCDAutonArrayIndexScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, AllianceColor color, RobotStartLocation location);
 	public:
 		LCDAutonArrayIndexScreen();
 		LCDAutonArrayIndexScreen(AutonRoutine* routine);
@@ -49,12 +49,6 @@ namespace TRL {
 
 		void display();
 		void setRoutine(AutonRoutine* routine);
-
-//		static void setAllianceColor(AllianceColor color);
-//		static void setRobotStartLocation(RobotStartLocation location);
-
-//		static Array<LCDAutonArrayIndexScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens, bool returnAllScreens);
-//		static Array<LCDAutonArrayIndexScreen*>* getSpecificAutonScreens(LCDMenuScreen* homeScreen, bool loopScreens);
 	};
 
 }

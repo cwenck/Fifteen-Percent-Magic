@@ -38,9 +38,9 @@ LCDAutonScreenArray::LCDAutonScreenArray(LCDMenuScreen* homeScreen,
 	generateArray(homeScreen, loopScreens);
 }
 
-void LCDAutonScreenArray::populateArrayWithScreens() {
+void LCDAutonScreenArray::initArrayScreens() {
 	Array<AutonRoutine*>* allRoutines;
-	if (!returnAllScreens) {
+	if (returnAllScreens) {
 		allRoutines = AutonRegistry::getRoutines();
 	} else {
 		allRoutines = AutonRegistry::getRoutines(currentlySelectedColor,
@@ -49,8 +49,8 @@ void LCDAutonScreenArray::populateArrayWithScreens() {
 
 	reinitWithNewSize(allRoutines->size());
 
-	//Two for loops are needed so that the entire array can be initialized before
-	//refrences to those elements are assigned
+//Two for loops are needed so that the entire array can be initialized before
+//refrences to those elements are assigned
 	for (int i = 0; i < this->size(); i++) {
 		this->at(i) = new LCDAutonArrayIndexScreen(allRoutines->at(i));
 	}
@@ -59,15 +59,21 @@ void LCDAutonScreenArray::populateArrayWithScreens() {
 
 void LCDAutonScreenArray::setAllianceColor(AllianceColor color) {
 	currentlySelectedColor = color;
+	generateArray();
 }
 
 void LCDAutonScreenArray::setRobotStartLocation(RobotStartLocation location) {
 	currentlySelectedStartLocation = location;
+	generateArray();
 }
 
 void LCDAutonScreenArray::shouldArrayGenerateAllScreens(
 		bool shouldGenerateAllScreens) {
 	this->returnAllScreens = shouldGenerateAllScreens;
+}
+
+LCDMenuScreen* LCDAutonScreenArray::getArrayStartScreen() {
+	return this->at(0);
 }
 
 ///////////////////////////

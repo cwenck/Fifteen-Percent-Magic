@@ -35,6 +35,8 @@ void LCDMenuHandler::initScreens() {
 			mainAutonScreen, true);
 
 	autonScreenArray = new LCDAutonScreenArray(mainAutonScreen, true);
+	autonColorSelection = new LCDAutonColorSelectionScreenArray(mainAutonScreen,
+			autonScreenArray);
 }
 
 LCDMenuHandler::~LCDMenuHandler() {
@@ -48,6 +50,8 @@ LCDMenuHandler::~LCDMenuHandler() {
 	delete specificSensorScreens;
 	delete specificBatteryScreens;
 	delete specificMotorScreens;
+
+	delete autonColorSelection;
 	delete autonScreenArray;
 }
 
@@ -67,15 +71,11 @@ void LCDMenuHandler::initScreenRelationships(LCD* lcd) {
 	setScreenArrayLCD((Array<LCDMenuScreen*>*) specificMotorScreens, lcd);
 
 	autonScreenArray->setArrayDisplayLCD(lcd);
+	autonColorSelection->setArrayDisplayLCD(lcd);
 
 //Set the relationships between menus
-	if (autonScreenArray->size() == 0) {
-		mainAutonScreen->setReferencedScreens(mainAutonScreen,
-				mainBatteryScreen, mainAutonScreen, mainSensorScreen);
-	} else {
-		mainAutonScreen->setReferencedScreens(mainAutonScreen,
-				mainBatteryScreen, autonScreenArray->at(0), mainSensorScreen);
-	}
+	mainAutonScreen->setReferencedScreens(mainAutonScreen, mainBatteryScreen,
+			autonColorSelection->getArrayStartScreen(), mainSensorScreen);
 
 	mainBatteryScreen->setReferencedScreens(mainAutonScreen, mainMotorScreen,
 			specificBatteryScreens->at(0), mainAutonScreen);

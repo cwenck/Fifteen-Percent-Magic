@@ -28,7 +28,12 @@ namespace TRL {
 		virtual ~LCDMenuScreen();
 
 		void setReferencedScreens(LCDMenuScreen* homeScreen, LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
+		void setReferencedScreens(LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
+		void setReferencedScreens(LCDMenuScreen* leftScreen, LCDMenuScreen* rightScreen);
 		void setHomeScreen(LCDMenuScreen* homeScreen);
+		void setLeftScreen(LCDMenuScreen* leftScreen);
+		void setEnterScreen(LCDMenuScreen* enterScreen);
+		void setRightScreen(LCDMenuScreen* rightScreen);
 		void setDisplayLCD(LCD* lcd);
 
 		bool hasLeftScreen();

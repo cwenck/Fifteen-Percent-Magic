@@ -13,24 +13,20 @@
 namespace TRL {
 	template <typename T> class LCDSelectionScreen : public LCDMenuScreen {
 	protected:
-		T* returnLocation;
 		T selectionReturnValue;
 		string selectionDisplayName;
 	public:
 		LCDSelectionScreen() {
-			this->returnLocation = NULL;
 			this->selectionReturnValue = *((T*) NULL);
 			this->selectionDisplayName = "";
 		}
 
-		LCDSelectionScreen(T* returnLocation, T selectionReturnValue, string selectionDisplayName) {
-			this->returnLocation = returnLocation;
+		LCDSelectionScreen(T selectionReturnValue, string selectionDisplayName) {
 			this->selectionReturnValue = selectionReturnValue;
 			this->selectionDisplayName = selectionDisplayName;
 		}
 
-		LCDSelectionScreen(T* returnLocation, T selectionReturnValue) {
-			this->returnLocation = returnLocation;
+		LCDSelectionScreen(T selectionReturnValue) {
 			this->selectionReturnValue = selectionReturnValue;
 			this->selectionDisplayName = "";
 		}
@@ -46,10 +42,7 @@ namespace TRL {
 			lcd->displayDownNavigation(2, "Select");
 		}
 
-		virtual LCDMenuScreen* onShortCenterButtonPress(){
-			(*returnLocation) = selectionReturnValue;
-			return enterScreen;
-		}
+		virtual LCDMenuScreen* onShortCenterButtonPress() = 0;
 
 	};
 }

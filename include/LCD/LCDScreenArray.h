@@ -12,15 +12,22 @@
 
 namespace TRL {
 
+	/*
+	 * All child classes should implement a constructor that calls generateArray(LCDMenuScreen* homeScreen, bool loopScreens)
+	 * with the correct parameters.
+	 */
+
 	class LCDScreenArray : public Array<LCDMenuScreen*> {
 	protected:
 
+		LCD* lcd;
 		LCDMenuScreen* homeScreen;
 		bool loopScreens;
 
 		/*
 		 * This should fill up the array with instances of subclasses of LCDMenuScreen
 		 */
+		virtual void initArrayScreens() = 0;
 
 		/*
 		 * Repopulates the array with screens. Then, it sets up the relationships between those screens;
@@ -29,14 +36,17 @@ namespace TRL {
 
 	public:
 		LCDScreenArray();
-		LCDScreenArray(LCDMenuScreen* homeScreen, bool loopScreens);
 		virtual ~LCDScreenArray(){}
 
-		void generateArray(LCDMenuScreen* homeScreen, bool loopScreens);
+		virtual void generateArray(LCDMenuScreen* homeScreen, bool loopScreens);
+		void generateArray();
 		void setArrayHomeScreen(LCDMenuScreen* homeScreen);
+		void setArrayEnterScreen(LCDMenuScreen* enterScreen);
 		void setArrayDisplayLCD(LCD* lcd);
+		void setArrayDisplayLCD();
 
-		virtual void populateArrayWithScreens() = 0;
+		virtual LCDMenuScreen* getArrayStartScreen() = 0;
+
 	};
 }
 

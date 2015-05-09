@@ -56,7 +56,6 @@ extern "C" {
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 
-
 using namespace TRL;
 
 void setMotorSpeed(int speed) {
@@ -70,7 +69,6 @@ void operatorControl() {
 //	Robot::controller.setShiftKey(MASTER_CONTROLLER, ShiftBtn_8U);
 
 //	AutonRegistry::printRoutines();
-
 	while (true) {
 		delay(20);
 		Robot::instance->driveControllerHandler(MasterHigherPriority);

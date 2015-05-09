@@ -29,6 +29,8 @@ namespace TRL {
 		Array<LCDSpecificMotorScreen*>* specificMotorScreens;
 		LCDAutonScreenArray* autonScreenArray;
 
+		LCDAutonColorSelectionScreenArray* autonColorSelection;
+
 		//////////////////////////////////
 		//Don't touch anthing below here//
 		//////////////////////////////////

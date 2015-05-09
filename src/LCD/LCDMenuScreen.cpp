@@ -17,7 +17,7 @@ LCDMenuScreen::LCDMenuScreen() {
 	this->lcd = NULL;
 }
 
-LCDMenuScreen::LCDMenuScreen(LCD* lcd){
+LCDMenuScreen::LCDMenuScreen(LCD* lcd) {
 	this->homeScreen = NO_SCREEN;
 	this->leftScreen = NO_SCREEN;
 	this->enterScreen = NO_SCREEN;
@@ -29,7 +29,7 @@ LCDMenuScreen::~LCDMenuScreen() {
 
 }
 
-void LCDMenuScreen::setDisplayLCD(LCD* lcd){
+void LCDMenuScreen::setDisplayLCD(LCD* lcd) {
 	this->lcd = lcd;
 }
 
@@ -42,8 +42,33 @@ void LCDMenuScreen::setReferencedScreens(LCDMenuScreen* homeScreen,
 	this->rightScreen = rightScreen;
 }
 
-void LCDMenuScreen::setHomeScreen(LCDMenuScreen* homeScreen){
+void LCDMenuScreen::setReferencedScreens(LCDMenuScreen* leftScreen,
+		LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen) {
+	this->leftScreen = leftScreen;
+	this->enterScreen = enterScreen;
+	this->rightScreen = rightScreen;
+}
+
+void LCDMenuScreen::setReferencedScreens(LCDMenuScreen* leftScreen,
+		LCDMenuScreen* rightScreen) {
+	this->leftScreen = leftScreen;
+	this->rightScreen = rightScreen;
+}
+
+void LCDMenuScreen::setHomeScreen(LCDMenuScreen* homeScreen) {
 	this->homeScreen = homeScreen;
+}
+
+void LCDMenuScreen::setLeftScreen(LCDMenuScreen* leftScreen) {
+	this->leftScreen = leftScreen;
+}
+
+void LCDMenuScreen::setEnterScreen(LCDMenuScreen* enterScreen) {
+	this->enterScreen = enterScreen;
+}
+
+void LCDMenuScreen::setRightScreen(LCDMenuScreen* rightScreen) {
+	this->rightScreen = rightScreen;
 }
 
 bool LCDMenuScreen::hasLeftScreen() {
@@ -67,8 +92,6 @@ bool LCDMenuScreen::hasRightScreen() {
 	return true;
 }
 
-
-
 LCDMenuScreen* LCDMenuScreen::getLeftScreen() {
 	return leftScreen;
 }
@@ -81,7 +104,7 @@ LCDMenuScreen* LCDMenuScreen::getRightScreen() {
 	return rightScreen;
 }
 
-LCDMenuScreen* LCDMenuScreen::getHomeScreen(){
+LCDMenuScreen* LCDMenuScreen::getHomeScreen() {
 	return homeScreen;
 }
 

@@ -10,12 +10,13 @@
 namespace TRL {
 
 LCDScreenArray::LCDScreenArray() {
+	this->lcd = NULL;
 	this->homeScreen = NULL;
 	this->loopScreens = false;
 }
 
 void LCDScreenArray::setupScreenArray() {
-	populateArrayWithScreens();
+	initArrayScreens();
 	for (int i = 0; i < this->size(); i++) {
 		if (loopScreens) {
 			if (i == 0) {
@@ -52,6 +53,7 @@ void LCDScreenArray::setupScreenArray() {
 			}
 		}
 	}
+	setArrayDisplayLCD();
 }
 
 void LCDScreenArray::generateArray(LCDMenuScreen* homeScreen,
@@ -61,13 +63,36 @@ void LCDScreenArray::generateArray(LCDMenuScreen* homeScreen,
 	setupScreenArray();
 }
 
+/*
+ * Only works if homeScreen and loopScreens have already been set.
+ */
+void LCDScreenArray::generateArray(){
+	if(homeScreen == NULL){
+		println(ERROR, "LCDScreenArray", "generateArray", "The homeScreen for the array was not set.");
+	}
+	generateArray(homeScreen, loopScreens);
+}
+
 void LCDScreenArray::setArrayHomeScreen(LCDMenuScreen* homeScreen){
 	for(int i = 0; i < this->size(); i++){
 		this->at(i)->setHomeScreen(homeScreen);
 	}
 }
 
+void LCDScreenArray::setArrayEnterScreen(LCDMenuScreen* enterScreen){
+	for(int i = 0; i < this->size(); i++){
+		this->at(i)->setEnterScreen(enterScreen);
+	}
+}
+
 void LCDScreenArray::setArrayDisplayLCD(LCD* lcd) {
+	this->lcd = lcd;
+	for(int i = 0; i < size(); i++) {
+		this->at(i)->setDisplayLCD(lcd);
+	}
+}
+
+void LCDScreenArray::setArrayDisplayLCD() {
 	for(int i = 0; i < size(); i++) {
 		this->at(i)->setDisplayLCD(lcd);
 	}
