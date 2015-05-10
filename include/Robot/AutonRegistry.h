@@ -17,6 +17,7 @@ namespace TRL {
 	class AutonRegistry {
 	private:
 		static VariableArray<AutonRoutine*>* routines;
+		static AutonRoutine* robotRoutine;
 		static AutonRoutine* activeRoutine;
 		static AutonRoutine* runningRoutine;
 	public:
@@ -36,6 +37,11 @@ namespace TRL {
 		static void setActiveRoutine(AutonRoutine* routine);
 		static void runActiveRoutine();
 		static void clearActiveRoutine();
+
+		static void setRobotRoutine(AutonRoutine* routine);
+		static void runRobotRoutine();
+		static void saveRobotRoutineToFile();
+		static AutonRoutine* readRoutineFromFile();
 
 		static Array<AutonRoutine*>* getRoutines();
 		static Array<AutonRoutine*>* getRoutines(AllianceColor color);

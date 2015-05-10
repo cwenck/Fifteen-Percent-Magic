@@ -15,6 +15,8 @@ namespace TRL {
 	class LCDAutonActionScreen : public LCDMenuScreen {
 	private:
 		AutonRoutine* routine;
+
+		bool running;
 	public:
 		LCDAutonActionScreen();
 		LCDAutonActionScreen(AutonRoutine* routine);

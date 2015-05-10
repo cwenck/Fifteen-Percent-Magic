@@ -71,6 +71,7 @@ void operatorControl() {
 //	AutonRegistry::printRoutines();
 	while (true) {
 		delay(20);
+		AutonRegistry::runActiveRoutine();
 		Robot::instance->driveControllerHandler(MasterHigherPriority);
 //		Robot::instance.handleInput(MasterAndSlaveEqualPriority);
 

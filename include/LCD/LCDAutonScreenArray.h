@@ -15,7 +15,7 @@
 
 namespace TRL {
 
-	class LCDAutonScreenArray : public LCDScreenArray{
+	class LCDAutonScreenArray : public LCDScreenArray {
 	private:
 		AllianceColor currentlySelectedColor;
 		RobotStartLocation currentlySelectedStartLocation;
@@ -27,7 +27,7 @@ namespace TRL {
 		LCDAutonScreenArray();
 		LCDAutonScreenArray(LCDMenuScreen* homeScreen, bool loopScreens);
 		LCDAutonScreenArray(LCDMenuScreen* homeScreen, bool loopScreens, bool shouldGenerateAllScreens);
-		~LCDAutonScreenArray(){}
+		~LCDAutonScreenArray() {}
 
 		void setAllianceColor(AllianceColor color);
 		void setRobotStartLocation(RobotStartLocation location);
@@ -49,6 +49,11 @@ namespace TRL {
 
 		void display();
 		void setRoutine(AutonRoutine* routine);
+
+		void setDisplayLCD(LCD* lcd);
+		void setReferencedScreens(LCDMenuScreen* homeScreen, LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
+		void setHomeScreen(LCDMenuScreen* homeScreen);
+
 
 		LCDMenuScreen* onShortCenterButtonPress();
 	};

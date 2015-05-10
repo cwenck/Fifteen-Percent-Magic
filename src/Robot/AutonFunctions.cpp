@@ -16,11 +16,13 @@ namespace TRL {
  */
 
 void AutonFunctions::redAuton() {
-
+	println("Red Auton Executing");
+	delay(10000);
 }
 
 void AutonFunctions::blueAuton() {
-
+	println("Blue Auton Executing");
+	delay(10000);
 }
 
 } /* namespace TRL */

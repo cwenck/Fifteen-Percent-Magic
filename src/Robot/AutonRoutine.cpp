@@ -18,10 +18,19 @@ AutonRoutine::AutonRoutine(AllianceColor color, RobotStartLocation location,
 	this->identifier = identifier;
 	this->name = routineName;
 	this->autonFunction = autonFunction;
+	this->running = false;
 }
 
 void AutonRoutine::run() {
+	println(DEBUG, "AutonRoutine", "run", "Starting execution of %s.", this->getRoutineName());
+	this->running = true;
 	autonFunction();
+	this->running = false;
+	println(DEBUG, "AutonRoutine", "run", "Stopping execution of %s.", this->getRoutineName());
+}
+
+bool AutonRoutine::isRunning(){
+	return running;
 }
 
 AllianceColor AutonRoutine::getAllianceColor() {

@@ -23,12 +23,15 @@ namespace TRL {
 		string name;
 		VoidFunctionPtr autonFunction;
 
+		bool running;
+
 	public:
 		AutonRoutine(AllianceColor color, RobotStartLocation location, AutonIdentifier identifier, string routineName, VoidFunctionPtr autonFunction);
 		virtual ~AutonRoutine() {}
 
 		void run();
 
+		bool isRunning();
 		AllianceColor getAllianceColor();
 		RobotStartLocation getStartLocation();
 		string getRoutineName();

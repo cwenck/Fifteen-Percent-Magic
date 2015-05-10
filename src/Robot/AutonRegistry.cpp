@@ -10,7 +10,9 @@
 namespace TRL {
 
 VariableArray<AutonRoutine*>* AutonRegistry::routines;
+AutonRoutine* AutonRegistry::robotRoutine;
 AutonRoutine* AutonRegistry::activeRoutine;
+AutonRoutine* AutonRegistry::runningRoutine;
 
 void AutonRegistry::initStatics() {
 	routines = new VariableArray<AutonRoutine*>;
@@ -84,10 +86,33 @@ void AutonRegistry::runActiveRoutine() {
 		return;
 	}
 	runRoutine(activeRoutine);
+	clearActiveRoutine();
 }
 
 void AutonRegistry::clearActiveRoutine() {
 	activeRoutine = NULL;
+}
+
+void AutonRegistry::setRobotRoutine(AutonRoutine* routine) {
+	robotRoutine = routine;
+}
+
+void AutonRegistry::runRobotRoutine() {
+	if (robotRoutine != NULL) {
+		println(ERROR, "AutonRegistry", "runRobotRoutine",
+				"The Robot's auton routine was never set. So nothing can be run.");
+	} else {
+		runRoutine(robotRoutine);
+	}
+}
+
+void AutonRegistry::saveRobotRoutineToFile(){
+
+}
+
+AutonRoutine* AutonRegistry::readRoutineFromFile() {
+	//TODO implement method
+	return NULL;
 }
 
 Array<AutonRoutine*>* AutonRegistry::getRoutines() {

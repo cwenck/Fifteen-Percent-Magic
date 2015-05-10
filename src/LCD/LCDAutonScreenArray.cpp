@@ -87,7 +87,9 @@ LCDAutonArrayIndexScreen::LCDAutonArrayIndexScreen() {
 
 LCDAutonArrayIndexScreen::LCDAutonArrayIndexScreen(AutonRoutine* routine) {
 	this->routine = routine;
-	this->actionScreen = new LCDAutonActionScreen();
+	this->actionScreen = new LCDAutonActionScreen(routine);
+	this->actionScreen->setReferencedScreens(homeScreen, actionScreen,
+			actionScreen, actionScreen);
 }
 
 LCDAutonArrayIndexScreen::~LCDAutonArrayIndexScreen() {
@@ -106,8 +108,27 @@ void LCDAutonArrayIndexScreen::display() {
 	lcd->displayDownNavigation(2, "Options");
 }
 
+void LCDAutonArrayIndexScreen::setDisplayLCD(LCD* lcd) {
+	this->lcd = lcd;
+	this->actionScreen->setDisplayLCD(lcd);
+}
+
+void LCDAutonArrayIndexScreen::setReferencedScreens(LCDMenuScreen* homeScreen,
+		LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen,
+		LCDMenuScreen* rightScreen){
+	this->homeScreen = homeScreen;
+	this->actionScreen->setHomeScreen(homeScreen);
+	this->leftScreen = leftScreen;
+	this->enterScreen = enterScreen;
+	this->rightScreen = rightScreen;
+}
+
+void LCDAutonArrayIndexScreen::setHomeScreen(LCDMenuScreen* homeScreen) {
+	this->homeScreen = homeScreen;
+	this->actionScreen->setHomeScreen(homeScreen);
+}
+
 LCDMenuScreen* LCDAutonArrayIndexScreen::onShortCenterButtonPress() {
-	return this;
-	//	return actionScreen;
+	return actionScreen;
 }
 } /* namespace TRL */

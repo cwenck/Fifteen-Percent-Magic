@@ -27,14 +27,14 @@ namespace TRL {
 		LCDMenuScreen(LCD* lcd);
 		virtual ~LCDMenuScreen();
 
-		void setReferencedScreens(LCDMenuScreen* homeScreen, LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
-		void setReferencedScreens(LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
-		void setReferencedScreens(LCDMenuScreen* leftScreen, LCDMenuScreen* rightScreen);
-		void setHomeScreen(LCDMenuScreen* homeScreen);
-		void setLeftScreen(LCDMenuScreen* leftScreen);
-		void setEnterScreen(LCDMenuScreen* enterScreen);
-		void setRightScreen(LCDMenuScreen* rightScreen);
-		void setDisplayLCD(LCD* lcd);
+		virtual void setReferencedScreens(LCDMenuScreen* homeScreen, LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
+		virtual void setReferencedScreens(LCDMenuScreen* leftScreen, LCDMenuScreen* enterScreen, LCDMenuScreen* rightScreen);
+		virtual void setReferencedScreens(LCDMenuScreen* leftScreen, LCDMenuScreen* rightScreen);
+		virtual void setHomeScreen(LCDMenuScreen* homeScreen);
+		virtual void setLeftScreen(LCDMenuScreen* leftScreen);
+		virtual void setEnterScreen(LCDMenuScreen* enterScreen);
+		virtual void setRightScreen(LCDMenuScreen* rightScreen);
+		virtual void setDisplayLCD(LCD* lcd);
 
 		bool hasLeftScreen();
 		bool hasEnterScreen();
